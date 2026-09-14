@@ -1,0 +1,15 @@
+{
+  "backgroundColor": "#fff2df",
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true,
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "bottom-nav": "/components/bottom-nav/index",
+    "call-broadcast": "/components/call-broadcast/index",
+    "lottery-countdown": "/components/lottery-countdown/index",
+    "mascot-launch-guide": "/components/mascot-launch-guide/index",
+    "soft-gold-atmosphere": "/components/soft-gold-atmosphere/index",
+    "starlight-mascot": "/components/starlight-mascot/index",
+    "wallet-recharge": "/components/wallet-recharge/index"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "wallet-recharge": "/components/wallet-recharge/index",
+    "call-preferences": "/components/call-preferences/index"
+  }
+}

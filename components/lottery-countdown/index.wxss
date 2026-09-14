@@ -1,0 +1,132 @@
+.lottery {
+  box-sizing: border-box;
+  height: 66rpx;
+  letter-spacing: 0;
+  position: relative;
+  width: 60rpx;
+}
+
+.lottery-icon {
+  height: 60rpx;
+  top: -2rpx;
+  transform-origin: 50% 80%;
+}
+
+.lottery-icon,
+.lottery-time {
+  left: 0;
+  position: absolute;
+  width: 60rpx;
+}
+
+.lottery-time {
+  background: rgba(103, 13, 53, 0.7);
+  border: 1rpx solid hsla(0, 0%, 100%, 0.4);
+  border-radius: 12rpx;
+  bottom: 0;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 20rpx;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  height: 24rpx;
+  line-height: 22rpx;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.lottery-demo-tag {
+  background: #fff5f8;
+  border-radius: 4rpx;
+  color: #a34567;
+  font-size: 16rpx;
+  line-height: 22rpx;
+  padding: 0 4rpx;
+  position: absolute;
+  right: -10rpx;
+  top: -5rpx;
+}
+
+.is-pending .lottery-time {
+  font-size: 18rpx;
+}
+
+.lottery:not(.is-lite) .lottery-icon {
+  animation: lottery-sway 3.8s ease-in-out infinite;
+}
+
+.is-urgent:not(.is-lite) .lottery-icon {
+  animation: lottery-urgent 1.5s ease-in-out infinite;
+}
+
+.is-urgent .lottery-time {
+  background: rgba(187, 23, 78, 0.86);
+}
+
+@-webkit-keyframes lottery-sway {
+  0%,
+  100%,
+  65% {
+    transform: rotate(0);
+  }
+
+  72% {
+    transform: rotate(-5deg) translateY(-2rpx);
+  }
+
+  80% {
+    transform: rotate(4deg) translateY(-2rpx);
+  }
+
+  88% {
+    transform: rotate(-2deg);
+  }
+}
+
+@keyframes lottery-sway {
+  0%,
+  100%,
+  65% {
+    transform: rotate(0);
+  }
+
+  72% {
+    transform: rotate(-5deg) translateY(-2rpx);
+  }
+
+  80% {
+    transform: rotate(4deg) translateY(-2rpx);
+  }
+
+  88% {
+    transform: rotate(-2deg);
+  }
+}
+
+@-webkit-keyframes lottery-urgent {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+
+  50% {
+    transform: rotate(3deg) translateY(-3rpx);
+  }
+}
+
+@keyframes lottery-urgent {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+
+  50% {
+    transform: rotate(3deg) translateY(-3rpx);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lottery .lottery-icon {
+    animation: none !important;
+  }
+}

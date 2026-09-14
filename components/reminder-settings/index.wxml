@@ -1,0 +1,167 @@
+<view class="reminder-settings personal-settings help-a-settings {{skin==='ibo_soft_gold'?'theme-ibo-soft-gold':skin==='siwuliu_ice'?'theme-siwuliu-ice':skin==='xiaoyu_moon_tide'?'theme-xiaoyu-moon-tide':'theme-classic'}} {{motionEnabled?'':'is-paused'}}">
+    <view class="settings-card">
+        <view class="reminder-heading">
+            <text class="section-kicker">提醒偏好</text>
+            <button bindtap="openAccountSettings" class="reminder-more">昵称与播报<image src="/assets/images/help-a/chevron.png"></image>
+            </button>
+        </view>
+        <view class="reminder-load-error" wx:if="{{loadError||workLoadError}}">
+            <text>{{loadError||workLoadError}}</text>
+            <button bindtap="loadPreferences" disabled="{{loading}}">重新读取</button>
+        </view>
+        <view class="reminder-grid">
+            <view class="notification-tile is-work {{workNotificationsEnabled?'is-on':''}} {{loading||workLoadError?'is-unknown':''}}">
+                <view class="notification-tile-top">
+                    <view class="setting-icon original-setting-icon">
+                        <image class="original-setting-image" mode="aspectFit" src="/assets/images/help-a/works.png"></image>
+                    </view>
+                    <view class="notification-switch-wrap">
+                        <view class="notification-switch-track"></view>
+                        <switch aria-label="作品提醒" bindchange="onToggleWorkNotifications" checked="{{workNotificationsEnabled}}" class="setting-switch" color="{{skin==='ibo_soft_gold'?'#806238':skin==='xiaoyu_moon_tide'?'#239aa6':skin==='siwuliu_ice'?'#458ca5':'#238b82'}}" disabled="{{loading||saving||workLoadError||!workNotificationsReady}}"></switch>
+                    </view>
+                </view>
+                <view class="notification-tile-copy">
+                    <text class="setting-title">作品提醒</text>
+                    <text class="notification-status">{{loading?'读取中':workLoadError?'状态未知':saving==='work'?'保存中':!workNotificationsReady?'暂未开放':workNotificationsEnabled?'已开启':'未开启'}}</text>
+                </view>
+            </view>
+            <view class="notification-tile is-linkmic {{linkmicNotificationsEnabled?'is-on':''}} {{loading||loadError?'is-unknown':''}}">
+                <view class="notification-tile-top">
+                    <view class="setting-icon original-setting-icon">
+                        <image class="original-setting-image" mode="aspectFit" src="/assets/images/help-a/mic.png"></image>
+                    </view>
+                    <view class="notification-switch-wrap">
+                        <view class="notification-switch-track"></view>
+                        <switch aria-label="上麦提醒" bindchange="onToggleLinkmicNotifications" checked="{{linkmicNotificationsEnabled}}" class="setting-switch" color="{{skin==='ibo_soft_gold'?'#806238':skin==='xiaoyu_moon_tide'?'#2f8e9b':skin==='siwuliu_ice'?'#4e77ba':'#d5523f'}}" disabled="{{loading||saving||loadError}}"></switch>
+                    </view>
+                </view>
+                <view class="notification-tile-copy">
+                    <text class="setting-title">上麦提醒</text>
+                    <text class="notification-status">{{loading?'读取中':loadError?'状态未知':saving==='linkmic'?'保存中':linkmicNotificationsEnabled?'已开启':'未开启'}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="reminder-management">
+            <button bindtap="openQuietSettings" class="reminder-entry" disabled="{{loading||loadError}}" hover-class="visibility-setting-row--pressed">
+                <view class="reminder-icon-shell is-gold">
+                    <image class="reminder-entry-icon" mode="aspectFit" src="/assets/images/help-a/quiet.png"></image>
+                </view>
+                <view class="reminder-entry-copy">
+                    <text>勿扰安排</text>
+                    <text class="reminder-entry-note">免打扰、学生党模式</text>
+                </view>
+                <text class="reminder-entry-state">{{loading?'读取中':loadError?'状态未知':dndEnabled?dndAllDay?'全天勿扰':dndStartText+' - '+dndEndText:studentModeEnabled?'仅周末':'未开启'}}</text>
+                <image class="reminder-entry-arrow" src="/assets/images/call-counter/chevron.png"></image>
+            </button>
+            <button aria-label="管理爱播守候列表显示" bindtap="onOpenAnchorVisibility" class="reminder-entry visibility-setting-row" disabled="{{loading||saving}}" hover-class="visibility-setting-row--pressed">
+                <view class="reminder-icon-shell">
+                    <image class="reminder-entry-icon" mode="aspectFit" src="/assets/images/help-a/watchlist.png"></image>
+                </view>
+                <view class="reminder-entry-copy">
+                    <text>守候列表显示</text>
+                    <text class="reminder-entry-note">只调整你的列表</text>
+                </view>
+                <text class="reminder-entry-state">管理</text>
+                <image class="reminder-entry-arrow" src="/assets/images/call-counter/chevron.png"></image>
+            </button>
+        </view>
+    </view>
+</view>
+<root-portal wx:if="{{quietVisible&&!timePickerVisible}}">
+    <view bindtap="closeQuietSettings" catchtouchmove="stopPickerTap" class="quiet-overlay">
+        <view catchtap="stopPickerTap" class="quiet-panel personal-settings help-a-settings {{skin==='ibo_soft_gold'?'theme-ibo-soft-gold':skin==='siwuliu_ice'?'theme-siwuliu-ice':skin==='xiaoyu_moon_tide'?'theme-xiaoyu-moon-tide':'theme-classic'}}">
+            <view class="quiet-heading">
+                <text>勿扰安排</text>
+                <button aria-label="关闭勿扰安排" bindtap="closeQuietSettings" class="quiet-close" disabled="{{saving}}">
+                    <image src="/assets/images/call-community/close.png"></image>
+                </button>
+            </view>
+            <view class="setting-row {{dndEnabled?'is-on':''}}">
+                <view class="setting-icon icon-shell icon-shell--dnd">
+                    <image class="generated-setting-icon" mode="aspectFit" src="/assets/images/help-a/quiet.png"></image>
+                </view>
+                <view class="setting-copy">
+                    <text class="setting-title">免打扰模式</text>
+                    <text class="setting-value">在设定时段暂停所有提醒</text>
+                </view>
+                <switch aria-label="免打扰模式" bindchange="onToggleDnd" checked="{{dndEnabled}}" class="setting-switch" color="{{skin==='ibo_soft_gold'?'#806238':skin==='xiaoyu_moon_tide'?'#278694':skin==='siwuliu_ice'?'#357f9e':'#c94758'}}" disabled="{{loading||saving||loadError}}"></switch>
+            </view>
+            <view aria-label="设置免打扰时间" bindtap="openDndTimePicker" class="dnd-time-card {{dndEnabled?'is-enabled':''}}" hover-class="dnd-time-card-hover">
+                <view class="dnd-time-copy">
+                    <text class="dnd-time-label">免打扰时段</text>
+                    <view class="dnd-time-range" wx:if="{{dndAllDay}}">
+                        <text>全天免打扰</text>
+                    </view>
+                    <view class="dnd-time-range" wx:else>
+                        <text>{{dndStartText}}</text>
+                        <view class="dnd-time-arrow">→</view>
+                        <text>{{dndEndText}}</text>
+                        <text class="next-day-tag" wx:if="{{dndCrossesMidnight}}">次日</text>
+                    </view>
+                </view>
+                <image class="dnd-entry-arrow" mode="aspectFit" src="/assets/images/call-counter/chevron.png"></image>
+            </view>
+            <view class="setting-row no-border {{studentModeEnabled?'is-on':''}}">
+                <view class="setting-icon icon-shell icon-shell--student">
+                    <image class="generated-setting-icon" mode="aspectFit" src="/assets/images/help-a/student.png"></image>
+                </view>
+                <view class="setting-copy">
+                    <text class="setting-title">学生党模式</text>
+                    <text class="setting-value">仅周六、周日接收开播提醒</text>
+                </view>
+                <switch aria-label="学生党模式" bindchange="onToggleStudentMode" checked="{{studentModeEnabled}}" class="setting-switch" color="{{skin==='ibo_soft_gold'?'#806238':skin==='xiaoyu_moon_tide'?'#278694':skin==='siwuliu_ice'?'#357f9e':'#c94758'}}" disabled="{{loading||saving||loadError}}"></switch>
+            </view>
+            <view class="mode-tip {{dndEnabled?'is-active':''}}" wx:if="{{dndEnabled||studentModeEnabled}}">
+                <view class="tip-dot"></view>
+                <text>{{dndEnabled?dndAllDay?'全天免打扰已开启':'每日 '+dndStartText+' 至 '+(dndCrossesMidnight?'次日 ':'')+dndEndText+' 暂停提醒':'学生党模式已开启，仅周末提醒'}}</text>
+            </view>
+        </view>
+    </view>
+</root-portal>
+<root-portal wx:if="{{timePickerVisible}}">
+    <view catchtap="closeDndTimePicker" class="time-picker-layer {{skin==='ibo_soft_gold'?'theme-ibo-soft-gold':skin==='siwuliu_ice'?'theme-siwuliu-ice':skin==='xiaoyu_moon_tide'?'theme-xiaoyu-moon-tide':'theme-classic'}} {{timePickerClosing?'is-closing':''}}">
+        <view catchtap="stopPickerTap" class="time-picker-sheet">
+            <view class="time-picker-handle"></view>
+            <view class="time-picker-head">
+                <view>
+                    <text class="time-picker-kicker">QUIET HOURS</text>
+                    <text class="time-picker-title">设置免打扰时间</text>
+                </view>
+                <view bindtap="closeDndTimePicker" class="time-picker-close">×</view>
+            </view>
+            <view class="time-segment">
+                <view bindtap="selectTimeField" class="time-segment-item {{activeTimeField==='start'?'is-active':''}}" data-field="start">
+                    <text class="time-segment-label">开始</text>
+                    <text class="time-segment-value">{{draftStartText}}</text>
+                </view>
+                <view class="time-route">
+                    <view class="time-route-dot"></view>
+                    <view class="time-route-line"></view>
+                    <view class="time-route-dot"></view>
+                </view>
+                <view bindtap="selectTimeField" class="time-segment-item {{activeTimeField==='end'?'is-active':''}}" data-field="end">
+                    <text class="time-segment-label">结束</text>
+                    <text class="time-segment-value">{{draftEndText}}</text>
+                    <text class="time-segment-next" wx:if="{{draftCrossesMidnight}}">次日</text>
+                </view>
+            </view>
+            <view class="time-wheel-wrap">
+                <view class="time-wheel-focus"></view>
+                <picker-view bindchange="onTimePickerChange" class="time-wheel" indicator-style="height: 92rpx;" value="{{pickerValue}}">
+                    <picker-view-column>
+                        <view class="time-wheel-item" wx:for="{{hourOptions}}" wx:key="*this">{{item}}</view>
+                    </picker-view-column>
+                    <picker-view-column>
+                        <view class="time-wheel-item" wx:for="{{minuteOptions}}" wx:key="*this">{{item}}</view>
+                    </picker-view-column>
+                </picker-view>
+                <view class="time-wheel-colon">:</view>
+            </view>
+            <view class="time-picker-summary">
+                <view class="summary-moon">☾</view>
+                <text>{{draftStartText}} 至 {{draftCrossesMidnight?'次日 ':''}}{{draftEndText}}</text>
+            </view>
+            <button bindtap="saveDndTime" class="time-save-button {{saving==='dnd-time'?'is-saving':''}}" disabled="{{saving==='dnd-time'}}">{{saving==='dnd-time'?'保存中':'保存时间'}}</button>
+        </view>
+    </view>
+</root-portal>

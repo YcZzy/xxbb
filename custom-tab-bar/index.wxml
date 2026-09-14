@@ -1,0 +1,30 @@
+<view class="nav-shell {{skin==='ibo_soft_gold'?'theme-ibo-soft-gold':skin==='siwuliu_ice'?'theme-siwuliu-ice':skin==='xiaoyu_moon_tide'?'theme-xiaoyu-moon-tide':'theme-classic'}}" wx:if="{{!hidden}}">
+    <view class="nav-panel">
+        <view aria-hidden="true" class="nav-jelly is-{{selected}} {{jellyReady?'is-ready':''}} {{jellyMoving?'is-moving':''}} is-{{jellyDirection}}">
+            <view class="nav-jelly-core"></view>
+        </view>
+        <view bindtap="onNavigate" class="nav-item {{selected===item.key?'is-active':''}} {{pressingKey===item.key?'is-pressing':''}}" data-key="{{item.key}}" wx:for="{{items}}" wx:key="key">
+            <view class="nav-tap-feedback" wx:if="{{pressingKey===item.key}}"></view>
+            <view aria-hidden="true" class="nav-icon nav-icon-digest" wx:if="{{item.key==='history'}}">
+                <view class="nav-digest-symbol">
+                    <view class="nav-digest-sheet"></view>
+                    <view class="nav-digest-line line-one"></view>
+                    <view class="nav-digest-line line-two"></view>
+                    <view class="nav-digest-seal"></view>
+                </view>
+            </view>
+            <view aria-hidden="true" class="nav-icon nav-icon-archive" wx:elif="{{item.key==='archive'}}">
+                <view class="nav-archive-symbol">
+                    <view class="nav-archive-line line-one"></view>
+                    <view class="nav-archive-line line-two"></view>
+                    <view class="nav-archive-dot dot-one"></view>
+                    <view class="nav-archive-dot dot-two"></view>
+                    <view class="nav-archive-dot dot-three"></view>
+                </view>
+            </view>
+            <view class="nav-icon nav-icon-{{item.key}}" wx:else>{{item.icon}}</view>
+            <text class="nav-label">{{item.label}}</text>
+            <view class="nav-dot" wx:if="{{selected===item.key}}"></view>
+        </view>
+    </view>
+</view>

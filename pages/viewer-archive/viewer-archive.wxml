@@ -1,0 +1,212 @@
+<call-broadcast></call-broadcast>
+<view class="archive-page viewer-redesign {{mascotThemeClass}} {{performanceClass}}">
+    <view class="custom-nav" style="height:{{navigationHeight}}px;padding-top:{{statusBarHeight}}px;">
+        <button aria-label="返回" bindtap="goBack" class="nav-back" hover-class="nav-back--pressed">
+            <view class="nav-back-chevron"></view>
+        </button>
+        <text class="custom-nav-title">在线趋势</text>
+        <view class="nav-placeholder"></view>
+    </view>
+    <scroll-view enhanced scroll-y class="archive-scroll" show-scrollbar="{{false}}">
+        <view class="archive-content">
+            <view class="viewer-identity-row">
+                <view aria-label="选择主播" bindtap="openAnchorSelector" class="viewer-identity" hover-class="viewer-control--pressed" role="button">
+                    <view class="filter-avatar-shell">
+                        <image class="filter-avatar" mode="aspectFill" src="{{selectedAnchor.avatarUrl}}" wx:if="{{selectedAnchor.avatarUrl}}"></image>
+                        <view class="filter-avatar filter-avatar-fallback" wx:else>{{selectedAnchor.initial}}</view>
+                        <view class="filter-live-dot" wx:if="{{selectedAnchor.status==='live'}}"></view>
+                    </view>
+                    <view class="filter-copy">
+                        <view class="viewer-name-row">
+                            <text class="filter-value">{{selectedAnchor.nickname||'选择主播'}}</text>
+                            <view class="viewer-chevron"></view>
+                        </view>
+                        <text class="filter-label">{{selectedAnchor.status==='live'?'正在直播':'在线人数档案'}}</text>
+                    </view>
+                </view>
+                <picker bindchange="onDateChange" class="viewer-date-picker" end="{{todayDate}}" mode="date" value="{{selectedDate}}">
+                    <view class="viewer-date-content">
+                        <text class="viewer-date-label">{{selectedDateLabel}}</text>
+                        <view class="viewer-date-value">
+                            <text>{{selectedDate}}</text>
+                            <view class="viewer-chevron"></view>
+                        </view>
+                    </view>
+                </picker>
+            </view>
+            <view class="archive-state" wx:if="{{loading&&!sessions.length}}">
+                <view class="state-loader">
+                    <view class="state-loader-ring"></view>
+                    <view class="state-loader-core"></view>
+                </view>
+                <text>正在整理当天数据</text>
+            </view>
+            <view class="archive-state is-error" wx:elif="{{loadError&&!sessions.length}}">
+                <view class="state-mark">!</view>
+                <text>{{loadError}}</text>
+                <button bindtap="retryLoad" hover-class="state-retry--pressed">重新加载</button>
+            </view>
+            <block wx:else>
+                <view class="summary-band">
+                    <view class="summary-metrics">
+                        <view class="summary-metric">
+                            <text class="summary-metric-value">{{sessionCount}}</text>
+                            <text class="summary-metric-label">开播场次</text>
+                        </view>
+                        <view class="summary-metric">
+                            <text class="summary-metric-value is-peak">{{summaryPeak}}</text>
+                            <text class="summary-metric-label">最高在线</text>
+                        </view>
+                        <view class="summary-metric">
+                            <text class="summary-metric-value">{{summaryDuration}}</text>
+                            <text class="summary-metric-label">总开播时长</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="viewer-record-toolbar">
+                    <view class="viewer-record-heading">
+                        <text>场次记录</text>
+                        <text class="viewer-preview-label" wx:if="{{isPreview}}">演示</text>
+                    </view>
+                    <view class="viewer-day-steps">
+                        <button aria-label="前一天" bindtap="changeDateBy" class="date-step" data-offset="-1" hover-class="date-step--pressed">
+                            <view class="date-step-chevron is-left"></view>
+                        </button>
+                        <button aria-label="后一天" bindtap="changeDateBy" class="date-step {{selectedDate===todayDate?'is-disabled':''}}" data-offset="1" disabled="{{selectedDate===todayDate}}" hover-class="date-step--pressed">
+                            <view class="date-step-chevron is-right"></view>
+                        </button>
+                    </view>
+                </view>
+                <view class="empty-state" wx:if="{{!sessions.length}}">
+                    <view aria-hidden="true" class="empty-chart">
+                        <view class="empty-chart-axis axis-x"></view>
+                        <view class="empty-chart-axis axis-y"></view>
+                        <view class="empty-chart-bar bar-one"></view>
+                        <view class="empty-chart-bar bar-two"></view>
+                        <view class="empty-chart-bar bar-three"></view>
+                    </view>
+                    <text class="empty-title">当天暂无在线人数记录</text>
+                    <text class="empty-subtitle">切换日期或主播查看其他场次</text>
+                </view>
+                <view class="session-list" wx:else>
+                    <view class="session-card {{item.isLive?'is-live':''}}" wx:for="{{sessions}}" wx:key="eventId">
+                        <view class="session-head">
+                            <view class="session-title-copy">
+                                <view class="session-title-line">
+                                    <text class="session-title">第 {{item.sessionNumber}} 场</text>
+                                    <view class="viewer-live-state" wx:if="{{item.isLive}}">
+                                        <view class="viewer-live-wave">
+                                            <view></view>
+                                            <view></view>
+                                            <view></view>
+                                        </view>
+                                        <text>直播中</text>
+                                    </view>
+                                </view>
+                                <text class="session-time-range">{{item.startTime}} - {{item.endTime}}</text>
+                            </view>
+                            <text class="session-duration-value">{{item.durationText}}</text>
+                        </view>
+                        <view class="session-stats">
+                            <view class="session-stat">
+                                <text class="session-stat-value">{{item.totalViewerText}}</text>
+                                <text class="session-stat-label">场观</text>
+                            </view>
+                            <view class="session-stat is-peak">
+                                <text class="session-stat-value">{{item.peakText}}</text>
+                                <text class="session-stat-label">最高在线</text>
+                            </view>
+                            <view class="session-stat">
+                                <text class="session-stat-value">{{item.likeText}}</text>
+                                <text class="session-stat-label">点赞数量</text>
+                            </view>
+                            <view class="session-stat">
+                                <text class="session-stat-value">{{item.followerGainText}}</text>
+                                <view class="session-stat-label-line">
+                                    <text class="session-stat-label">涨粉数</text>
+                                    <text class="session-estimate-tag" wx:if="{{item.followerGainEstimated}}">估</text>
+                                </view>
+                            </view>
+                            <view class="session-stat">
+                                <text class="session-stat-value">{{item.averageViewerText}}</text>
+                                <text class="session-stat-label">平均在线</text>
+                            </view>
+                            <view class="session-stat is-stay">
+                                <text class="session-stat-value">{{item.averageStayText}}</text>
+                                <view class="session-stat-label-line">
+                                    <text class="session-stat-label">人均停留</text>
+                                    <text class="session-estimate-tag" wx:if="{{item.averageStayEstimated}}">估</text>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="curve-section">
+                            <view class="curve-head">
+                                <view class="curve-readout">
+                                    <text class="curve-title">{{item.activePoint?'选中在线人数':'最近采样人数'}}</text>
+                                    <view>
+                                        <text class="curve-readout-value">{{item.activePoint?item.activePoint.viewerText:item.lastViewerText}}</text>
+                                        <text class="curve-readout-unit">人</text>
+                                    </view>
+                                </view>
+                                <text class="curve-sample-time">{{item.activePoint?item.activePoint.timeText:item.lastSampleTime}}</text>
+                            </view>
+                            <view class="curve-canvas-shell" wx:if="{{item.hasCurve}}">
+                                <view class="curve-grid-line grid-one"></view>
+                                <view class="curve-grid-line grid-two"></view>
+                                <view class="curve-grid-line grid-three"></view>
+                                <canvas bindtouchstart="onChartTouch" catchtouchmove="onChartTouch" class="viewer-chart" data-session-index="{{index}}" id="archive-chart-{{index}}" type="2d"></canvas>
+                                <view aria-hidden="true" class="curve-touch-overlay" wx:if="{{item.activePoint}}">
+                                    <view class="curve-touch-line" style="left:{{item.activePoint.xPercent}}%;"></view>
+                                    <view class="curve-touch-dot" style="left:{{item.activePoint.xPercent}}%;top:{{item.activePoint.yPercent}}%;"></view>
+                                </view>
+                            </view>
+                            <view class="curve-empty" wx:else>
+                                <view class="curve-empty-line"></view>
+                                <text>本场暂无人数变化记录</text>
+                            </view>
+                            <view class="curve-axis-labels">
+                                <text>{{item.curveStartTime}}</text>
+                                <text>{{item.curveEndTime}}</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </block>
+            <view class="viewer-disclaimer">数据不保证100%准确，仅供参考，不构成任何承诺和依据。</view>
+            <view class="archive-footer-space"></view>
+        </view>
+    </scroll-view>
+    <view class="anchor-selector-layer {{anchorSelectorClosing?'is-closing':''}}" wx:if="{{anchorSelectorOpen}}">
+        <view bindtap="closeAnchorSelector" class="anchor-selector-backdrop"></view>
+        <view catchtap="preventBubble" class="anchor-selector-sheet">
+            <view class="anchor-selector-handle"></view>
+            <view class="anchor-selector-head">
+                <view class="anchor-selector-title-group">
+                    <text class="anchor-selector-title">选择主播</text>
+                    <text class="anchor-selector-count">已收录 {{anchors.length}} 位</text>
+                </view>
+                <button aria-label="关闭主播选择" bindtap="closeAnchorSelector" class="anchor-selector-close" hover-class="anchor-selector-close--pressed">
+                    <view class="anchor-selector-close-line line-one"></view>
+                    <view class="anchor-selector-close-line line-two"></view>
+                </button>
+            </view>
+            <scroll-view enhanced scroll-y class="anchor-selector-list" show-scrollbar="{{false}}" style="height:{{anchors.length>5?380:anchors.length*70+12}}px;">
+                <view aria-label="选择 {{item.nickname}}" bindtap="selectAnchor" class="anchor-selector-option {{index===selectedAnchorIndex?'is-selected':''}} {{item.status==='live'?'is-live':''}}" data-index="{{index}}" hover-class="anchor-selector-option--pressed" role="button" style="animation-delay:{{index*38}}ms;" wx:for="{{anchors}}" wx:key="account">
+                    <view class="anchor-option-avatar-shell">
+                        <image class="anchor-option-avatar" mode="aspectFill" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+                        <view class="anchor-option-avatar anchor-option-avatar-fallback" wx:else>{{item.initial}}</view>
+                        <view class="anchor-option-live-dot" wx:if="{{item.status==='live'}}"></view>
+                    </view>
+                    <view class="anchor-option-copy">
+                        <text class="anchor-option-name">{{item.nickname}}</text>
+                        <text class="anchor-option-meta">{{item.status==='live'?'正在直播':'已收录人数记录'}}</text>
+                    </view>
+                    <view aria-hidden="true" class="anchor-option-check">
+                        <view class="anchor-option-checkmark"></view>
+                    </view>
+                </view>
+                <view class="anchor-selector-safe-space"></view>
+            </scroll-view>
+        </view>
+    </view>
+</view>

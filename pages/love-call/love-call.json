@@ -1,0 +1,14 @@
+{
+  "navigationStyle": "custom",
+  "backgroundColor": "#fffafa",
+  "usingComponents": {
+    "honor-insignia": "/components/honor-insignia/index",
+    "call-preferences": "/components/call-preferences/index",
+    "call-count": "./components/call-count/index",
+    "recharge-dialog": "/components/recharge-dialog/index",
+    "wallet-recharge": "/components/wallet-recharge/index",
+    "starlight-mascot": "/components/starlight-mascot/index",
+    "bottom-nav": "/components/bottom-nav/index",
+    "call-broadcast": "/components/call-broadcast/index"
+  }
+}

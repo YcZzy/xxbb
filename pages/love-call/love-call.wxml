@@ -1,0 +1,356 @@
+<call-broadcast></call-broadcast>
+<view class="call-page {{mascotThemeClass}} {{performanceClass}} {{!active?'is-paused':''}}">
+    <view class="call-nav" style="padding-top:{{statusBarHeight}}px;height:{{navigationHeight}}px;">
+        <button aria-label="返回" bindtap="back" class="nav-back">‹</button>
+        <text class="nav-title">{{fromDigestTip?'i币充值':'为爱播打 Call'}}</text>
+    </view>
+    <view class="call-body {{showRecharge||showConfirm||preferencesVisible||celebration?'is-paused':''}}">
+        <view class="wallet-line">
+            <view aria-label="刷新i币余额" aria-role="button" bindtap="refreshBalance" class="wallet-value">
+                <image aria-hidden="true" class="wallet-coin" mode="aspectFit" src="/assets/images/help-a/coins.png"></image>
+                <text class="wallet-number">{{balanceLoading?'···':balanceText}}</text>
+                <text class="wallet-unit">i币余额</text>
+            </view>
+            <button aria-label="设置显示昵称" bindtap="openCallPreferences" class="call-preferences-entry" disabled="{{submitting}}" hover-class="preferences-pressed" wx:if="{{!fromDigestTip}}">
+                <image aria-hidden="true" mode="aspectFit" src="/assets/icons/call-settings.svg"></image>
+                <text>设置显示昵称</text>
+                <image aria-hidden="true" class="preferences-chevron" mode="aspectFit" src="/assets/icons/recharge/chevron.svg"></image>
+            </button>
+        </view>
+        <view bindtap="loadCenter" class="call-error" wx:if="{{loadError}}">{{loadError}} · 点击重试</view>
+        <text aria-live="polite" class="call-message" wx:if="{{fromDigestTip&&statusMessage}}">{{statusMessage}}</text>
+        <block wx:if="{{!fromDigestTip}}">
+            <view aria-role="tablist" class="call-tabs {{currentTab==='history'?'show-history':''}}">
+                <view aria-hidden="true" class="call-tab-indicator">
+                    <view class="call-tab-sheen {{tabInteracted?currentTab==='send'?'sheen-send':'sheen-history':''}}"></view>
+                </view>
+                <button aria-role="tab" aria-selected="{{currentTab==='send'}}" bindtap="switchCallTab" class="call-tab {{currentTab==='send'?'is-current':''}}" data-tab="send" disabled="{{submitting}}" hover-class="tab-pressed" hover-stay-time="80">
+                    <image aria-hidden="true" class="call-tab-icon" mode="aspectFit" src="/assets/icons/call-heart.svg"></image>
+                    <text>打call</text>
+                </button>
+                <button aria-role="tab" aria-selected="{{currentTab==='history'}}" bindtap="switchCallTab" class="call-tab {{currentTab==='history'?'is-current':''}}" data-tab="history" disabled="{{submitting}}" hover-class="tab-pressed" hover-stay-time="80">
+                    <image aria-hidden="true" class="call-tab-icon" mode="aspectFit" src="/assets/icons/call-receipt.svg"></image>
+                    <text>打call明细</text>
+                </button>
+            </view>
+            <view class="call-send-panel {{currentTab!=='send'?'is-paused':''}}" hidden="{{currentTab!=='send'}}">
+                <view class="call-hero {{!heroVisible?'effects-paused':''}}" id="call-target" wx:if="{{selected}}">
+                    <view class="target-identity">
+                        <view class="target-avatar-wrap {{selected.live?'is-live':''}}">
+                            <image class="target-avatar" mode="aspectFill" src="{{selected.avatar}}" wx:if="{{selected.avatar}}"></image>
+                            <view class="target-avatar fallback" wx:else>{{selected.initial}}</view>
+                        </view>
+                        <view class="target-heading">
+                            <text class="target-eyebrow">为 TA 点亮星光</text>
+                            <text class="target-name">{{selected.name}}</text>
+                        </view>
+                        <button bindtap="scrollToAnchors" class="target-switch">换一位<text>⌄</text>
+                        </button>
+                    </view>
+                    <view class="target-stat">
+                        <text class="target-stat-label">累计收到 Call</text>
+                        <view class="target-total">
+                            <text>{{selected.callsText}}</text>
+                        </view>
+                        <view class="target-presence {{selected.live?'presence-live':''}}">
+                            <view class="presence-dot" wx:if="{{selected.statusKnown}}"></view>
+                            <text>{{!selected.statusKnown?'为 TA 点亮星光':selected.live?'开播中':'静候下一次相见'}}</text>
+                        </view>
+                    </view>
+                    <view class="call-mascot">
+                        <starlight-mascot active="{{active&&heroVisible&&!badgePreview&&!showConfirm&&!preferencesVisible&&!showRecharge&&!celebration&&currentTab==='send'}}" lite="{{performanceClass==='performance-lite'}}" state="{{pack.code==='free'?'normal':'live'}}"></starlight-mascot>
+                    </view>
+                </view>
+                <view class="call-empty" wx:elif="{{loading}}">正在整理你的爱播…</view>
+                <view class="call-empty" wx:else>暂无可支持的主播</view>
+                <view class="honor-progress {{honorExpanded?'is-expanded':''}} {{selected.badgeProgress.targetCode==='call_100000'?'honor-galaxy':''}}" wx:if="{{selected}}">
+                    <button aria-expanded="{{honorExpanded}}" aria-label="{{honorExpanded?'收起徽章预览':'展开徽章预览'}}" bindtap="toggleHonorProgress" class="honor-heading" hover-class="honor-heading-pressed" wx:if="{{selected.badgeProgress.available}}">
+                        <image aria-hidden="true" class="honor-art" mode="aspectFit" src="{{selected.badgeProgress.artwork}}" wx:if="{{selected.badgeProgress.artwork}}"></image>
+                        <view aria-hidden="true" class="honor-art honor-symbol honor-symbol-{{selected.badgeProgress.targetCode}}" wx:else>{{selected.badgeProgress.targetSymbol}}</view>
+                        <view class="honor-heading-copy">
+                            <text class="honor-title">徽章预览</text>
+                            <text class="honor-subtitle">{{selected.badgeProgress.targetName}} · {{selected.badgeProgress.reachedTop?selected.badgeProgress.awardedTop?'已获得':selected.badgeProgress.awardsKnown?'待颁发':'状态待同步':'还差 '+selected.badgeProgress.remainingText+' 次'}}</text>
+                        </view>
+                        <view class="honor-disclosure">
+                            <text>{{honorExpanded?'收起':'展开'}}</text>
+                            <image aria-hidden="true" class="honor-chevron" mode="aspectFit" src="/assets/icons/recharge/chevron.svg"></image>
+                        </view>
+                    </button>
+                    <view class="honor-details" wx:if="{{selected.badgeProgress.available&&honorExpanded}}">
+                        <view class="honor-numbers">
+                            <view>
+                                <text class="honor-count">{{selected.badgeProgress.countText}}</text>
+                                <text class="honor-unit"> 次打Call</text>
+                            </view>
+                            <text class="honor-goal">目标 {{selected.badgeProgress.targetText}} 次</text>
+                        </view>
+                        <view aria-label="{{selected.badgeProgress.targetName}}，已有{{selected.badgeProgress.countText}}次打Call，目标{{selected.badgeProgress.targetText}}次" class="honor-track">
+                            <view class="honor-fill" style="transform:scaleX({{selected.badgeProgress.scale}});"></view>
+                        </view>
+                        <view class="honor-milestones">
+                            <button aria-label="预览{{item.name}}，{{item.thresholdText}}次打Call，{{item.stateText}}" bindtap="openBadgePreview" class="honor-tier {{item.current?'is-current':''}} {{item.reached?'is-reached':''}} {{item.awarded?'is-awarded':''}}" data-code="{{item.code}}" hover-class="honor-tier-pressed" wx:for="{{selected.badgeProgress.tiers}}" wx:key="code">
+                                <view aria-hidden="true" class="honor-tier-marker"></view>
+                                <text class="honor-tier-number">{{item.thresholdText}}次</text>
+                                <text class="honor-tier-state">{{item.stateText}}</text>
+                            </button>
+                        </view>
+                    </view>
+                    <view class="honor-unavailable" wx:if="{{!selected.badgeProgress.available}}">
+                        <text class="honor-title">徽章进度</text>
+                        <text class="honor-subtitle">打Call次数暂未同步</text>
+                    </view>
+                </view>
+                <view class="gift-section {{!giftsVisible?'effects-paused':''}}">
+                    <view class="section-line">
+                        <text class="section-title">心意礼物</text>
+                        <view class="my-total">
+                            <text>我已送出</text>
+                            <text class="my-total-number">{{myCallsText}}</text>
+                            <text>Call</text>
+                        </view>
+                    </view>
+                    <view aria-role="radiogroup" class="gift-deck">
+                        <button aria-checked="{{pack.code===item.code}}" aria-role="radio" bindtap="choosePack" class="gift gift-{{item.code}} {{pack.code===item.code?'is-selected':''}}" data-code="{{item.code}}" disabled="{{submitting}}" hover-class="gift-pressed" wx:for="{{packs}}" wx:key="code">
+                            <text aria-label="支持全站通告，仅限公开主播" class="gift-broadcast" wx:if="{{item.coins>0}}">全站通告</text>
+                            <view class="gift-check">✓</view>
+                            <view class="gift-art">
+                                <image mode="aspectFit" src="/pages/love-call/assets/gifts/{{item.art}}.png"></image>
+                            </view>
+                            <text class="gift-name">{{item.name}}</text>
+                            <view class="gift-count">
+                                <text>＋{{item.calls}}</text>
+                                <text>Call</text>
+                            </view>
+                            <view class="gift-price">
+                                <view class="gift-amount">
+                                    <image aria-hidden="true" class="gift-coin" mode="aspectFit" src="/assets/images/help-a/coins.png" wx:if="{{item.coins>0}}"></image>
+                                    <text>{{item.price}}</text>
+                                </view>
+                                <text class="gift-original" wx:if="{{item.discounted}}">{{item.originalCoins}} i币</text>
+                            </view>
+                        </button>
+                    </view>
+                    <view class="burst-mode" wx:if="{{pack.coins>0}}">
+                        <text>连送模式</text>
+                        <switch aria-label="连送模式" bindchange="toggleBurst" checked="{{burstEnabled}}" color="#b72c51" disabled="{{!burstEnabled&&submitting||burstPaused||!stateReady||!anchorsReady||!coinEnabled}}"></switch>
+                    </view>
+                    <button bindtap="submit" class="send-call {{pack.code==='nova'?'send-nova':''}} {{burstEnabled?'send-burst':''}}" disabled="{{submitting&&!burstEnabled||burstPaused||!stateReady||!anchorsReady||!selected||pack.code==='free'&&!freeAvailable||burstEnabled&&burstSent+burstPending>=burstLimit}}" hover-class="send-pressed" hover-stay-time="60">
+                        <view class="send-shine"></view>
+                        <text class="send-star">✦</text>
+                        <text>{{burstPaused?'本笔待核对':burstEnabled?burstSent+burstPending>=burstLimit?'本轮已达上限':'再送一份 '+pack.name:submitting||!stateReady||!anchorsReady?'正在确认…':pack.code==='free'?freeAvailable?'送出今日心意':'今日已支持 · 明天再来':'送出 '+pack.calls+' 次 Call'}}</text>
+                        <text class="send-cost" wx:if="{{pack.coins>0}}">{{pack.coins}} i币</text>
+                    </button>
+                    <view aria-live="polite" class="burst-progress" wx:if="{{burstVisible}}">
+                        <view class="burst-counts">
+                            <view aria-hidden="true" class="burst-feedback {{burstPulse%2?'burst-pulse-a':'burst-pulse-b'}}">
+                                <image mode="aspectFit" src="/pages/love-call/assets/gifts/{{pack.art}}.png"></image>
+                            </view>
+                            <text class="burst-delivered">已送达 {{burstSent}} 份</text>
+                            <text class="burst-pending">{{burstPaused?'待核对':'待确认'}} {{burstPending}} 份</text>
+                            <button bindtap="stopBurst" class="burst-stop" wx:if="{{burstEnabled}}">停止连送</button>
+                        </view>
+                        <view class="burst-reservation">
+                            <text>预留 {{burstReserved}} i币</text>
+                            <text>本轮可用 {{burstAvailable}} i币</text>
+                        </view>
+                        <button bindtap="checkBurstResult" class="burst-check" disabled="{{burstChecking}}" wx:if="{{burstPaused}}">{{burstChecking?'正在核对…':'核对本笔结果'}}</button>
+                    </view>
+                    <text class="call-rule">每日免费 1 次 · i币打 Call 不占用免费次数</text>
+                    <text aria-live="polite" class="call-message" wx:if="{{statusMessage}}">{{statusMessage}}</text>
+                </view>
+                <view class="supporters-section" id="call-anchors">
+                    <view class="anchor-list-heading">
+                        <text class="section-title">爱播守候</text>
+                        <text class="anchor-list-count">{{anchors.length}} 位</text>
+                    </view>
+                    <view class="anchor-list-controls">
+                        <view aria-role="tablist" class="scope-switch">
+                            <button aria-role="tab" aria-selected="{{!onlyMine}}" bindtap="switchScope" class="{{!onlyMine?'chosen':''}}" data-scope="all">全部</button>
+                            <button aria-role="tab" aria-selected="{{onlyMine}}" bindtap="switchScope" class="{{onlyMine?'chosen':''}}" data-scope="mine">特别关注</button>
+                        </view>
+                        <view class="call-search">
+                            <view class="search-icon"></view>
+                            <input adjust-position="true" bindinput="onSearch" confirm-type="search" maxlength="64" placeholder="搜索昵称或抖音号" value="{{query}}"></input>
+                        </view>
+                    </view>
+                    <view class="anchor-stack-track" style="--anchor-card-height:{{anchorCardHeight}}px;">
+                        <view aria-label="为{{item.name}}打Call，累计{{item.callsText}}次" aria-role="button" aria-selected="{{selected.account===item.account}}" bindtap="selectAnchor" class="call-anchor {{selected.account===item.account?'is-selected':''}} {{index===visibleAnchors.length-1?'is-last':''}}" data-account="{{item.account}}" hover-class="anchor-pressed" hover-stay-time="90" style="top:{{anchorStackInset+index*anchorStackStep}}px;z-index:{{index+1}};" wx:for="{{visibleAnchors}}" wx:key="account">
+                            <text class="anchor-rank rank-{{index}}">{{index+1<10?'0':''}}{{index+1}}</text>
+                            <view class="anchor-avatar-shell {{item.live?'is-live':''}}">
+                                <image class="anchor-avatar" lazy-load="{{index>5}}" mode="aspectFill" src="{{item.avatar}}" wx:if="{{item.avatar}}"></image>
+                                <view class="anchor-avatar fallback" wx:else>{{item.initial}}</view>
+                            </view>
+                            <view class="anchor-identity">
+                                <text class="anchor-name">{{item.name}}</text>
+                                <view class="anchor-state {{item.live?'is-live':''}}">
+                                    <view aria-hidden="true" class="anchor-presence-dot" wx:if="{{item.statusKnown}}"></view>
+                                    <text>{{!item.statusKnown?'为 TA 打Call':item.live?'开播中':'守候中'}}</text>
+                                    <text class="anchor-followed" wx:if="{{item.subscribed}}">特别关注</text>
+                                </view>
+                            </view>
+                            <view class="anchor-score {{item.callsText.length>8?'is-long':''}}">
+                                <text>{{item.callsText}}</text>
+                                <text>Call</text>
+                            </view>
+                            <view class="anchor-select">{{selected.account===item.account?'✓':'＋'}}</view>
+                        </view>
+                        <view class="call-empty" wx:if="{{!visibleAnchors.length}}">{{loading?'正在整理爱播…':query?'没有找到这位主播':onlyMine?'还没有特别关注的主播':'暂无可支持的主播'}}</view>
+                    </view>
+                </view>
+                <text class="call-disclosure">i币仅用于站内互动，不向主播转账，不影响开播提醒。付费 Call 不计入连续签到及每日免费活动。</text>
+            </view>
+            <view class="call-history" wx:if="{{currentTab==='history'}}">
+                <view class="history-heading">
+                    <text class="section-title">全站付费打call</text>
+                    <text class="history-subtitle">最新送出</text>
+                </view>
+                <view class="history-row" wx:for="{{historyItems}}" wx:key="record_id">
+                    <image class="history-gift" lazy-load="true" mode="aspectFit" src="/pages/love-call/assets/gifts/{{item.art}}.png"></image>
+                    <view class="history-detail">
+                        <text class="history-name">{{item.nickname}}</text>
+                        <text class="history-recipient">送给 {{item.anchor_name}}</text>
+                        <text class="history-meta">{{item.giftName}} · {{item.costText}}</text>
+                        <text class="history-time">{{item.timeText}}</text>
+                    </view>
+                    <view class="history-result">
+                        <view class="history-quantity">
+                            <text>{{item.quantityText}}</text>
+                            <text class="history-unit">Call</text>
+                        </view>
+                        <text class="history-status">已送达</text>
+                    </view>
+                </view>
+                <view aria-live="polite" class="history-state" wx:if="{{historyError}}">
+                    <text>{{historyError}}</text>
+                    <button bindtap="refreshCallHistory" class="history-action" disabled="{{historyLoading}}">重新加载</button>
+                </view>
+                <view aria-live="polite" class="history-state" wx:elif="{{historyLoading}}">
+                    <view aria-hidden="true" class="history-loader"></view>
+                    <text>正在加载明细…</text>
+                </view>
+                <view class="history-state history-empty" wx:elif="{{historyLoaded&&!historyItems.length}}">
+                    <image mode="aspectFit" src="/pages/love-call/assets/gifts/star.png"></image>
+                    <text class="history-empty-title">暂无付费打call记录</text>
+                    <button bindtap="switchCallTab" class="history-action" data-tab="send">去打call</button>
+                </view>
+                <button bindtap="moreCallHistory" class="history-more" wx:elif="{{historyHasMore}}">加载更多</button>
+                <text class="history-end" wx:elif="{{historyLoaded}}">已显示全部记录</text>
+            </view>
+        </block>
+    </view>
+    <root-portal wx:if="{{badgePreview&&active}}">
+        <view bindtap="closeBadgePreview" catchtouchmove="noop" class="honor-preview-overlay {{mascotThemeClass}} {{performanceClass}}">
+            <view aria-label="{{badgePreview.name}}徽章预览" aria-modal="true" aria-role="dialog" catchtap="noop" class="honor-preview-dialog preview-tier-{{badgePreview.level}}">
+                <view class="honor-preview-header">
+                    <text class="honor-preview-title">{{badgePreview.name}}</text>
+                    <button aria-label="关闭徽章预览" bindtap="closeBadgePreview" class="honor-preview-close" hover-class="honor-preview-pressed">
+                        <view aria-hidden="true" class="honor-preview-cross"></view>
+                    </button>
+                </view>
+                <scroll-view class="honor-preview-scroll" enhanced="true" scroll-y="true" show-scrollbar="false">
+                    <view class="honor-preview-content">
+                        <text class="honor-preview-anchor">{{selected.name}} · {{badgePreview.stateText}}</text>
+                        <view class="honor-preview-stage">
+                            <view class="honor-preview-insignia">
+                                <honor-insignia active="{{active}}" badge="{{badgePreview}}" lite="{{performanceClass==='performance-lite'}}"></honor-insignia>
+                            </view>
+                        </view>
+                        <view aria-role="tablist" class="honor-preview-tabs">
+                            <button aria-label="预览{{item.name}}" aria-role="tab" aria-selected="{{item.code===badgePreview.code}}" bindtap="openBadgePreview" class="honor-preview-tab {{item.code===badgePreview.code?'is-selected':''}}" data-code="{{item.code}}" hover-class="honor-preview-pressed" wx:for="{{selected.badgeProgress.tiers}}" wx:key="code">{{item.thresholdText}}次</button>
+                        </view>
+                        <view class="honor-preview-numbers">
+                            <view>
+                                <text class="honor-preview-count">{{badgePreview.countText}}</text>
+                                <text class="honor-preview-unit"> 次打Call</text>
+                            </view>
+                            <text class="honor-preview-goal">目标 {{badgePreview.fullThresholdText}} 次</text>
+                        </view>
+                        <view class="honor-preview-track">
+                            <view class="honor-preview-fill" style="transform:scaleX({{badgePreview.scale}})"></view>
+                        </view>
+                        <text aria-live="polite" class="honor-preview-status">{{badgePreview.awarded?'这枚徽章已获得':badgePreview.reached?badgePreview.awardsKnown?'已达成目标，等待自动颁发':'已达成目标，颁发状态待同步':'距离这枚徽章，还差 '+badgePreview.remainingText+' 次'}}</text>
+                        <text class="honor-preview-rule">免费打Call和成功送出的付费Call均计入。达标后自动颁发。</text>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{callSending&&active}}">
+        <view aria-busy="true" aria-live="polite" class="call-sending {{mascotThemeClass}} {{performanceClass}}">
+            <image class="sending-gift" mode="aspectFit" src="/pages/love-call/assets/gifts/{{sendingArt}}.png"></image>
+            <view class="sending-copy">
+                <text class="sending-title">正在送给 {{sendingName}}</text>
+                <text class="sending-status">微信确认中</text>
+            </view>
+            <view aria-hidden="true" class="sending-spinner"></view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{showConfirm}}">
+        <view bindtap="closeConfirm" catchtouchmove="noop" class="call-overlay {{mascotThemeClass}}">
+            <view catchtap="noop" class="call-modal">
+                <text class="modal-title">{{burstConfirm?'开启本轮连送':'确认这份心意'}}</text>
+                <text class="modal-copy">送给 {{selected.name}}</text>
+                <text class="confirm-quantity">＋{{pack.calls}} <text>Call</text>
+                </text>
+                <view class="confirm-cost">
+                    <text>{{burstConfirm?'每份消费':'本次消费'}}</text>
+                    <text>{{pack.coins}} i币</text>
+                </view>
+                <view class="confirm-cost" wx:if="{{pack.discounted}}">
+                    <text>主题九折 · 已省</text>
+                    <text>{{pack.originalCoins-pack.coins}} i币</text>
+                </view>
+                <view class="confirm-cost" wx:if="{{burstConfirm}}">
+                    <text>本轮上限 · {{burstLimit}} 份</text>
+                    <text>{{burstBudget}} i币</text>
+                </view>
+                <text class="burst-consent" wx:if="{{burstConfirm}}">确认后送出 1 份，每次再点送礼按钮扣 {{pack.coins}} i币。仅送给当前爱播，切换后需重新确认。离开页面会取消未提交的连送，已提交的订单继续核对。</text>
+                <view class="confirm-cost" wx:else>
+                    <text>消费后余额</text>
+                    <text>{{balance-pack.coins}} i币</text>
+                </view>
+                <view class="confirm-broadcast">
+                    <view class="confirm-broadcast-heading">
+                        <text class="confirm-broadcast-title">全小程序通告</text>
+                        <button bindtap="openCallPreferences" class="confirm-identity-edit" disabled="{{submitting}}">修改</button>
+                    </view>
+                    <text aria-live="polite" class="confirm-broadcast-copy">{{callIdentityLoading?'正在确认播报身份…':callIdentity||'播报身份暂未读取'}}</text>
+                    <button bindtap="retryCallIdentity" class="confirm-identity-edit" wx:if="{{!callIdentityLoading&&!callIdentity}}">重新读取</button>
+                </view>
+                <view class="modal-actions">
+                    <button bindtap="closeConfirm" disabled="{{submitting}}">取消</button>
+                    <button bindtap="confirmCall" class="modal-primary" disabled="{{submitting}}">{{submitting?'确认中…':burstConfirm?'开启并送出 1 份':'确认消费'}}</button>
+                </view>
+            </view>
+        </view>
+    </root-portal>
+    <call-preferences active="{{active}}" bindclose="closeCallPreferences" bindprofile="callPreferencesProfile" bindunconfirmed="callPreferencesUnconfirmed" lite="{{performanceClass==='performance-lite'}}" skin="{{mascotThemeSkin}}" visible="{{preferencesVisible}}"></call-preferences>
+    <wallet-recharge active="{{active}}" bindclose="closeRechargeRecovery" binddelivered="closeRechargeRecovery" lite="{{performanceClass==='performance-lite'}}" preferred-order-id="{{rechargeRecoveryOrderId}}" recovery-id="{{rechargeRecoveryId}}" skin="{{mascotThemeSkin}}" visible="{{rechargeRecoveryVisible}}"></wallet-recharge>
+    <recharge-dialog active="{{active}}" balance-text="{{balanceText}}" bindamountinput="onRechargeInput" bindclose="closeRecharge" bindconfirm="recharge" bindcustom="chooseCustomRecharge" bindselect="chooseRecharge" busy="{{submitting}}" coins="{{rechargeCoins}}" coins-text="{{rechargeCoinsText}}" custom="{{!!customRecharge}}" input-error="{{rechargeInputError}}" input-value="{{rechargeCustomValue}}" lite="{{performanceClass==='performance-lite'}}" message="{{statusMessage}}" mode="{{rechargeMode}}" note="充值后不会自动送出 Call。未成年人请勿充值。" options="{{rechargeOptions}}" price-text="{{rechargePriceText}}" range-text="{{customRangeText}}" skin="{{mascotThemeSkin}}" visible="{{showRecharge}}"></recharge-dialog>
+    <root-portal wx:if="{{celebration}}">
+        <view catchtouchmove="noop" class="celebration-overlay {{performanceClass}} fx-{{celebrationPack}}">
+            <button aria-label="关闭动画" bindtap="closeCelebration" class="celebration-close">×</button>
+            <view class="celebration-stage">
+                <view class="celebration-ring ring-one"></view>
+                <view class="celebration-ring ring-two"></view>
+                <view class="celebration-particle p-{{item}}" wx:for="{{sparks}}" wx:key="*this">
+                    <text>✦</text>
+                </view>
+                <image binderror="onInlineArtworkError" bindload="loadInlineArtwork" class="celebration-character" data-art="starlightLive" mode="aspectFit" src="{{inlineArt.starlightLive||'/assets/images/remote-fallback/starlightLive.png'}}"></image>
+                <view class="celebration-recipient">
+                    <image mode="aspectFill" src="{{celebrationAvatar}}" wx:if="{{celebrationAvatar}}"></image>
+                    <text>{{celebrationName}}</text>
+                </view>
+            </view>
+            <text class="celebration-label">{{celebrationPack==='nova'?'星河为你盛放':celebrationPack==='spark'?'让热爱闪闪发光':'今日心意已点亮'}}</text>
+            <view class="celebration-total">
+                <call-count active="{{active&&celebration}}" lite="{{performanceClass==='performance-lite'}}" quantity="{{celebrationQuantity}}"></call-count>
+                <text>Call</text>
+            </view>
+            <text class="celebration-note">这份支持，已记录在爱播的星光里</text>
+            <text class="celebration-note" wx:if="{{rewardMessage}}">{{rewardMessage}}</text>
+            <text class="celebration-note celebration-growth" wx:if="{{memberReward}}">{{memberReward}}</text>
+            <button bindtap="closeCelebration" class="celebration-done">收下这份星光</button>
+        </view>
+    </root-portal>
+</view>

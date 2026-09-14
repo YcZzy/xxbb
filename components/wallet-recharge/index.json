@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "recharge-dialog": "/components/recharge-dialog/index"
+  }
+}

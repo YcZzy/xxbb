@@ -1,0 +1,551 @@
+[is='components/call-account/index'] {
+  display: block;
+}
+
+[is='components/digest-gratuity/index'] {
+  display: block;
+}
+
+[is='components/galaxy-honor-badge/index'] {
+  display: block;
+  flex: none;
+  height: 50rpx;
+  width: 208rpx;
+}
+
+[is='components/honor-insignia/index'] {
+  display: block;
+  height: 62rpx;
+  width: 208rpx;
+}
+
+[is='components/lottery-countdown/index'] {
+  display: block;
+  flex: none;
+}
+
+[is='components/mascot-launch-guide/index'] {
+  bottom: 0;
+  display: block;
+  left: 108rpx;
+  max-width: 176px;
+  pointer-events: none;
+  position: absolute;
+  right: 104px;
+  z-index: 9;
+}
+
+[is='components/order-countdown/index'] {
+  display: block;
+}
+
+[is='components/recharge-dialog/index'] {
+  display: block;
+}
+
+[is='components/reminder-settings/index'] {
+  display: block;
+  margin-bottom: 0;
+}
+
+[is='components/soft-gold-atmosphere/index'] {
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0;
+}
+
+[is='components/starlight-mascot/index'] {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+[is='components/wallet-recharge/index'] {
+  display: block;
+}
+
+[is='pages/card-pack/components/dynamic-card/index'] {
+  display: block;
+  width: 100%;
+}
+
+[is='pages/card-pack/components/star-river/index'] {
+  display: block;
+}
+
+[is='pages/card-pack/components/tear-pack/index'] {
+  display: block;
+}
+
+[is='pages/love-call/components/call-count/index'] {
+  color: inherit;
+  display: inline-block;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.theme-ibo-soft-gold {
+  --ink: #334847;
+  --muted: #636d65;
+  --paper: #f7f8f3;
+  --accent: #806238;
+  --accent-deep: #614b2d;
+  --jade: #326d57;
+  --line: #dce1d6;
+  --tint: #eee6d3;
+  --help-ink: #334847;
+  --help-muted: #636d65;
+  --help-action: #806238;
+  --help-line: #dce1d6;
+  --help-band: #f0f2e9;
+  --help-paper: #f7f8f3;
+}
+
+.call-page.theme-ibo-soft-gold,
+.digest-page.theme-ibo-soft-gold,
+.entry-page.theme-ibo-soft-gold,
+.help-page.personal-center.help-a.theme-ibo-soft-gold,
+.media-page.theme-ibo-soft-gold,
+.records-page.theme-ibo-soft-gold {
+  --ink: #334847;
+  --muted: #636d65;
+  --paper: #fffef8;
+  --accent: #806238;
+  --accent-deep: #614b2d;
+  --jade: #326d57;
+  --line: #dce1d6;
+  --tint: #eee6d3;
+  background: linear-gradient(155deg, #edf4f1, #f7f7f1 38%, #f6f5ed 70%, #eef4f1);
+  color: #334847;
+}
+
+.media-page.theme-ibo-soft-gold .anchor-name,
+.media-page.theme-ibo-soft-gold .card-title,
+.media-page.theme-ibo-soft-gold .custom-nav-title,
+.media-page.theme-ibo-soft-gold .hero-title {
+  color: #334847;
+}
+
+.media-page.theme-ibo-soft-gold .accent,
+.media-page.theme-ibo-soft-gold .eyebrow,
+.media-page.theme-ibo-soft-gold .live-audience-number {
+  color: #806238;
+}
+
+.media-page.theme-ibo-soft-gold .anchor-id,
+.media-page.theme-ibo-soft-gold .anchor-status,
+.media-page.theme-ibo-soft-gold .hero-subtitle,
+.media-page.theme-ibo-soft-gold .search-placeholder {
+  color: #636d65;
+}
+
+.media-page.theme-ibo-soft-gold .anchor-card {
+  background: #fffef9e8;
+  border-color: #c5b38d;
+  box-shadow:
+    0 12px 28px #69796812,
+    inset 0 0 0 1px #d3c19c66;
+}
+
+.media-page.theme-ibo-soft-gold .anchor-row {
+  border-color: #dce1d6;
+}
+
+.media-page.theme-ibo-soft-gold .anchor-row.is-featured {
+  background: linear-gradient(110deg, #f5eddc, #fbfcf7 50%, #eef5ee);
+  border-color: #c4ad7f;
+  box-shadow: inset 0 0 0 1px #d3bf9955;
+}
+
+.media-page.theme-ibo-soft-gold .anchor-featured-label {
+  background: #e7d8b8;
+  color: #70552e;
+}
+
+.media-page.theme-ibo-soft-gold .featured-avatar-orbit {
+  border-color: #c4ad7f #dfeadf #c4ad7f #e8dab9;
+}
+
+.media-page.theme-ibo-soft-gold .anchor-featured-beam,
+.media-page.theme-ibo-soft-gold .anchor-featured-spark {
+  animation: none;
+  opacity: 0.15;
+}
+
+.media-page.theme-ibo-soft-gold .anchor-call-count {
+  --call-ink: #806238;
+  --call-soft: #eee6d366;
+  --call-muted: #636d65;
+}
+
+.media-page.theme-ibo-soft-gold .filter-tools-panel,
+.media-page.theme-ibo-soft-gold .summary-strip,
+.media-page.theme-ibo-soft-gold .summary-tabs {
+  background: transparent;
+  border-color: #dce1d6;
+}
+
+.media-page.theme-ibo-soft-gold .filter-toggle,
+.media-page.theme-ibo-soft-gold .special-focus-button {
+  background: #f6f3e8;
+  border-color: #c7b58f;
+  box-shadow: inset 0 0 0 1px #c7b58f44;
+  color: #806238;
+}
+
+.media-page.theme-ibo-soft-gold .filter-toggle-label,
+.media-page.theme-ibo-soft-gold .special-focus-label {
+  color: #70552e;
+}
+
+.media-page.theme-ibo-soft-gold .special-focus-button.is-active {
+  background: linear-gradient(110deg, #e2d1af, #f6efd9, #dfe9d9);
+}
+
+.media-page.theme-ibo-soft-gold .special-focus-signal-core {
+  background: #806238;
+  box-shadow: none;
+}
+
+.media-page.theme-ibo-soft-gold .summary-tab {
+  background: transparent;
+  color: #636d65;
+}
+
+.media-page.theme-ibo-soft-gold .summary-tab.is-active {
+  background: #eee4cd;
+  box-shadow: inset 0 0 0 1px #c8b58c88;
+  color: #70552e;
+}
+
+.media-page.theme-ibo-soft-gold .summary-tab.is-active .summary-tab-label {
+  color: #70552e;
+}
+
+.media-page.theme-ibo-soft-gold .summary-tab-glow {
+  background: none;
+}
+
+.media-page.theme-ibo-soft-gold .search-bar {
+  background: #f7f8f1;
+  border-color: #d8ccb0;
+  box-shadow: none;
+}
+
+.media-page.theme-ibo-soft-gold .search-input {
+  color: #334847;
+}
+
+.media-page.theme-ibo-soft-gold .search-clear {
+  background: #eee6d3;
+  color: #806238;
+}
+
+.media-page.theme-ibo-soft-gold .love-call-entry {
+  background: linear-gradient(120deg, #e3d2af, #f4ecd4, #e2ebdf);
+  border-color: #c7b58f;
+  box-shadow: 0 5px 12px #69796812;
+  color: #70552e;
+}
+
+.media-page.theme-ibo-soft-gold .love-call-entry-icon,
+.media-page.theme-ibo-soft-gold .love-call-entry-title {
+  color: #70552e;
+}
+
+.media-page.theme-ibo-soft-gold .avatar-fallback {
+  background: #eee6d3;
+  color: #806238;
+}
+
+.digest-page.theme-ibo-soft-gold .custom-nav {
+  background: #f4f7f0f5;
+  border-color: #dce1d6;
+  color: #334847;
+}
+
+.digest-page.theme-ibo-soft-gold .newspaper {
+  background: #fffef8;
+  border-color: #c5b38d;
+  box-shadow:
+    0 12px 28px #596c591a,
+    inset 0 0 0 1px #e2d4b6;
+}
+
+.digest-page.theme-ibo-soft-gold .lead-divider > view,
+.digest-page.theme-ibo-soft-gold .masthead-rule,
+.digest-page.theme-ibo-soft-gold .section-rule {
+  background: #b9a177;
+}
+
+.digest-page.theme-ibo-soft-gold .anchor-report,
+.digest-page.theme-ibo-soft-gold .masthead,
+.digest-page.theme-ibo-soft-gold .paper-section,
+.digest-page.theme-ibo-soft-gold .summary-cell {
+  border-color: #d8ceb5;
+}
+
+.digest-page.theme-ibo-soft-gold .article-name,
+.digest-page.theme-ibo-soft-gold .lead-title,
+.digest-page.theme-ibo-soft-gold .masthead-title {
+  color: #334847;
+}
+
+.digest-page.theme-ibo-soft-gold .anchor-stat-value,
+.digest-page.theme-ibo-soft-gold .article-headline,
+.digest-page.theme-ibo-soft-gold .masthead-star,
+.digest-page.theme-ibo-soft-gold .summary-value {
+  color: #806238;
+}
+
+.digest-page.theme-ibo-soft-gold .nav-history,
+.digest-page.theme-ibo-soft-gold .nav-icon,
+.digest-page.theme-ibo-soft-gold .session-ribbon {
+  background: #f0ead9;
+  border-color: #ccbc99;
+  color: #806238;
+}
+
+.digest-page.theme-ibo-soft-gold .history-sheet,
+.digest-page.theme-ibo-soft-gold .share-card-panel {
+  background: #fffef8;
+  border-color: #c5b38d;
+  color: #334847;
+}
+
+.digest-page.theme-ibo-soft-gold .history-date-row.is-selected {
+  background: #eee6d3;
+  color: #70552e;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold {
+  --archive-surface: #f7f8f3;
+  --archive-ink: #334847;
+  --archive-muted: #636d65;
+  --archive-line: #dce1d6;
+  --archive-control-line: #c9b995;
+  --archive-accent: #806238;
+  --archive-wash: #eee6d3;
+  --archive-rival: #376cab;
+}
+
+.archive-page.viewer-redesign.theme-ibo-soft-gold {
+  --viewer-surface: #f7f8f3;
+  --viewer-ink: #334847;
+  --viewer-muted: #636d65;
+  --viewer-line: #dce1d6;
+  --viewer-control-line: #c9b995;
+  --viewer-accent: #806238;
+  --viewer-wash: #eee6d3;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-profile-avatar,
+.archive-page.viewer-redesign.theme-ibo-soft-gold .filter-avatar-shell {
+  box-shadow:
+    0 0 0 2px #f7f8f3,
+    0 0 0 3px #c5b38d;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-date-control,
+.archive-page.viewer-redesign.theme-ibo-soft-gold .viewer-date-picker {
+  background: linear-gradient(120deg, #fffef8, #f2efdf);
+  border-color: #c5b38d;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-hour-dot {
+  background: #b59d73;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-finished-toggle,
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-live-match,
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-past-match {
+  background: #fffef8;
+  border-color: #d6c8aa;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-match-footer,
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-match-meta {
+  color: #636d65;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-dialog-team-vs,
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-dialog-vs > text:first-child,
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-past-vs,
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-vs > text:first-child {
+  color: #967747;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-player-name {
+  color: #334847;
+}
+
+.archive-design-scope.archive-redesign.theme-ibo-soft-gold .archive-profile-status.is-live {
+  color: #b92945;
+}
+
+.help-page.personal-center.help-a.theme-ibo-soft-gold {
+  --help-ink: #334847;
+  --help-muted: #636d65;
+  --help-action: #806238;
+  --help-line: #dce1d6;
+  --help-band: #f0f2e9;
+  --help-tint: #e6eadf;
+  --help-accent: #806238;
+  --help-paper: #f7f8f3;
+}
+
+.help-page.help-a.theme-ibo-soft-gold .faq-entry-icon {
+  background: #eee6d3;
+}
+
+.help-a.theme-ibo-soft-gold .faq-panel {
+  background: #f7f8f3;
+  color: #334847;
+}
+
+.theme-ibo-soft-gold .anchor-visibility-title,
+.theme-ibo-soft-gold .faq-title,
+.theme-ibo-soft-gold .repair-panel-title,
+.theme-ibo-soft-gold .test-panel-title {
+  color: #334847;
+}
+
+.theme-ibo-soft-gold .anchor-visibility-subtitle,
+.theme-ibo-soft-gold .faq-answer {
+  color: #636d65;
+}
+
+.theme-ibo-soft-gold .anchor-visibility-panel,
+.theme-ibo-soft-gold .call-modal,
+.theme-ibo-soft-gold .diagnosis-card,
+.theme-ibo-soft-gold .love-call-dialog,
+.theme-ibo-soft-gold .repair-panel,
+.theme-ibo-soft-gold .test-panel {
+  background: #fffef8;
+  border-color: #c5b38d;
+  box-shadow: 0 16px 40px #354d442b;
+  color: #334847;
+}
+
+.theme-ibo-soft-gold .anchor-visibility-accent,
+.theme-ibo-soft-gold .repair-panel-accent {
+  background: linear-gradient(90deg, #c5ad7d, #eee3c6, #aac9b7);
+}
+
+.theme-ibo-soft-gold .anchor-visibility-toggle.is-shown {
+  background: #f0f2e9;
+  border-color: #c5b38d;
+}
+
+.theme-ibo-soft-gold .diagnosis-button,
+.theme-ibo-soft-gold .repair-primary-button,
+.theme-ibo-soft-gold .test-primary-button {
+  background: #806238;
+  color: #fffef8;
+}
+
+.call-page.theme-ibo-soft-gold .call-history,
+.call-page.theme-ibo-soft-gold .call-tabs {
+  --history-accent: #806238;
+}
+
+.call-page.theme-ibo-soft-gold .supporters-section {
+  --anchor-face: #fffef8;
+  --anchor-edge: #d6c8aa;
+  --anchor-depth: #52654912;
+  --anchor-secondary: #636d65;
+}
+
+.call-page.theme-ibo-soft-gold .gift.is-selected {
+  background: linear-gradient(120deg, #fbf7e9, #f2f6ed);
+  border-color: #c5b38d;
+  box-shadow: 0 6px 12px #52654912;
+}
+
+.call-page.theme-ibo-soft-gold .send-call,
+.theme-ibo-soft-gold .call-modal .modal-primary {
+  background: #806238;
+  color: #fffef8;
+}
+
+.records-page.theme-ibo-soft-gold .record-row {
+  border-color: #dce1d6;
+}
+
+.records-page.theme-ibo-soft-gold .records-filter.is-selected {
+  border-color: #806238;
+  color: #806238;
+}
+
+.theme-ibo-soft-gold ::selection {
+  background: #e4d9b9;
+  color: #334847;
+}
+
+page {
+  animation: page-soft-enter 0.18s cubic-bezier(0.22, 0.74, 0.28, 1) both;
+  background: #fff7ed;
+  color: #2a2220;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    PingFang SC,
+    Microsoft YaHei,
+    sans-serif;
+  min-height: 100%;
+}
+
+button {
+  background: transparent;
+  border: 0;
+  box-sizing: border-box;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+}
+
+button::after {
+  display: none;
+}
+
+.safe-bottom-space {
+  height: calc(150rpx + env(safe-area-inset-bottom));
+}
+
+@-webkit-keyframes page-soft-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8rpx);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes page-soft-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8rpx);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.performance-lite button,
+.performance-lite image,
+.performance-lite text,
+.performance-lite view {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.12s !important;
+}

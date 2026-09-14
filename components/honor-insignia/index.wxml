@@ -1,0 +1,19 @@
+<view class="insignia {{!active||lite?'insignia-still':''}}" wx:if="{{badge}}">
+    <galaxy-honor-badge lite="{{lite||!active}}" wx:if="{{badge.code==='call_100000'}}"></galaxy-honor-badge>
+    <view class="anchor-honor-badge badge-level-{{badge.level}}" wx:else>
+        <view class="anchor-honor-clip">
+            <view class="anchor-honor-shine"></view>
+        </view>
+        <view class="anchor-honor-emblem" wx:if="{{badge.level===3&&!artworkFailed}}">
+            <view class="anchor-honor-orbit"></view>
+            <image binderror="onArtworkError" class="anchor-honor-emblem-image" mode="aspectFit" src="/assets/images/badges/call-10000.png"></image>
+        </view>
+        <text class="anchor-honor-symbol" wx:elif="{{badge.level!==3}}">{{badge.symbol}}</text>
+        <view class="anchor-honor-copy">
+            <text class="anchor-honor-name">{{badge.name}}</text>
+            <text class="anchor-honor-caption">{{badge.level===1?'100 LOVE':badge.level===2?'1K SUPPORT':'TOP HONOR'}}</text>
+        </view>
+        <view class="anchor-honor-spark spark-one" wx:if="{{badge.level===3}}"></view>
+        <view class="anchor-honor-spark spark-two" wx:if="{{badge.level===3}}"></view>
+    </view>
+</view>

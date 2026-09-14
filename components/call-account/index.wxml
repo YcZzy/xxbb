@@ -1,0 +1,145 @@
+<template name="rankEmblem">
+    <view aria-label="等级 {{level}}" class="rank-emblem rank-{{level}}">
+        <view class="rank-core">
+            <image aria-hidden="true" binderror="onRankArtworkError" class="rank-art" data-level="{{level}}" mode="aspectFit" src="{{rankSources[level]}}"></image>
+        </view>
+        <view class="rank-ribbon">
+            <text>Lv.{{level}}</text>
+        </view>
+    </view>
+</template>
+<view class="account {{theme==='ibo_soft_gold'?'theme-ibo-soft-gold':theme==='siwuliu_ice'?'theme-siwuliu-ice':theme==='xiaoyu_moon_tide'?'theme-xiaoyu-moon-tide':'theme-classic'}} {{performanceClass}} {{foreground&&headerVisible&&!panel&&!preferencesVisible&&!rechargeVisible?'':'is-paused'}} {{entranceReady?'is-ready':''}}">
+    <view class="account-cover">
+        <view aria-hidden="true" class="account-cover-sheen"></view>
+        <view class="account-contour"></view>
+    </view>
+    <view class="account-identity">
+        <view class="account-portrait level-{{profile.level||0}} {{upgraded?'is-upgraded':''}}">
+            <view aria-hidden="true" class="portrait-prism"></view>
+            <view class="portrait-frame-detail"></view>
+            <view class="account-portrait-crop">
+                <image binderror="onInlineArtworkError" bindload="loadInlineArtwork" class="account-mascot" data-art="starlightWait" mode="aspectFit" src="{{inlineArt.starlightWait||'/assets/images/remote-fallback/starlightWait.png'}}"></image>
+            </view>
+        </view>
+        <view class="account-name-area">
+            <button aria-label="修改站内昵称" bindtap="openNickname" class="account-name" disabled="{{!profile}}">
+                <text>{{profile?profile.nickname:profileLoading?'正在读取':'我的账号'}}</text>
+                <image src="/assets/images/help-a/edit.png"></image>
+            </button>
+            <button aria-label="查看星光成长等级" bindtap="openLevels" class="member-progress account-caption {{upgraded?'is-upgraded':''}}" disabled="{{!profile}}">
+                <view class="identity-rank {{upgraded?'is-upgraded':''}}" wx:if="{{profile}}">
+                    <template is="rankEmblem" data="{{level:displayLevel,rankSources:rankSources}}"></template>
+                </view>
+                <view class="rank-placeholder" wx:else></view>
+                <view aria-label="当前等级成长进度" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{{progress}}" aria-valuetext="{{profile?profile.next_experience?'再积累 '+remainingText+' 经验升级':rankCompleteText:'等待同步'}}" class="progress-track" role="progressbar">
+                    <view class="progress-channel">
+                        <view class="progress-fill" style="transform:scaleX({{displayProgress/100}});"></view>
+                    </view>
+                    <view aria-hidden="true" class="progress-milestones">
+                        <view class="{{displayProgress>=25?'is-lit':''}}" data-step="25"></view>
+                        <view class="{{displayProgress>=50?'is-lit':''}}" data-step="50"></view>
+                        <view class="{{displayProgress>=75?'is-lit':''}}" data-step="75"></view>
+                    </view>
+                </view>
+                <view aria-label="下一等级 {{displayNextLevel}}" class="growth-target" wx:if="{{displayNextLevel!==null}}">
+                    <template is="rankEmblem" data="{{level:displayNextLevel,rankSources:rankSources}}"></template>
+                </view>
+                <view aria-label="{{profile&&!profile.next_experience?rankCompleteText:'等级资料等待同步'}}" class="growth-end {{profile&&!profile.next_experience?'is-complete':''}}" wx:else>
+                    <image aria-hidden="true" binderror="onRankArtworkError" data-level="{{displayLevel}}" mode="aspectFit" src="{{rankSources[displayLevel]}}" wx:if="{{profile&&!profile.next_experience}}"></image>
+                    <view class="growth-placeholder" wx:else></view>
+                </view>
+            </button>
+        </view>
+    </view>
+    <view class="account-wallet">
+        <view class="wallet-content">
+            <view aria-label="{{(balance===null?'余额暂不可用':'余额'+balance+'i币')+(balanceError?'，余额未同步':'')}}" class="wallet-value">
+                <view aria-hidden="true" class="wallet-coin-stage {{balanceCredited?'is-credited':''}} {{!coinVisible||balance===null||balanceError?'is-coin-paused':''}}">
+                    <view class="wallet-coin-face">
+                        <image aria-hidden="true" class="wallet-coin" mode="aspectFit" src="/assets/images/help-a/coins.png"></image>
+                        <view class="coin-sheen-window">
+                            <view class="coin-sheen"></view>
+                        </view>
+                        <view class="coin-edge-glint"></view>
+                    </view>
+                </view>
+                <view aria-hidden="true" class="wallet-number {{balanceAnimating?'is-rolling':''}}" style="font-size:{{balanceFontSize}}px;">
+                    <view class="balance-digit {{item.to===','?'is-comma':''}} {{item.from!==item.to?'is-changing':''}}" wx:for="{{balanceDigits}}" wx:key="index">
+                        <text class="digit-old">{{item.from}}</text>
+                        <text class="digit-new">{{item.to}}</text>
+                    </view>
+                </view>
+                <button aria-label="{{balanceLoading?'正在刷新余额':'刷新余额'}}" bindtap="refreshBalance" class="wallet-refresh-control" disabled="{{balanceLoading||!coinEnabled}}" hover-class="wallet-refresh--pressed">
+                    <image aria-hidden="true" class="wallet-refresh {{balanceLoading?'is-spinning':''}}" mode="aspectFit" src="/assets/images/help-a/refresh.png"></image>
+                </button>
+            </view>
+            <text class="wallet-note" wx:if="{{!coinEnabled&&!profileLoading}}">充值暂未开放</text>
+        </view>
+        <view class="wallet-actions">
+            <button bindtap="recharge" class="wallet-recharge" disabled="{{!coinEnabled}}" hover-class="account-action--pressed">
+                <text>充值</text>
+                <image src="/assets/images/help-a/arrow.png"></image>
+            </button>
+        </view>
+    </view>
+    <view class="account-error" wx:if="{{profileError||balanceError}}">
+        <text>{{balanceError||profileError}}</text>
+        <button bindtap="load">重试</button>
+    </view>
+</view>
+<root-portal wx:if="{{panel}}">
+    <view bindtap="close" catchtouchmove="noop" class="account-overlay">
+        <view catchtap="noop" class="account-panel {{theme==='ibo_soft_gold'?'theme-ibo-soft-gold':theme==='siwuliu_ice'?'theme-siwuliu-ice':theme==='xiaoyu_moon_tide'?'theme-xiaoyu-moon-tide':'theme-classic'}} {{performanceClass}} {{foreground?'':'is-paused'}} {{panel==='levels'?'is-levels':''}}">
+            <view class="account-panel-head">
+                <text>{{panel==='nickname'?'我的昵称':'星光成长'}}</text>
+                <button aria-label="关闭" bindtap="close" class="account-icon" disabled="{{saving}}">
+                    <image src="/assets/images/help-a/close.png"></image>
+                </button>
+            </view>
+            <block wx:if="{{panel==='nickname'}}">
+                <text class="panel-intro">这是你在 i播播了么 的站内昵称</text>
+                <input bindblur="editNickname" bindinput="editNickname" class="nickname-input" disabled="{{saving||!profile.can_rename}}" maxlength="12" placeholder="给自己起个名字" type="nickname" value="{{nicknameDraft}}"></input>
+                <view class="nickname-meta">
+                    <text>2～12个字符 · 每天可改一次</text>
+                    <text>{{nicknameDraft.length}}/12</text>
+                </view>
+                <text class="panel-note" wx:if="{{!profile.can_rename}}">今天已修改过，明天再来</text>
+                <button bindtap="saveNickname" class="panel-save" disabled="{{saving||!profile.can_rename}}">{{saving?'正在检查昵称':'保存昵称'}}</button>
+            </block>
+            <scroll-view bounces="{{false}}" class="levels-scroll" enhanced="{{true}}" scroll-y="{{true}}" show-scrollbar="{{false}}" wx:else>
+                <view class="level-summary">
+                    <view class="level-summary-emblem">
+                        <template is="rankEmblem" data="{{level:profile.level,rankSources:rankSources}}"></template>
+                    </view>
+                    <view class="level-summary-copy">
+                        <text class="level-summary-name">{{profile.title}}</text>
+                        <text>{{experienceText}} 经验</text>
+                        <text class="level-next">{{profile.next_experience?'距离下一级还需 '+remainingText+' 经验':rankCompleteText}}</text>
+                    </view>
+                    <view class="level-summary-mark">LV.{{profile.level}}</view>
+                </view>
+                <text class="level-preview-hint">轻触徽章，预览动效</text>
+                <view class="levels-grid">
+                    <view class="level-item {{item.earned?'is-earned':''}} {{item.current?'is-current':''}} {{!item.available?'is-unreleased':''}} {{previewRankLevel===item.level?'is-preview-'+previewRankVariant:''}}" wx:for="{{rankItems}}" wx:key="level">
+                        <button aria-label="预览 Lv.{{item.level}} {{item.title}}徽章动效，{{item.status}}" bindtap="previewRank" class="level-preview" data-level="{{item.level}}">
+                            <view class="level-emblem">
+                                <template is="rankEmblem" data="{{level:item.level,rankSources:rankSources}}"></template>
+                            </view>
+                        </button>
+                        <text class="level-title">{{item.title}}</text>
+                        <text class="level-requires">{{item.experienceText}}</text>
+                        <view class="level-status">{{item.status}}</view>
+                    </view>
+                </view>
+                <view class="level-rules">
+                    <text>成功消费 1 i币打Call，累计 1 经验。</text>
+                    <text>充值、免费Call和其他消费不计入；消费撤销后扣回对应经验。等级长期累计，不按月清零。</text>
+                    <text>等级不影响开播提醒速度，不提供兑换或提现。</text>
+                </view>
+            </scroll-view>
+            <text class="panel-error" wx:if="{{saveError}}">{{saveError}}</text>
+        </view>
+    </view>
+</root-portal>
+<call-preferences active="{{foreground}}" bindclose="closePreferences" bindprofile="preferencesProfile" lite="{{!!performanceClass}}" skin="{{theme}}" visible="{{preferencesVisible}}"></call-preferences>
+<wallet-recharge active="{{foreground}}" bindclose="closeRecharge" binddelivered="rechargeDelivered" lite="{{performanceClass==='performance-lite'}}" skin="{{theme}}" visible="{{rechargeVisible}}"></wallet-recharge>

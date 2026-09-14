@@ -1,0 +1,35 @@
+<root-portal wx:if="{{visible&&active}}">
+    <view bindtap="close" catchtouchmove="noop" class="preferences-overlay">
+        <view aria-label="昵称与播报" aria-modal="true" aria-role="dialog" catchtap="noop" class="preferences-panel skin-{{skin}} {{lite?'is-lite':''}}">
+            <view class="preferences-heading">
+                <text>昵称与播报</text>
+                <button aria-label="关闭" bindtap="close" class="preferences-close" disabled="{{saving}}">
+                    <image mode="aspectFit" src="/assets/icons/recharge/x.svg"></image>
+                </button>
+            </view>
+            <view aria-live="polite" class="preferences-state" wx:if="{{loading}}">正在读取设置…</view>
+            <block wx:elif="{{profile}}">
+                <view class="preferences-identity">
+                    <text class="preferences-caption">当前播报身份</text>
+                    <text class="preferences-name">{{profile.public_calls?profile.nickname:'一位星友'}}</text>
+                    <text class="preferences-mode">{{profile.public_calls?'公开昵称':'匿名播报'}}</text>
+                </view>
+                <view class="preferences-row">
+                    <text class="preferences-label" id="public-name-label">公开我的昵称</text>
+                    <switch aria-label="公开我的昵称" bindchange="changePreference" checked="{{profile.public_calls}}" color="{{skin==='ibo_soft_gold'?'#806238':skin==='siwuliu_ice'?'#17647f':skin==='xiaoyu_moon_tide'?'#1d7068':'#b72c51'}}" data-key="public_calls" disabled="{{saving}}"></switch>
+                </view>
+                <view class="preferences-row">
+                    <text class="preferences-label">显示全站打 Call 播报</text>
+                    <switch aria-label="显示全站打 Call 播报" bindchange="changePreference" checked="{{profile.show_broadcasts}}" color="{{skin==='ibo_soft_gold'?'#806238':skin==='siwuliu_ice'?'#17647f':skin==='xiaoyu_moon_tide'?'#1d7068':'#b72c51'}}" data-key="show_broadcasts" disabled="{{saving}}"></switch>
+                </view>
+                <view aria-live="polite" class="preferences-status">
+                    <text>{{saving?'正在保存…':saved?'已保存':''}}</text>
+                </view>
+            </block>
+            <view aria-live="polite" class="preferences-error" wx:if="{{error}}">
+                <text>{{error}}</text>
+                <button bindtap="load" disabled="{{loading||saving}}">重新读取</button>
+            </view>
+        </view>
+    </view>
+</root-portal>

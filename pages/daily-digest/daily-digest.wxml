@@ -1,0 +1,325 @@
+<call-broadcast></call-broadcast>
+<view class="digest-page {{mascotThemeClass}} {{performanceClass}}">
+    <view class="custom-nav" style="height:{{navigationHeight}}px;padding-top:{{statusBarHeight}}px;">
+        <button aria-label="查看历史早报" bindtap="openHistory" class="nav-history" hover-class="nav-history--pressed">
+            <view aria-hidden="true" class="history-calendar-icon">
+                <view class="history-calendar-top"></view>
+                <view class="history-calendar-dot dot-left"></view>
+                <view class="history-calendar-dot dot-right"></view>
+            </view>
+            <text>往期</text>
+        </button>
+        <text class="custom-nav-title">星光早报</text>
+        <button aria-label="分享星光早报" class="nav-icon nav-share" hover-class="nav-icon--pressed" open-type="share">↗</button>
+    </view>
+    <scroll-view enhanced scroll-y bindscrolltolower="onDigestBottom" class="digest-scroll" lower-threshold="16" show-scrollbar="{{false}}">
+        <view class="digest-state loading-state" wx:if="{{loading}}">
+            <view class="loading-mark">
+                <view class="loading-line line-one"></view>
+                <view class="loading-line line-two"></view>
+                <view class="loading-line line-three"></view>
+            </view>
+            <text>正在为大人整理昨夜星光</text>
+        </view>
+        <view class="digest-state error-state" wx:elif="{{loadError}}">
+            <view class="state-symbol">!</view>
+            <text class="state-title">大人的早报暂未送达</text>
+            <text class="state-copy">{{loadError}}</text>
+            <button bindtap="loadDigest">重新获取</button>
+        </view>
+        <view class="newspaper-wrap {{reportRevealAnimating?'is-ceremony-reveal':''}}" style="--digest-nav-height:{{navigationHeight}}px;" wx:else>
+            <view class="newspaper">
+                <view aria-hidden="true" class="paper-grain"></view>
+                <view class="masthead">
+                    <view class="masthead-rule"></view>
+                    <view class="masthead-title-row">
+                        <view class="masthead-star">✦</view>
+                        <text class="masthead-title">星光早报</text>
+                        <view class="masthead-star">✦</view>
+                    </view>
+                    <text class="masthead-subtitle">STARDUST MORNING POST</text>
+                    <view class="masthead-meta">
+                        <text>{{report.dateLabel}}</text>
+                        <text>{{report.issueLabel}}</text>
+                    </view>
+                </view>
+                <view wx:if="{{report.followed_count}}">
+                    <view class="lead-story">
+                        <text class="lead-kicker">呈大人阅</text>
+                        <text class="lead-title">{{report.lead}}</text>
+                        <view class="followed-cast">
+                            <view class="followed-avatar-stack">
+                                <view class="followed-avatar-shell" style="z-index:{{10-anchorIndex}};" wx:for="{{report.followedAnchors}}" wx:for-index="anchorIndex" wx:key="account">
+                                    <image class="followed-avatar" mode="aspectFill" src="{{item.avatar_url}}" wx:if="{{item.avatar_url}}"></image>
+                                    <view class="followed-avatar followed-avatar-fallback" wx:else>{{item.initial}}</view>
+                                </view>
+                            </view>
+                            <view class="followed-cast-copy">
+                                <text class="followed-cast-kicker">已为大人整理</text>
+                                <text class="followed-cast-names">{{report.followedNamesText}}</text>
+                            </view>
+                        </view>
+                        <view class="lead-divider">
+                            <view></view>
+                            <text>晨间速览</text>
+                            <view></view>
+                        </view>
+                    </view>
+                    <view class="summary-grid">
+                        <view class="summary-cell summary-{{item.key}}" wx:for="{{report.summaryCells}}" wx:key="key">
+                            <text class="summary-value">{{item.value}}</text>
+                            <text class="summary-label">{{item.label}}</text>
+                        </view>
+                    </view>
+                    <view class="paper-section editor-section">
+                        <view class="section-heading">
+                            <view class="section-index">01</view>
+                            <text>晨间手记</text>
+                            <view class="section-rule"></view>
+                        </view>
+                        <view class="editor-note">
+                            <text class="editor-quote">“</text>
+                            <text class="editor-note-copy">{{report.editorNote}}</text>
+                        </view>
+                        <view class="fun-fact-list" wx:if="{{report.funFacts.length}}">
+                            <view class="fun-fact-item" wx:for="{{report.funFacts}}" wx:key="key">
+                                <text class="fun-fact-index">0{{index+1}}</text>
+                                <view class="fun-fact-copy">
+                                    <text class="fun-fact-label">{{item.label}}</text>
+                                    <text class="fun-fact-value">{{item.value}}</text>
+                                    <text class="fun-fact-detail">{{item.detail}}</text>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="paper-section headline-section" wx:if="{{report.renderedActiveAnchors.length}}">
+                        <view class="section-heading">
+                            <view class="section-index">02</view>
+                            <text>爱播夜报</text>
+                            <view class="section-rule"></view>
+                        </view>
+                        <view class="anchor-report" wx:for="{{report.renderedActiveAnchors}}" wx:key="account">
+                            <view class="anchor-report-head">
+                                <view class="article-avatar-wrap">
+                                    <image class="article-avatar" lazy-load="{{index>1}}" mode="aspectFill" src="{{item.avatar_url}}" wx:if="{{item.avatar_url}}"></image>
+                                    <view class="article-avatar article-avatar-fallback" wx:else>{{item.initial}}</view>
+                                </view>
+                                <view class="article-copy">
+                                    <view class="article-name-row">
+                                        <text class="article-name">{{item.nickname}}</text>
+                                        <text class="session-ribbon">{{item.session_count}}场直播</text>
+                                    </view>
+                                    <text class="article-headline">{{item.headline}}</text>
+                                    <text class="article-time">{{item.startText}}—{{item.endText}}</text>
+                                </view>
+                            </view>
+                            <view class="anchor-stat-grid">
+                                <view class="anchor-stat" wx:for="{{item.detailStats}}" wx:key="key">
+                                    <text class="anchor-stat-value">{{item.value}}</text>
+                                    <text class="anchor-stat-label">{{item.label}}</text>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="paper-section clip-section" wx:if="{{report.nightlyClips.length}}">
+                        <view class="section-heading">
+                            <view class="section-index">03</view>
+                            <text>切片速览</text>
+                            <view class="section-rule"></view>
+                        </view>
+                        <view class="clip-anchor-block" wx:for="{{report.nightlyClips}}" wx:key="account">
+                            <view class="clip-anchor-head">
+                                <image class="clip-anchor-avatar" lazy-load="{{true}}" mode="aspectFill" src="{{item.avatar_url}}" wx:if="{{item.avatar_url}}"></image>
+                                <view class="clip-anchor-avatar clip-anchor-fallback" wx:else>{{item.initial}}</view>
+                                <view class="clip-anchor-copy">
+                                    <text class="clip-anchor-name">{{item.nickname}}</text>
+                                </view>
+                                <text class="clip-anchor-count">{{item.work_count}}条</text>
+                            </view>
+                            <view class="clip-topic-list">
+                                <view class="clip-topic-row {{clip.isHot?'clip-topic-row--hot':''}}" wx:for="{{item.clips}}" wx:for-item="clip" wx:key="key">
+                                    <view class="clip-topic-marker"></view>
+                                    <view class="clip-topic-copy">
+                                        <view class="clip-topic-heading">
+                                            <text class="clip-topic-title">{{clip.title}}</text>
+                                            <text aria-label="本期已采集切片点赞最高" class="clip-hot" wx:if="{{clip.isHot}}">HOT</text>
+                                        </view>
+                                        <text class="clip-topic-body" wx:if="{{clip.body}}">{{clip.body}}</text>
+                                        <view class="clip-topic-meta">
+                                            <text class="clip-like-count {{clip.isHot?'clip-like-count--hot':''}}">{{clip.likesText}}</text>
+                                            <text wx:if="{{clip.timeText}}">{{clip.timeText}}</text>
+                                            <text wx:if="{{clip.sourceText}}">{{clip.sourceText}}</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <text class="clip-source-note">标题及正文来自公开切片，点赞数为采集时数据。HOT 为该主播本期已采集切片中点赞最高的一条；发布时间不代表事件发生时间。</text>
+                    </view>
+                    <view class="paper-section resting-section" wx:if="{{report.renderedRestingAnchors.length}}">
+                        <view class="section-heading">
+                            <view class="section-index">04</view>
+                            <text>昨夜休刊</text>
+                            <view class="section-rule"></view>
+                        </view>
+                        <view class="resting-list">
+                            <view class="resting-person" wx:for="{{report.renderedRestingAnchors}}" wx:key="account">
+                                <view class="resting-avatar-wrap">
+                                    <image class="resting-avatar" lazy-load="{{true}}" mode="aspectFill" src="{{item.avatar_url}}" wx:if="{{item.avatar_url}}"></image>
+                                    <view class="resting-avatar resting-avatar-fallback" wx:else>{{item.initial}}</view>
+                                </view>
+                                <text>{{item.nickname}}</text>
+                            </view>
+                        </view>
+                        <text class="resting-note">昨夜没有开播记录，下一次见面继续为大人守候。</text>
+                    </view>
+                </view>
+                <view class="empty-report" wx:else>
+                    <view aria-hidden="true" class="empty-constellation">
+                        <view class="empty-star star-a">✦</view>
+                        <view class="empty-star star-b">✧</view>
+                        <view class="empty-orbit"></view>
+                    </view>
+                    <text class="empty-title">大人，这份早报还缺一位主角</text>
+                    <text class="empty-copy">在爱播守候中开启特别关注，明早六点会为大人整理爱播的昨日数据。</text>
+                </view>
+                <view class="paper-footer">
+                    <view class="footer-copy">
+                        <text class="footer-title">呈大人亲阅</text>
+                        <text>数据不保证100%准确，仅供参考，不构成任何承诺和依据。</text>
+                        <text class="read-streak-copy">{{report.readStreakText}}</text>
+                    </view>
+                    <view class="seal-area">
+                        <button aria-label="批阅早报" bindtap="approveDigest" class="approval-trigger" hover-class="approval-trigger--pressed" wx:if="{{!isRead&&!sealAnimating}}">
+                            <view class="approval-trigger-mark">朱</view>
+                            <text>落印批阅</text>
+                        </button>
+                        <view aria-hidden="true" class="stamp-tool" wx:if="{{sealAnimating}}">
+                            <view class="stamp-handle-top"></view>
+                            <view class="stamp-handle-neck"></view>
+                            <view class="stamp-handle-base"></view>
+                        </view>
+                        <view aria-label="早报已阅" bindtap="approveDigest" class="read-seal {{sealAnimating?'is-imprinting':''}}" wx:if="{{sealAnimating||isRead}}">
+                            <image binderror="onDigestArtworkError" class="read-seal-image" data-art="seal" mode="aspectFit" src="{{sealSrc}}"></image>
+                            <text class="seal-date" wx:if="{{isRead}}">{{report.readTimeText}}</text>
+                        </view>
+                        <view aria-hidden="true" class="seal-impact" wx:if="{{sealAnimating}}">
+                            <view class="ink-speck speck-one"></view>
+                            <view class="ink-speck speck-two"></view>
+                            <view class="ink-speck speck-three"></view>
+                            <view class="ink-speck speck-four"></view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <button aria-label="生成星光早报分享卡" bindtap="generateShareCard" class="share-card-trigger {{shareCardGenerating?'is-generating':''}}" disabled="{{shareCardGenerating}}" hover-class="share-card-trigger--pressed">
+                <view aria-hidden="true" class="share-card-mark">
+                    <view class="share-card-mark-star">✦</view>
+                    <view class="share-card-mark-line line-one"></view>
+                    <view class="share-card-mark-line line-two"></view>
+                </view>
+                <view class="share-card-copy">
+                    <text>{{shareCardGenerating?'正在生成分享卡':'生成星光分享卡'}}</text>
+                    <text>把昨夜星光装进一张图</text>
+                </view>
+                <view class="share-card-arrow">›</view>
+            </button>
+            <text class="below-paper-note">每日 06:00 · 为大人的特别关注更新</text>
+            <digest-gratuity active="{{digestForeground&&!ceremonyVisible&&!historyVisible&&!shareCardVisible}}" date="{{report.date}}" id="digest-gratuity" lite="{{performanceClass==='performance-lite'}}" skin="{{mascotThemeSkin}}" wx:if="{{report.followed_count}}"></digest-gratuity>
+        </view>
+    </scroll-view>
+    <view catchtouchmove="keepCeremonyStill" class="memorial-ceremony {{ceremonyOpening?'is-opening':''}}" wx:if="{{ceremonyVisible}}">
+        <view aria-hidden="true" class="ceremony-backdrop"></view>
+        <view aria-hidden="true" class="ceremony-frame-line frame-line-top"></view>
+        <view aria-hidden="true" class="ceremony-frame-line frame-line-bottom"></view>
+        <button aria-label="暂不启阅" bindtap="skipCeremony" class="ceremony-skip" hover-class="ceremony-skip--pressed">×</button>
+        <view class="ceremony-stage">
+            <view class="ceremony-heading">
+                <text class="ceremony-kicker">大人，晨奏已至</text>
+                <text class="ceremony-title">今日星光奏报</text>
+                <text class="ceremony-date">{{ceremonyDateLabel}}</text>
+            </view>
+            <button aria-label="请大人启阅今日星光奏报" bindtap="openCeremony" class="ceremony-presenter" hover-class="ceremony-presenter--pressed">
+                <view class="ceremony-herald-run">
+                    <view class="ceremony-herald-float">
+                        <image binderror="onDigestArtworkError" class="ceremony-herald" data-art="herald" mode="aspectFit" src="{{heraldSrc}}"></image>
+                        <view aria-hidden="true" class="ceremony-scroll-focus">
+                            <view class="scroll-focus-line"></view>
+                        </view>
+                    </view>
+                </view>
+                <view class="ceremony-action">
+                    <view class="ceremony-action-seal">启</view>
+                    <text>请大人启阅</text>
+                    <view class="ceremony-action-arrow">›</view>
+                </view>
+            </button>
+        </view>
+        <view aria-hidden="true" class="ceremony-unfurl">
+            <view class="unfurl-rod unfurl-rod-top">
+                <view class="unfurl-finial finial-left"></view>
+                <view class="unfurl-finial finial-right"></view>
+            </view>
+            <view class="unfurl-paper">
+                <view class="unfurl-cloud cloud-left"></view>
+                <view class="unfurl-cloud cloud-right"></view>
+                <view class="unfurl-content">
+                    <text class="unfurl-kicker">呈大人亲阅</text>
+                    <text class="unfurl-title">星光早报</text>
+                    <view class="unfurl-rule"></view>
+                    <text class="unfurl-date">{{ceremonyDateLabel}}</text>
+                    <view class="unfurl-seal">阅</view>
+                </view>
+            </view>
+            <view class="unfurl-rod unfurl-rod-bottom">
+                <view class="unfurl-finial finial-left"></view>
+                <view class="unfurl-finial finial-right"></view>
+            </view>
+        </view>
+    </view>
+    <view bindtap="closeShareCard" class="share-card-layer" wx:if="{{shareCardVisible}}">
+        <view class="share-card-backdrop"></view>
+        <view catchtap="keepShareCardOpen" class="share-card-panel">
+            <view class="share-card-panel-head">
+                <view>
+                    <text class="share-card-panel-kicker">MORNING POST CARD</text>
+                    <text class="share-card-panel-title">星光分享卡</text>
+                </view>
+                <button aria-label="关闭分享卡" bindtap="closeShareCard" class="share-card-close">×</button>
+            </view>
+            <image bindtap="previewShareCard" class="share-card-preview" mode="aspectFit" show-menu-by-longpress="{{true}}" src="{{shareCardPath}}"></image>
+            <view class="share-card-actions">
+                <button bindtap="previewShareCard" hover-class="share-card-action--pressed">查看大图</button>
+                <button bindtap="shareShareCard" class="is-primary" hover-class="share-card-action--pressed">微信分享</button>
+            </view>
+        </view>
+    </view>
+    <canvas class="digest-share-canvas" id="digest-share-canvas" type="2d"></canvas>
+    <view bindtap="closeHistory" class="history-layer" wx:if="{{historyVisible}}">
+        <view class="history-backdrop"></view>
+        <view catchtap="keepHistoryOpen" class="history-sheet">
+            <view class="history-sheet-handle"></view>
+            <view class="history-sheet-head">
+                <view>
+                    <text class="history-sheet-kicker">MORNING POST ARCHIVE</text>
+                    <text class="history-sheet-title">往期星光</text>
+                </view>
+                <view class="history-sheet-meta">最近 30 期</view>
+            </view>
+            <view class="history-sheet-rule"></view>
+            <scroll-view enhanced scroll-y class="history-date-list" show-scrollbar="{{false}}">
+                <button bindtap="selectHistoryDate" class="history-date-row {{item.isSelected?'is-selected':''}}" data-date="{{item.date}}" hover-class="history-date-row--pressed" wx:for="{{historyDates}}" wx:key="date">
+                    <view class="history-date-main">
+                        <text class="history-date-day">{{item.dayLabel}}</text>
+                        <text class="history-date-weekday">{{item.weekdayLabel}}</text>
+                        <text class="history-latest-mark" wx:if="{{item.isLatest}}">最新</text>
+                    </view>
+                    <view class="history-date-side">
+                        <text>{{item.issueLabel}}</text>
+                        <view class="history-row-arrow">›</view>
+                    </view>
+                </button>
+            </scroll-view>
+        </view>
+    </view>
+</view>

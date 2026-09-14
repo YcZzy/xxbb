@@ -1,0 +1,36 @@
+<view aria-hidden="true" class="starlight-mascot state-{{state}} {{!active||!foreground?'is-paused':''}} {{lite?'is-lite':''}}" hover-class="is-pressed" hover-stay-time="100">
+    <view class="starlight-shadow"></view>
+    <view class="starlight-pose pose-wait">
+        <view class="starlight-float">
+            <image binderror="onArtworkError" class="starlight-art" mode="aspectFit" src="{{waitArt}}"></image>
+            <view class="starlight-beacon">
+                <view class="starlight-glint"></view>
+            </view>
+            <view class="starlight-orbit">
+                <view class="starlight-orbit-turn">
+                    <view class="starlight-traveller"></view>
+                </view>
+            </view>
+            <view class="starlight-spark spark-one"></view>
+            <view class="starlight-spark spark-two"></view>
+        </view>
+    </view>
+    <view class="starlight-pose pose-live">
+        <view class="starlight-float">
+            <image binderror="onArtworkError" class="starlight-art" mode="aspectFit" src="{{liveArt}}"></image>
+            <view class="starlight-beacon">
+                <view class="starlight-glint"></view>
+            </view>
+            <view class="starlight-signal signal-one"></view>
+            <view class="starlight-signal signal-two"></view>
+            <view class="starlight-orbit">
+                <view class="starlight-orbit-turn">
+                    <view class="starlight-traveller"></view>
+                </view>
+            </view>
+            <view class="starlight-spark spark-one"></view>
+            <view class="starlight-spark spark-two"></view>
+            <view class="starlight-spark spark-three"></view>
+        </view>
+    </view>
+</view>

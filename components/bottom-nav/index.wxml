@@ -1,0 +1,12 @@
+<view class="nav-shell {{skin==='siwuliu_ice'?'theme-siwuliu-ice':skin==='xiaoyu_moon_tide'?'theme-xiaoyu-moon-tide':'theme-classic'}}">
+    <view class="nav-panel">
+        <view aria-hidden="true" class="nav-jelly is-{{navigatingKey||current}} is-ready {{jellyMoving?'is-moving':''}} is-{{jellyDirection}}">
+            <view class="nav-jelly-core"></view>
+        </view>
+        <view bindtap="onNavigate" class="nav-item {{navigatingKey===item.key||!navigatingKey&&current===item.key?'is-active':''}}" data-key="{{item.key}}" hover-class="nav-item-hover" wx:for="{{items}}" wx:key="key">
+            <view class="nav-icon nav-icon-{{item.key}}">{{item.icon}}</view>
+            <text class="nav-label">{{item.label}}</text>
+            <view class="nav-dot" wx:if="{{navigatingKey===item.key||!navigatingKey&&current===item.key}}"></view>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,79 @@
+<root-portal wx:if="{{visible&&active}}">
+    <view bindtap="close" catchtouchmove="noop" class="recharge-overlay {{skin==='ibo_soft_gold'?'theme-ibo-soft-gold':''}} {{lite?'is-lite':''}}">
+        <view catchtap="noop" class="recharge-modal">
+            <view class="recharge-heading">
+                <image aria-hidden="true" class="recharge-emblem" mode="aspectFit" src="/assets/images/help-a/coins.png"></image>
+                <view class="recharge-heading-copy">
+                    <text class="recharge-title">为热爱蓄能</text>
+                    <text class="recharge-subtitle">i币充值 · 1 元 = 100 i币</text>
+                </view>
+                <button aria-label="关闭充值" bindtap="close" class="recharge-close" disabled="{{busy}}" hover-class="recharge-pressed" hover-stay-time="80">
+                    <image aria-hidden="true" mode="aspectFit" src="/assets/icons/recharge/x.svg"></image>
+                </button>
+            </view>
+            <view class="recharge-body">
+                <view class="recharge-balance">
+                    <text>当前余额</text>
+                    <text>{{balanceText}} <text>i币</text>
+                    </text>
+                </view>
+                <block wx:if="{{ready&&!locked}}">
+                    <view aria-label="充值金额" aria-role="radiogroup" class="recharge-options">
+                        <button aria-checked="{{mode!=='custom'&&coins===item.coins}}" aria-role="radio" bindtap="choose" class="{{mode!=='custom'&&coins===item.coins?'selected':''}} {{item.test_only?'recharge-test':''}}" data-coins="{{item.coins}}" disabled="{{busy}}" hover-class="recharge-pressed" hover-stay-time="80" wx:for="{{options}}" wx:key="coins">
+                            <text class="recharge-option-coins">{{item.coins}} <text>i币{{item.test_only?' · 测试':''}}</text>
+                            </text>
+                            <view aria-hidden="true" class="recharge-option-rule"></view>
+                            <text class="recharge-option-price">¥{{item.priceText}}</text>
+                            <view aria-hidden="true" class="recharge-check">
+                                <image mode="aspectFit" src="/assets/icons/recharge/check.svg"></image>
+                            </view>
+                        </button>
+                    </view>
+                    <view class="custom-recharge {{mode==='custom'?'custom-active':''}}" wx:if="{{custom}}">
+                        <button aria-expanded="{{mode==='custom'}}" bindtap="chooseCustom" class="custom-recharge-toggle" disabled="{{busy}}" hover-class="recharge-pressed" hover-stay-time="80">
+                            <text>自定义金额</text>
+                            <view class="custom-recharge-range">
+                                <text>{{rangeText}}</text>
+                                <image aria-hidden="true" mode="aspectFit" src="/assets/icons/recharge/chevron.svg"></image>
+                            </view>
+                        </button>
+                        <view class="custom-input-wrap" wx:if="{{mode==='custom'}}">
+                            <text class="custom-currency">¥</text>
+                            <input adjust-position="{{true}}" aria-label="自定义充值金额，单位元" bindinput="input" class="custom-amount-input {{inputValue.length>8?'custom-amount-long':''}}" confirm-type="done" cursor-spacing="80" disabled="{{busy}}" maxlength="32" placeholder="输入金额" type="digit" value="{{inputValue}}"></input>
+                            <text class="custom-currency-unit">元</text>
+                        </view>
+                        <text aria-live="polite" class="recharge-input-error" wx:if="{{inputError}}">{{inputError}}</text>
+                    </view>
+                </block>
+                <order-countdown active="{{visible&&active}}" bindexpire="expired" deadline="{{deadline}}" notify-expired="{{!busy}}" order-id="{{orderId}}" wx:if="{{deadline&&orderId}}"></order-countdown>
+                <view class="recharge-notes">
+                    <image aria-hidden="true" mode="aspectFit" src="/assets/icons/recharge/info.svg"></image>
+                    <text class="recharge-note">{{note}}</text>
+                </view>
+                <text aria-live="polite" class="recharge-message" wx:if="{{message}}">{{message}}</text>
+            </view>
+            <view class="recharge-footer">
+                <view class="recharge-summary">
+                    <text>本次到账</text>
+                    <view>
+                        <text class="recharge-summary-number">{{coinsText}}</text>
+                        <text> i币</text>
+                    </view>
+                </view>
+                <view class="recharge-actions {{priceText.length>8?'recharge-actions-long':''}}">
+                    <button aria-label="{{busy?'确认中…':actionText||(coins===null?'请输入金额':'支付 ¥'+priceText)}}" bindtap="confirm" class="recharge-primary" disabled="{{busy||ready&&coins===null}}" hover-class="recharge-pressed" hover-stay-time="80">
+                        <block wx:if="{{!busy&&ready&&!locked&&!actionText&&coins!==null}}">
+                            <text>确认充值</text>
+                            <text class="recharge-pay-price">¥{{priceText}}</text>
+                            <image aria-hidden="true" mode="aspectFit" src="/assets/icons/recharge/arrow-right.svg"></image>
+                        </block>
+                        <text class="recharge-action-status" wx:else>{{busy?'确认中…':actionText||(coins===null?'请输入金额':'支付 ¥'+priceText)}}</text>
+                    </button>
+                </view>
+                <view class="recharge-links">
+                    <button bindtap="{{canCancel?'cancel':'close'}}" class="recharge-secondary" disabled="{{busy}}" hover-class="recharge-pressed" hover-stay-time="80">{{canCancel?'取消订单':'暂不充值'}}</button>
+                </view>
+            </view>
+        </view>
+    </view>
+</root-portal>

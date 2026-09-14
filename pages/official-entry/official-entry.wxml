@@ -1,0 +1,9 @@
+<view class="entry-page {{mascotThemeClass}}">
+    <image aria-hidden="true" class="entry-mark" mode="aspectFit" src="/assets/images/settings/work-reminder.png"></image>
+    <text aria-live="polite" class="entry-title">{{title}}</text>
+    <text class="entry-message" wx:if="{{message}}">{{message}}</text>
+    <view class="entry-actions" wx:if="{{!busy}}">
+        <button bindtap="retry" class="entry-primary" hover-class="entry-pressed" wx:if="{{canRetry}}">重新连接</button>
+        <button bindtap="openHome" class="entry-home" hover-class="entry-pressed">进入首页</button>
+    </view>
+</view>

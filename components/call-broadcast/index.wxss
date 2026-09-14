@@ -1,0 +1,412 @@
+.call-flash {
+  --flash-accent: #b72c51;
+  --flash-ink: #302a32;
+  --flash-muted: #705963;
+  --flash-tint: #fff2f6;
+  --flash-line: #ebdee4;
+  --flash-paper: #fff;
+  --flash-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  align-items: center;
+  animation: call-flash-in 0.42s var(--flash-ease) both;
+  background: var(--flash-paper);
+  border-radius: 16rpx;
+  box-shadow: 0 12rpx 40rpx rgba(74, 43, 61, 0.14);
+  box-sizing: border-box;
+  color: var(--flash-ink);
+  display: flex;
+  gap: 12rpx;
+  left: 24rpx;
+  letter-spacing: 0;
+  margin: 0 auto;
+  max-width: 500px;
+  min-height: 184rpx;
+  padding: 12rpx 6rpx 12rpx 10rpx;
+  position: fixed;
+  right: 24rpx;
+  z-index: 180;
+}
+
+.call-flash.theme-siwuliu-ice {
+  --flash-accent: #17647f;
+  --flash-ink: #294753;
+  --flash-muted: #4e6672;
+  --flash-tint: #edf9fb;
+  --flash-line: #dcecef;
+}
+
+.call-flash.theme-xiaoyu-moon-tide {
+  --flash-accent: #1d7068;
+  --flash-ink: #294e51;
+  --flash-muted: #486569;
+  --flash-tint: #edf8f5;
+  --flash-line: #dcece5;
+}
+
+.call-flash.theme-ibo-soft-gold {
+  --flash-accent: #806238;
+  --flash-ink: #334847;
+  --flash-muted: #334847;
+  --flash-tint: #eee6d3;
+  --flash-line: #dce1d6;
+  --flash-paper: #fffef8;
+}
+
+.flash-surface {
+  background: linear-gradient(
+    110deg,
+    var(--flash-tint),
+    var(--flash-paper) 44%,
+    var(--flash-paper) 75%,
+    var(--flash-tint)
+  );
+  border-radius: inherit;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+}
+
+.flash-sheen {
+  animation: call-flash-sheen 0.7s 0.18s var(--flash-ease) both;
+  background: linear-gradient(110deg, transparent, #ffffffcc, transparent);
+  left: -45%;
+  opacity: 0;
+  top: 0;
+  transform: translateX(-100%);
+  width: 40%;
+}
+
+.flash-sheen,
+.flash-trail {
+  bottom: 0;
+  position: absolute;
+}
+
+.flash-trail {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--flash-accent),
+    var(--flash-line),
+    transparent
+  );
+  height: 1px;
+  left: 24rpx;
+  opacity: 0.65;
+  right: 24rpx;
+}
+
+.flash-art {
+  align-items: center;
+  animation: call-flash-art 0.5s var(--flash-ease) both;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 140rpx;
+}
+
+.flash-art,
+.flash-mascot {
+  flex: none;
+  height: 160rpx;
+}
+
+.flash-mascot {
+  display: block;
+  width: 160rpx;
+}
+
+.flash-heart {
+  height: 72rpx;
+  width: 72rpx;
+}
+
+.flash-copy {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.flash-names {
+  align-items: baseline;
+  display: flex;
+  font-size: 24rpx;
+  gap: 8rpx;
+  line-height: 1.6;
+  min-width: 0;
+}
+
+.flash-anchor,
+.flash-user {
+  font-weight: 600;
+  max-width: 46%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flash-anchor {
+  color: var(--flash-accent);
+}
+
+.flash-for {
+  color: var(--flash-muted);
+  flex: none;
+  font-size: 22rpx;
+}
+
+.flash-action {
+  align-items: baseline;
+  column-gap: 12rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 4rpx;
+}
+
+.flash-verb {
+  color: var(--flash-muted);
+  flex: none;
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.flash-amount {
+  align-items: baseline;
+  animation: call-flash-count 0.42s 0.08s var(--flash-ease) both;
+  display: flex;
+  gap: 6rpx;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.flash-count {
+  font-size: 52rpx;
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  line-height: 1.2;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+
+.flash-count,
+.flash-unit {
+  color: var(--flash-accent);
+}
+
+.flash-unit {
+  flex: none;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.flash-amount.is-wide .flash-count {
+  font-size: 40rpx;
+}
+
+.flash-amount.is-long .flash-count {
+  font-size: 28rpx;
+}
+
+.flash-close {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+  flex: none;
+  height: 80rpx;
+  justify-content: center;
+  margin: 0;
+  min-height: 40px;
+  min-width: 40px;
+  padding: 0;
+  position: relative;
+  transition:
+    background-color 0.16s,
+    -webkit-transform 0.16s var(--flash-ease);
+  transition:
+    transform 0.16s var(--flash-ease),
+    background-color 0.16s;
+  transition:
+    transform 0.16s var(--flash-ease),
+    background-color 0.16s,
+    -webkit-transform 0.16s var(--flash-ease);
+  width: 80rpx;
+}
+
+.flash-close::after {
+  border: 0;
+}
+
+.flash-close image {
+  display: block;
+  height: 32rpx;
+  width: 32rpx;
+}
+
+.flash-close-pressed {
+  background: var(--flash-tint);
+  transform: scale(0.92);
+}
+
+.flash-close:focus-visible {
+  outline: 2px solid var(--flash-accent);
+  outline-offset: -4px;
+}
+
+.call-flash.is-leaving {
+  animation: call-flash-out 0.18s ease-in both;
+  pointer-events: none;
+}
+
+.call-flash.is-leaving .flash-amount,
+.call-flash.is-leaving .flash-art,
+.call-flash.is-leaving .flash-sheen,
+.performance-lite .flash-amount,
+.performance-lite .flash-art,
+.performance-lite .flash-sheen,
+.performance-lite.call-flash {
+  animation: none;
+}
+
+.performance-lite .flash-close {
+  transition: none;
+}
+
+@-webkit-keyframes call-flash-in {
+  from {
+    opacity: 0;
+    transform: translate(-24rpx, -12rpx);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes call-flash-in {
+  from {
+    opacity: 0;
+    transform: translate(-24rpx, -12rpx);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@-webkit-keyframes call-flash-art {
+  from {
+    opacity: 0.4;
+    transform: translateX(-12rpx) rotate(-9deg) scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0) scale(1);
+  }
+}
+
+@keyframes call-flash-art {
+  from {
+    opacity: 0.4;
+    transform: translateX(-12rpx) rotate(-9deg) scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0) scale(1);
+  }
+}
+
+@-webkit-keyframes call-flash-count {
+  from {
+    opacity: 0.4;
+    transform: translateY(12rpx);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes call-flash-count {
+  from {
+    opacity: 0.4;
+    transform: translateY(12rpx);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes call-flash-sheen {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(400%);
+  }
+}
+
+@keyframes call-flash-sheen {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(400%);
+  }
+}
+
+@-webkit-keyframes call-flash-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12rpx);
+  }
+}
+
+@keyframes call-flash-out {
+  to {
+    opacity: 0;
+    transform: translateY(-12rpx);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .call-flash,
+  .flash-amount,
+  .flash-art,
+  .flash-sheen {
+    animation: none !important;
+  }
+
+  .flash-close {
+    transition: none;
+  }
+
+  .call-flash.is-leaving {
+    opacity: 0;
+  }
+}

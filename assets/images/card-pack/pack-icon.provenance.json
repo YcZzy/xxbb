@@ -1,0 +1,10 @@
+{
+  "model_requested": "gpt-image-2.5",
+  "generated_at": "2026-09-11",
+  "source": "D:/maoqiuqiudy/outputs/card-pack-icon-image25-20260911/pack-source.png",
+  "source_dimensions": [1254, 1254],
+  "requested_dimensions": [1024, 1024],
+  "source_has_alpha": true,
+  "processing": "Preserved provider alpha; downsampled original to 192x192 indexed PNG with 192 colors. Chroma-key derivative was not used.",
+  "prompt": "Asset type: one premium collectible trading-card booster pack icon for a Chinese livestream companion mini app. Centered single sealed foil card pack, slight three-quarter angle and a playful gentle tilt, crisp broad silhouette legible at 48 pixels. Deep jade-teal enamel foil, warm champagne gold crimped top and bottom seals, a single sculpted luminous four-point star emblem in the center, refined fine gold border. Elegant polished 3D game inventory icon, tactile highlights and careful bevels, sophisticated and charming, no character. Entire object occupies about 80 percent of square, with generous safe padding. Perfectly uniform flat magenta #ff00ff chroma-key background, no floor, no cast shadow on background, no gradients or texture on background, no magenta on the pack. No text, letters, numbers, labels, watermarks, extra objects or sparkles outside the silhouette."
+}

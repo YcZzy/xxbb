@@ -1,0 +1,4 @@
+<view class="checkout-clock {{expired?'is-expired':''}}" wx:if="{{deadline}}">
+    <text>{{expired?'付款时限已到':'付款剩余时间'}}</text>
+    <text class="checkout-time">{{expired?'待核对结果':clock}}</text>
+</view>

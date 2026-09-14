@@ -1,0 +1,29 @@
+<root-portal wx:if="{{item}}">
+    <view aria-label="{{item.nickname}}为{{item.anchor_name}}点亮了{{item.calls}}次Call" aria-live="polite" class="call-flash {{mascotThemeClass}} {{performanceClass}} {{leaving?'is-leaving':''}}" style="top:{{top}}px;" wx:for="{{entries}}" wx:key="id">
+        <view aria-hidden="true" class="flash-surface">
+            <view class="flash-sheen"></view>
+            <view class="flash-trail"></view>
+        </view>
+        <view aria-hidden="true" class="flash-art">
+            <image binderror="onArtError" bindload="loadInlineArtwork" class="flash-mascot" data-art="starlightLive" mode="aspectFit" src="{{inlineArt.starlightLive||'/assets/images/remote-fallback/starlightLive.png'}}" wx:if="{{!artFailed}}"></image>
+            <image class="flash-heart" mode="aspectFit" src="{{heartIcon}}" wx:else></image>
+        </view>
+        <view class="flash-copy">
+            <view class="flash-names">
+                <text class="flash-user">{{item.nickname}}</text>
+                <text class="flash-for">为</text>
+                <text class="flash-anchor">{{item.anchor_name}}</text>
+            </view>
+            <view class="flash-action">
+                <text class="flash-verb">点亮了</text>
+                <view class="flash-amount {{countClass}}">
+                    <text class="flash-count">{{callsText}}</text>
+                    <text class="flash-unit">Call</text>
+                </view>
+            </view>
+        </view>
+        <button aria-label="收起这条动态" bindtap="dismiss" class="flash-close" disabled="{{leaving}}" hover-class="flash-close-pressed" hover-stay-time="80">
+            <image aria-hidden="true" mode="aspectFit" src="/assets/images/call-community/close.png"></image>
+        </button>
+    </view>
+</root-portal>

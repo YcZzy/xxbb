@@ -1,0 +1,8 @@
+{
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTitleText": "梦幻老王 · 专属守候",
+  "usingComponents": {
+    "bottom-nav": "/components/bottom-nav/index",
+    "call-broadcast": "/components/call-broadcast/index"
+  }
+}

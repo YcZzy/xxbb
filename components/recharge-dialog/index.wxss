@@ -1,0 +1,730 @@
+.recharge-overlay {
+  align-items: center;
+  background: #302a3299;
+  inset: 0;
+  justify-content: center;
+  letter-spacing: 0;
+  padding: 24px 12px;
+  position: fixed;
+  z-index: 30000;
+}
+
+.recharge-modal,
+.recharge-overlay {
+  box-sizing: border-box;
+  display: flex;
+}
+
+.recharge-modal {
+  animation: recharge-in 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px #302a3233;
+  color: #302a32;
+  flex-direction: column;
+  max-height: 100%;
+  max-width: 460px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.recharge-overlay button {
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+}
+
+.recharge-overlay button::after {
+  border: 0;
+}
+
+.recharge-overlay button[disabled] {
+  opacity: 0.65;
+}
+
+.recharge-heading {
+  align-items: center;
+  display: flex;
+  flex: none;
+  gap: 12px;
+  padding: 26px 24px 18px;
+}
+
+.recharge-heading-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.recharge-title {
+  display: block;
+  font-size: 24px;
+  font-weight: 750;
+  line-height: 1.4;
+}
+
+.recharge-subtitle {
+  color: #796d76;
+  display: block;
+  font-size: 12px;
+  line-height: 20px;
+  margin-top: 4px;
+}
+
+.recharge-emblem {
+  display: block;
+  flex: none;
+  height: 38px;
+  width: 38px;
+}
+
+.recharge-overlay .recharge-close {
+  align-items: center;
+  background: transparent;
+  display: flex;
+  flex: none;
+  height: 44px;
+  justify-content: center;
+  margin: -8px -8px -8px 0;
+  width: 44px;
+}
+
+.recharge-close image {
+  display: block;
+  height: 22px;
+  width: 22px;
+}
+
+.recharge-body {
+  -webkit-overflow-scrolling: touch;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 24px;
+}
+
+.recharge-balance {
+  align-items: center;
+  border-bottom: 1px solid #ede5ea;
+  border-top: 1px solid #ede5ea;
+  box-sizing: border-box;
+  color: #796d76;
+  display: flex;
+  font-size: 13px;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  min-height: 52px;
+  padding: 12px 0;
+}
+
+.recharge-balance > text:last-child {
+  color: #302a32;
+  font-size: 19px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.recharge-balance > text:last-child text {
+  color: #796d76;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.recharge-options {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 14px;
+}
+
+.recharge-options button {
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #e3d9e0;
+  color: #302a32;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 130px;
+  min-width: 0;
+  padding: 23px 18px 18px;
+  position: relative;
+  text-align: left;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    -webkit-transform 0.14s;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.14s;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.14s,
+    -webkit-transform 0.14s;
+}
+
+.recharge-option-coins {
+  display: block;
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  line-height: 1.25;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.recharge-option-coins text {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.recharge-option-rule {
+  background: #e4d7df;
+  height: 1px;
+  margin: 12px 0 10px;
+  width: 28px;
+}
+
+.recharge-option-price {
+  display: block;
+  font-size: 19px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 550;
+  line-height: 26px;
+}
+
+.recharge-options .selected {
+  background: #fff2f6;
+  border-color: #b72c51;
+  color: #b72c51;
+}
+
+.selected .recharge-option-rule {
+  background: #dba9b9;
+}
+
+.recharge-check {
+  align-items: center;
+  background: #b72c51;
+  border-radius: 50%;
+  display: flex;
+  height: 19px;
+  justify-content: center;
+  opacity: 0;
+  position: absolute;
+  right: 11px;
+  top: 11px;
+  transform: scale(0.7);
+  transition:
+    opacity 0.18s,
+    -webkit-transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.18s,
+    transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.18s,
+    transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    -webkit-transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 19px;
+}
+
+.recharge-check image {
+  display: block;
+  height: 13px;
+  width: 13px;
+}
+
+.selected .recharge-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.recharge-options .recharge-test {
+  align-items: center;
+  flex-direction: row;
+  grid-column: 1/-1;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: 14px 38px 14px 18px;
+}
+
+.recharge-test .recharge-option-coins {
+  font-size: 18px;
+}
+
+.recharge-test .recharge-option-rule {
+  display: none;
+}
+
+.recharge-test .recharge-check {
+  top: 17px;
+}
+
+.custom-recharge {
+  border: 1px solid #e3d9e0;
+  border-radius: 8px;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.custom-active {
+  background: #fff2f6;
+  border-color: #b72c51;
+}
+
+.recharge-overlay .custom-recharge-toggle {
+  background: transparent;
+  color: #302a32;
+  font-size: 14px;
+  font-weight: 550;
+  gap: 12px;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: 14px 16px;
+  text-align: left;
+  width: 100%;
+}
+
+.custom-recharge-range,
+.recharge-overlay .custom-recharge-toggle {
+  align-items: center;
+  display: flex;
+}
+
+.custom-recharge-range {
+  color: #796d76;
+  font-size: 12px;
+  font-weight: 400;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.custom-recharge-range image {
+  flex: none;
+  height: 16px;
+  transition: transform 0.22s ease-out;
+  transition:
+    transform 0.22s ease-out,
+    -webkit-transform 0.22s ease-out;
+  width: 16px;
+}
+
+.custom-active .custom-recharge-range image {
+  transform: rotate(180deg);
+}
+
+.custom-input-wrap {
+  align-items: center;
+  animation: recharge-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  border-bottom: 2px solid #b72c51;
+  display: flex;
+  gap: 12px;
+  margin: 0 16px 16px;
+  min-height: 64px;
+}
+
+.custom-currency {
+  color: #b72c51;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.custom-amount-input {
+  background: transparent;
+  caret-color: #b72c51;
+  color: #302a32;
+  flex: 1;
+  font-size: 30px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  height: 60px;
+  min-width: 0;
+}
+
+.custom-currency-unit {
+  color: #796d76;
+  font-size: 14px;
+}
+
+.custom-amount-long {
+  font-size: 20px;
+}
+
+.recharge-input-error {
+  color: #b72c51;
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0 16px 16px;
+}
+
+.recharge-notes {
+  align-items: flex-start;
+  display: flex;
+  gap: 9px;
+  margin: 20px 0;
+}
+
+.recharge-notes image {
+  display: block;
+  flex: none;
+  height: 15px;
+  margin-top: 3px;
+  width: 15px;
+}
+
+.recharge-note {
+  color: #796d76;
+  display: block;
+  font-size: 12px;
+  line-height: 21px;
+}
+
+.recharge-message {
+  color: #b72c51;
+  display: block;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0 0 20px;
+  overflow-wrap: anywhere;
+}
+
+.recharge-footer {
+  border-top: 1px solid #ede5ea;
+  flex: none;
+  padding: 16px 24px 6px;
+}
+
+.recharge-summary {
+  align-items: baseline;
+  color: #796d76;
+  display: flex;
+  font-size: 13px;
+  gap: 16px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  min-height: 30px;
+}
+
+.recharge-summary > view {
+  color: #b72c51;
+  font-size: 12px;
+  text-align: right;
+}
+
+.recharge-summary-number {
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  line-height: 30px;
+  overflow-wrap: anywhere;
+}
+
+.recharge-actions .recharge-primary {
+  align-items: center;
+  background: #b72c51;
+  color: #fff;
+  display: flex;
+  font-size: 16px;
+  font-weight: 650;
+  gap: 10px;
+  justify-content: center;
+  line-height: 24px;
+  min-height: 56px;
+  padding: 14px 18px;
+  transition: transform 0.15s ease-out;
+  transition:
+    transform 0.15s ease-out,
+    -webkit-transform 0.15s ease-out;
+  width: 100%;
+}
+
+.recharge-pay-price {
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.recharge-summary > view {
+  min-width: 0;
+}
+
+.recharge-summary > text {
+  flex: none;
+}
+
+.recharge-actions-long .recharge-primary {
+  flex-wrap: wrap;
+}
+
+.recharge-actions-long .recharge-pay-price {
+  font-size: 18px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.recharge-primary image {
+  display: block;
+  flex: none;
+  height: 19px;
+  margin-left: 2px;
+  width: 19px;
+}
+
+.recharge-action-status {
+  overflow-wrap: anywhere;
+}
+
+.recharge-links {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.recharge-overlay .recharge-records,
+.recharge-overlay .recharge-secondary {
+  align-items: center;
+  background: transparent;
+  color: #796d76;
+  display: flex;
+  font-size: 12px;
+  gap: 6px;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.recharge-records image {
+  display: block;
+  height: 16px;
+  width: 16px;
+}
+
+.recharge-overlay .recharge-options button[disabled] {
+  background: #fff;
+  color: #302a32;
+}
+
+.recharge-overlay .recharge-options .selected[disabled] {
+  background: #fff2f6;
+  color: #b72c51;
+}
+
+.recharge-overlay .recharge-actions .recharge-primary[disabled] {
+  background: #b72c51;
+  color: #fff;
+}
+
+.recharge-overlay .custom-recharge-toggle[disabled],
+.recharge-overlay .recharge-close[disabled],
+.recharge-overlay .recharge-records[disabled],
+.recharge-overlay .recharge-secondary[disabled] {
+  background: transparent;
+  color: #796d76;
+}
+
+.recharge-overlay.theme-ibo-soft-gold {
+  background: #2c423b88;
+}
+
+.theme-ibo-soft-gold .recharge-modal {
+  background: #fffef8;
+  box-shadow: 0 18px 40px #354d442b;
+  color: #334847;
+}
+
+.theme-ibo-soft-gold .custom-currency-unit,
+.theme-ibo-soft-gold .custom-recharge-range,
+.theme-ibo-soft-gold .recharge-balance,
+.theme-ibo-soft-gold .recharge-note,
+.theme-ibo-soft-gold .recharge-subtitle,
+.theme-ibo-soft-gold .recharge-summary {
+  border-color: #dce1d6;
+  color: #636d65;
+}
+
+.theme-ibo-soft-gold .recharge-footer {
+  border-color: #dce1d6;
+}
+
+.recharge-overlay.theme-ibo-soft-gold .recharge-options button {
+  background: #fffef8;
+  border-color: #dce1d6;
+  color: #334847;
+}
+
+.recharge-overlay.theme-ibo-soft-gold .recharge-options .selected,
+.recharge-overlay.theme-ibo-soft-gold .recharge-options .selected[disabled] {
+  background: #eee6d3;
+  border-color: #806238;
+  color: #70552e;
+}
+
+.theme-ibo-soft-gold .recharge-check {
+  background: #806238;
+}
+
+.theme-ibo-soft-gold .recharge-option-rule {
+  background: #dce1d6;
+}
+
+.theme-ibo-soft-gold .selected .recharge-option-rule {
+  background: #c5b38d;
+}
+
+.recharge-overlay.theme-ibo-soft-gold .custom-recharge {
+  border-color: #dce1d6;
+}
+
+.recharge-overlay.theme-ibo-soft-gold .custom-active {
+  background: #eee6d3;
+  border-color: #806238;
+}
+
+.theme-ibo-soft-gold .custom-input-wrap {
+  border-color: #806238;
+}
+
+.recharge-overlay.theme-ibo-soft-gold .custom-amount-input,
+.recharge-overlay.theme-ibo-soft-gold .custom-recharge-toggle,
+.theme-ibo-soft-gold .recharge-balance > text:last-child {
+  color: #334847;
+}
+
+.theme-ibo-soft-gold .custom-currency,
+.theme-ibo-soft-gold .recharge-summary > view {
+  color: #806238;
+}
+
+.recharge-overlay.theme-ibo-soft-gold .recharge-actions .recharge-primary,
+.recharge-overlay.theme-ibo-soft-gold .recharge-actions .recharge-primary[disabled] {
+  background: #806238;
+  color: #fffef8;
+}
+
+.recharge-overlay.theme-ibo-soft-gold .recharge-close,
+.recharge-overlay.theme-ibo-soft-gold .recharge-records,
+.recharge-overlay.theme-ibo-soft-gold .recharge-secondary {
+  color: #636d65;
+}
+
+.recharge-overlay button:focus-visible {
+  outline: 2px solid #b72c51;
+  outline-offset: 3px;
+}
+
+.recharge-body::-webkit-scrollbar {
+  width: 3px;
+}
+
+.recharge-body::-webkit-scrollbar-thumb {
+  background: #bdafb7;
+  border-radius: 3px;
+}
+
+.recharge-pressed {
+  transform: scale(0.98);
+}
+
+@-webkit-keyframes recharge-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes recharge-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 359px) {
+  .recharge-heading {
+    gap: 9px;
+    padding: 22px 18px 16px;
+  }
+
+  .recharge-emblem {
+    height: 28px;
+    width: 28px;
+  }
+
+  .recharge-body {
+    padding: 0 18px;
+  }
+
+  .recharge-footer {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .recharge-options button,
+  .recharge-overlay .custom-recharge-toggle {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .custom-recharge-range {
+    gap: 6px;
+  }
+}
+
+@media (max-height: 580px) {
+  .recharge-heading {
+    padding-bottom: 14px;
+    padding-top: 18px;
+  }
+
+  .recharge-footer {
+    padding-top: 10px;
+  }
+
+  .recharge-summary {
+    margin-bottom: 6px;
+  }
+}
+
+.is-lite .custom-input-wrap,
+.is-lite .custom-recharge-range image,
+.is-lite .recharge-check,
+.is-lite .recharge-modal,
+.is-lite button {
+  animation: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-input-wrap,
+  .custom-recharge-range image,
+  .recharge-check,
+  .recharge-modal,
+  button {
+    animation: none;
+    transition: none;
+  }
+}

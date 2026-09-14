@@ -1,0 +1,5 @@
+<view aria-label="{{(mock?'本地模拟，':'')+(pending?'福袋开奖中':'福袋倒计时 '+text)}}" class="lottery {{theme}} {{urgent?'is-urgent':''}} {{pending?'is-pending':''}} {{lite?'is-lite':''}}" wx:if="{{visible}}">
+    <image aria-hidden="true" class="lottery-icon" mode="aspectFit" src="/assets/images/lottery/lucky-bag-v2.png"></image>
+    <text class="lottery-time">{{text}}</text>
+    <text class="lottery-demo-tag" wx:if="{{mock}}">模拟</text>
+</view>

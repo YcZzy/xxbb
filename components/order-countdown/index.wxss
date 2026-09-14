@@ -1,0 +1,26 @@
+.checkout-clock {
+  align-items: baseline;
+  border-top: 1rpx solid #efe6ec;
+  color: #776771;
+  display: flex;
+  font-size: 23rpx;
+  gap: 16rpx;
+  justify-content: space-between;
+  letter-spacing: 0;
+  line-height: 1.5;
+  padding: 16rpx 0;
+}
+
+.checkout-time {
+  color: #b12f50;
+  flex: none;
+  font-size: 30rpx;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  min-width: 5ch;
+  text-align: right;
+}
+
+.is-expired .checkout-time {
+  font-size: 23rpx;
+}

@@ -1,0 +1,73 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/media/media",
+    "pages/live-archive/live-archive",
+    "pages/daily-digest/daily-digest",
+    "pages/help/help",
+    "pages/official-entry/official-entry"
+  ],
+  "subPackages": [
+    {
+      "name": "loveCall",
+      "root": "pages/love-call",
+      "pages": ["love-call"]
+    },
+    {
+      "name": "viewerArchive",
+      "root": "pages/viewer-archive",
+      "pages": ["viewer-archive"]
+    }
+  ],
+  "preloadRule": {
+    "pages/live-archive/live-archive": {
+      "network": "all",
+      "packages": ["viewerArchive"]
+    },
+    "pages/media/media": {
+      "network": "all",
+      "packages": ["viewerArchive", "loveCall"]
+    }
+  },
+  "tabBar": {
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "color": "#9a8b83",
+    "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "状态"
+      },
+      {
+        "pagePath": "pages/media/media",
+        "text": "爱播守候"
+      },
+      {
+        "pagePath": "pages/daily-digest/daily-digest",
+        "text": "星光早报"
+      },
+      {
+        "pagePath": "pages/live-archive/live-archive",
+        "text": "星光档案"
+      },
+      {
+        "pagePath": "pages/help/help",
+        "text": "帮助"
+      }
+    ],
+    "selectedColor": "#c92f2c"
+  },
+  "usingComponents": {
+    "bottom-nav": "/components/bottom-nav/index",
+    "call-broadcast": "/components/call-broadcast/index"
+  },
+  "window": {
+    "backgroundColor": "#fff7ed",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#fff5e8",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "i播播了么"
+  },
+  "sitemapLocation": "sitemap.json"
+}

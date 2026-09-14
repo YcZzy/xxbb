@@ -1,0 +1,169 @@
+.galaxy-honor {
+  align-items: center;
+  background: linear-gradient(110deg, #202e59, #252746 64%, #403565);
+  border: 1rpx solid #a9afe0;
+  border-radius: 13rpx;
+  box-shadow:
+    0 5rpx 12rpx rgba(34, 35, 73, 0.18),
+    inset 0 1rpx 0 rgba(241, 237, 255, 0.35);
+  box-sizing: border-box;
+  color: #f6f5ff;
+  display: flex;
+  height: 50rpx;
+  letter-spacing: 0;
+  padding: 0 8rpx 0 59rpx;
+  position: relative;
+  width: 208rpx;
+}
+
+.galaxy-window {
+  border-radius: inherit;
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+}
+
+.galaxy-stream {
+  animation: galaxy-stream 7.2s ease-in-out infinite paused;
+  background: linear-gradient(90deg, transparent, rgba(215, 205, 255, 0.2), transparent);
+  height: 100rpx;
+  left: -80rpx;
+  position: absolute;
+  top: -20rpx;
+  transform: translateX(0) rotate(30deg);
+  width: 58rpx;
+}
+
+.galaxy-constellation {
+  background: #f5e9ba;
+  box-shadow:
+    -22rpx 31rpx #ccd7ff,
+    -62rpx -2rpx #bfb0eb,
+    -101rpx 32rpx #f0dfb0;
+  height: 2rpx;
+  opacity: 0.65;
+  position: absolute;
+  right: 10rpx;
+  top: 6rpx;
+  width: 2rpx;
+}
+
+.galaxy-crest {
+  left: -4rpx;
+  top: -7rpx;
+}
+
+.galaxy-crest,
+.galaxy-medal {
+  height: 62rpx;
+  position: absolute;
+  width: 62rpx;
+}
+
+.galaxy-medal {
+  inset: 0;
+}
+
+.galaxy-orbit {
+  animation: galaxy-orbit 9s linear infinite paused;
+  border-color: #d6dbff rgba(219, 223, 255, 0.25) transparent;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1rpx;
+  box-sizing: border-box;
+  height: 46rpx;
+  left: 0;
+  position: absolute;
+  top: 11rpx;
+  transform: rotate(-28deg);
+  width: 64rpx;
+}
+
+.galaxy-comet {
+  background: #fff2c7;
+  border-radius: 2rpx;
+  height: 2rpx;
+  left: 8rpx;
+  position: absolute;
+  top: 4rpx;
+  transform: rotate(-36deg);
+  width: 6rpx;
+}
+
+.galaxy-copy {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+  position: relative;
+}
+
+.galaxy-name {
+  color: #f5f4ff;
+  font-size: 24rpx;
+  font-weight: 650;
+  letter-spacing: 5rpx;
+  line-height: 38rpx;
+  white-space: nowrap;
+}
+
+.is-moving .galaxy-orbit,
+.is-moving .galaxy-stream {
+  animation-play-state: running;
+}
+
+@-webkit-keyframes galaxy-stream {
+  0%,
+  25% {
+    opacity: 0;
+    transform: translateX(0) rotate(30deg);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100%,
+  75% {
+    opacity: 0;
+    transform: translateX(320rpx) rotate(30deg);
+  }
+}
+
+@keyframes galaxy-stream {
+  0%,
+  25% {
+    opacity: 0;
+    transform: translateX(0) rotate(30deg);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100%,
+  75% {
+    opacity: 0;
+    transform: translateX(320rpx) rotate(30deg);
+  }
+}
+
+@-webkit-keyframes galaxy-orbit {
+  to {
+    transform: rotate(332deg);
+  }
+}
+
+@keyframes galaxy-orbit {
+  to {
+    transform: rotate(332deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galaxy-honor .galaxy-orbit,
+  .galaxy-honor .galaxy-stream {
+    animation: none;
+  }
+}

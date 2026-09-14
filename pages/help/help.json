@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "帮助中心",
+  "usingComponents": {
+    "bottom-nav": "/components/bottom-nav/index",
+    "call-account": "/components/call-account/index",
+    "call-broadcast": "/components/call-broadcast/index",
+    "reminder-settings": "/components/reminder-settings/index"
+  }
+}

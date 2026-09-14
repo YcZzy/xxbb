@@ -1,0 +1,340 @@
+<call-broadcast></call-broadcast>
+<view class="media-page {{mascotThemeClass}} {{performanceClass}}">
+    <view class="custom-nav" style="height:{{navigationHeight}}px;padding-top:{{statusBarHeight}}px;">
+        <text class="custom-nav-title">爱播守候</text>
+    </view>
+    <view class="media-content">
+        <view class="hero-row">
+            <view>
+                <text class="eyebrow">FAVORITE WATCH</text>
+                <button aria-label="查看我的粉丝专属徽章" bindtap="openFanBadge" class="owned-fan-badge theme-{{fanBadge.theme}}" wx:if="{{fanBadge}}">
+                    <view class="owned-fan-badge-shine"></view>
+                    <view class="owned-fan-badge-orbit"></view>
+                    <view class="owned-fan-badge-avatar-wrap">
+                        <image class="owned-fan-badge-avatar" mode="aspectFill" src="{{fanBadge.avatarUrl}}" wx:if="{{fanBadge.avatarUrl}}"></image>
+                        <view class="owned-fan-badge-avatar owned-fan-badge-fallback" wx:else>{{fanBadge.initial}}</view>
+                    </view>
+                    <view class="owned-fan-badge-copy">
+                        <text class="owned-fan-badge-name">{{fanBadge.badge_name}}</text>
+                        <text class="owned-fan-badge-anchor">{{fanBadge.nickname}} · 专属粉丝</text>
+                    </view>
+                    <view class="owned-fan-badge-spark spark-one"></view>
+                    <view class="owned-fan-badge-spark spark-two"></view>
+                </button>
+                <view class="hero-title">爱播<text class="accent">守候</text>
+                </view>
+                <text class="hero-subtitle">守候每一位爱播，开播状态实时掌握</text>
+            </view>
+            <view class="hero-action-stack">
+                <button bindtap="openLoveCall" class="love-call-entry">
+                    <view class="love-call-entry-icon">
+                        <text>♥</text>
+                    </view>
+                    <view class="love-call-entry-copy">
+                        <text class="love-call-entry-title">我为爱播打call</text>
+                    </view>
+                </button>
+                <button aria-label="我的粉丝专属徽章" bindtap="openFanBadge" class="fan-badge-entry" wx:if="{{hasFanBadgeAccess&&!fanBadge}}">
+                    <view class="fan-badge-entry-orbit"></view>
+                    <view class="fan-badge-entry-core">
+                        <text>徽</text>
+                    </view>
+                    <text class="fan-badge-entry-label">我的徽章</text>
+                </button>
+            </view>
+        </view>
+        <view class="anchor-card">
+            <view class="card-header card-header-actions-only">
+                <view class="card-header-actions">
+                    <button aria-label="{{filterToolsExpanded?'收起筛选和搜索':'展开筛选和搜索'}}" bindtap="onToggleFilterTools" class="filter-toggle {{filterToolsExpanded?'is-expanded':''}}" hover-class="filter-toggle--pressed" hover-stay-time="80">
+                        <view aria-hidden="true" class="filter-toggle-sheen"></view>
+                        <view aria-hidden="true" class="filter-toggle-icon">
+                            <view class="filter-toggle-line line-one"></view>
+                            <view class="filter-toggle-line line-two"></view>
+                            <view class="filter-toggle-line line-three"></view>
+                        </view>
+                        <text class="filter-toggle-label">{{filterToolsExpanded?'收起筛选':'筛选搜索'}}</text>
+                        <view aria-hidden="true" class="filter-toggle-chevron"></view>
+                    </button>
+                    <button aria-label="{{showSpecialFocus?'退出特别关注筛选':'查看特别关注主播'}}" bindtap="onToggleSpecialFocus" class="special-focus-button {{showSpecialFocus?'is-active':''}}" hover-class="special-focus-button--pressed" wx:if="{{subscribedAnchorCount>0}}">
+                        <view aria-hidden="true" class="special-focus-border-flow">
+                            <view class="special-focus-sheen"></view>
+                        </view>
+                        <image aria-hidden="true" class="special-focus-mascot" mode="aspectFit" src="/assets/images/media/siwuliu-focus-sitter.png"></image>
+                        <text class="special-focus-label">特别关注</text>
+                        <view aria-hidden="true" class="special-focus-signal">
+                            <view class="special-focus-signal-core"></view>
+                        </view>
+                    </button>
+                </view>
+            </view>
+            <view class="filter-tools-panel {{filterToolsExpanded?'is-expanded':''}}">
+                <view class="filter-tools-inner">
+                    <view class="summary-strip">
+                        <view class="summary-tabs">
+                            <view bindtap="onSelectCategory" class="summary-tab tab-{{item.key}} {{!showSpecialFocus&&activeCategory===item.key?'is-active':''}}" data-category="{{item.key}}" hover-class="summary-tab--pressed" hover-stay-time="80" wx:for="{{categories}}" wx:key="key">
+                                <view class="summary-tab-glow"></view>
+                                <text class="summary-tab-label">{{item.label}}</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="search-bar">
+                        <input bindinput="onSearchInput" class="search-input" confirm-type="search" placeholder="搜索主播昵称或dy号" placeholder-class="search-placeholder" value="{{searchQuery}}"></input>
+                        <button aria-label="清除搜索" bindtap="clearSearch" class="search-clear" wx:if="{{searchQuery}}">×</button>
+                    </view>
+                </view>
+            </view>
+            <view class="anchor-row {{item.status==='live'?'is-live':''}} {{item.featured?'is-featured':''}} {{item.primaryBadge&&item.primaryBadge.level===3?'has-top-honor':''}} {{index===filteredAnchors.length-1?'is-last':''}}" style="animation-delay:{{index<7?index*45:315}}ms;" wx:for="{{filteredAnchors}}" wx:key="account">
+                <view aria-label="置顶主播" class="anchor-featured-label" wx:if="{{item.featured}}">
+                    <view class="anchor-featured-label-mark"></view>
+                    <text class="anchor-featured-label-text">置顶</text>
+                    <text class="anchor-featured-label-en">TOP</text>
+                </view>
+                <view aria-hidden="true" class="anchor-featured-fx" wx:if="{{item.featured}}">
+                    <view class="anchor-featured-beam beam-one"></view>
+                    <view class="anchor-featured-beam beam-two"></view>
+                    <view class="anchor-featured-spark spark-one"></view>
+                    <view class="anchor-featured-spark spark-two"></view>
+                    <view class="anchor-featured-spark spark-three"></view>
+                    <text class="anchor-featured-watermark">TOP</text>
+                </view>
+                <view class="anchor-row-main">
+                    <view class="avatar-wrap">
+                        <image binderror="onAvatarError" class="avatar" data-account="{{item.account}}" fade-show="{{true}}" lazy-load="{{index>5}}" mode="aspectFill" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+                        <view class="avatar avatar-fallback" wx:else>{{item.initial}}</view>
+                        <view class="live-ring" wx:if="{{item.status==='live'}}"></view>
+                        <view aria-hidden="true" class="live-equalizer" wx:if="{{item.status==='live'}}">
+                            <view class="live-equalizer-bar bar-1"></view>
+                            <view class="live-equalizer-bar bar-2"></view>
+                            <view class="live-equalizer-bar bar-3"></view>
+                            <view class="live-equalizer-bar bar-4"></view>
+                            <view class="live-equalizer-bar bar-5"></view>
+                        </view>
+                        <view class="featured-avatar-orbit" wx:if="{{item.featured}}"></view>
+                    </view>
+                    <view class="anchor-copy">
+                        <view class="anchor-name-line {{item.primaryBadge&&item.primaryBadge.code==='call_100000'?'has-galaxy-honor':''}}">
+                            <text class="anchor-name">{{item.nickname}}</text>
+                            <galaxy-honor-badge lite="{{performanceClass!==''}}" name="{{item.primaryBadge.name}}" wx:if="{{item.primaryBadge&&item.primaryBadge.code==='call_100000'}}"></galaxy-honor-badge>
+                            <view class="anchor-honor-badge badge-level-{{item.primaryBadge.level}}" wx:elif="{{item.primaryBadge}}">
+                                <view class="anchor-honor-clip">
+                                    <view class="anchor-honor-shine"></view>
+                                </view>
+                                <view class="anchor-honor-emblem" wx:if="{{item.primaryBadge.level===3}}">
+                                    <view class="anchor-honor-orbit"></view>
+                                    <image class="anchor-honor-emblem-image" mode="aspectFit" src="/assets/images/badges/call-10000.png"></image>
+                                </view>
+                                <text class="anchor-honor-symbol" wx:else>{{item.primaryBadge.symbol}}</text>
+                                <view class="anchor-honor-copy">
+                                    <text class="anchor-honor-name">{{item.primaryBadge.name}}</text>
+                                    <text class="anchor-honor-caption" wx:if="{{item.primaryBadge.level===1}}">100 LOVE</text>
+                                    <text class="anchor-honor-caption" wx:elif="{{item.primaryBadge.level===2}}">1K SUPPORT</text>
+                                    <text class="anchor-honor-caption" wx:else>TOP HONOR</text>
+                                </view>
+                                <view class="anchor-honor-spark spark-one" wx:if="{{item.primaryBadge.level===3}}"></view>
+                                <view class="anchor-honor-spark spark-two" wx:if="{{item.primaryBadge.level===3}}"></view>
+                            </view>
+                        </view>
+                        <view aria-label="复制dy号{{item.douyinId}}" aria-role="button" catchtap="onCopyDouyinId" class="anchor-id-copy" data-value="{{item.douyinId}}" hover-class="anchor-id-copy--pressed">
+                            <text class="anchor-id-prefix">dy</text>
+                            <text class="anchor-id">{{item.douyinId}}</text>
+                            <view aria-hidden="true" class="anchor-copy-icon">
+                                <view class="anchor-copy-icon-back"></view>
+                                <view class="anchor-copy-icon-front"></view>
+                            </view>
+                        </view>
+                        <view class="my-fan-tag" wx:if="{{item.isMyFanBadge}}">
+                            <view class="my-fan-tag-light"></view>
+                            <text>我的专属</text>
+                        </view>
+                        <button aria-label="{{item.nickname}}累计{{item.callCountText}}次Call，点击打Call" catchtap="openLoveCall" class="anchor-call-count {{item.callCountText.length>9?'anchor-call-count--long':''}}" data-account="{{item.account}}" hover-class="anchor-call-count--pressed" hover-stay-time="90">
+                            <view aria-hidden="true" class="anchor-call-mark">
+                                <image class="anchor-call-heart" mode="aspectFit" src="/assets/images/call-counter/heart-{{mascotThemeIsMoonTide?'teal':mascotThemeIsIce?'blue':'rose'}}.png"></image>
+                            </view>
+                            <view class="anchor-call-metric">
+                                <text class="anchor-call-value">{{item.callCountText}}</text>
+                                <text class="anchor-call-unit">Call</text>
+                            </view>
+                            <image aria-hidden="true" class="anchor-call-chevron" mode="aspectFit" src="/assets/images/call-counter/chevron.png"></image>
+                        </button>
+                    </view>
+                    <view class="anchor-action">
+                        <view class="status-pill status-{{item.status}}">
+                            <view class="status-dot"></view>
+                            <text wx:if="{{item.status==='live'}}">开播中</text>
+                            <text wx:elif="{{item.status==='offline'}}">未开播</text>
+                            <text wx:else>获取中</text>
+                        </view>
+                        <button bindtap="onManualNotify" class="manual-notify-btn {{item.sendingManual?'is-disabled':''}}" data-account="{{item.account}}" disabled="{{item.sendingManual}}" wx:if="{{isAdmin}}">{{item.sendingManual?'发送中':'补发'}}</button>
+                        <view class="anchor-action-buttons">
+                            <switch bindchange="onToggleMonitor" checked="{{item.enabled}}" color="{{mascotThemeIsSoftGold?'#806238':mascotThemeIsMoonTide?'#239aa6':mascotThemeIsIce?'#3f86b2':'#d93a2f'}}" data-account="{{item.account}}" disabled="{{item.updating}}"></switch>
+                        </view>
+                    </view>
+                </view>
+                <view class="live-status-row" wx:if="{{item.status==='live'}}">
+                    <view aria-label="{{item.viewerCountAvailable?item.viewerCount+'人在线，查看在线趋势':'在线人数连接中，查看在线趋势'}}" aria-role="button" bindtap="openViewerArchive" class="live-audience" data-account="{{item.account}}" hover-class="live-audience--pressed" hover-stay-time="90">
+                        <view aria-hidden="true" class="live-audience-signal">
+                            <view class="live-audience-ring"></view>
+                            <view class="live-audience-core"></view>
+                        </view>
+                        <block wx:if="{{item.viewerCountAvailable}}">
+                            <text class="live-audience-number">{{item.viewerCountDisplay}}</text>
+                            <text class="live-audience-label">人在线</text>
+                        </block>
+                        <view class="live-audience-loading" wx:else>
+                            <view class="live-audience-loading-dot dot-one"></view>
+                            <view class="live-audience-loading-dot dot-two"></view>
+                            <view class="live-audience-loading-dot dot-three"></view>
+                        </view>
+                        <text aria-hidden="true" class="live-audience-chevron">›</text>
+                    </view>
+                    <lottery-countdown account="{{item.account}}" lite="{{performanceClass!==''}}" room-id="{{item.roomId}}" theme="{{mascotThemeClass}}"></lottery-countdown>
+                </view>
+            </view>
+            <view class="search-empty" wx:if="{{searchQuery&&filteredAnchors.length===0}}">
+                <text class="search-empty-title">没有找到相关主播</text>
+                <text class="search-empty-subtitle">试试其他昵称或dy号</text>
+            </view>
+        </view>
+        <view bindtap="loadAll" class="error-card" wx:if="{{loadError}}">
+            <text>{{loadError}} · 点击重试</text>
+        </view>
+        <view class="safe-bottom-space"></view>
+    </view>
+    <root-portal wx:if="{{showLoveCall}}">
+        <view bindtap="closeLoveCall" class="love-call-overlay {{mascotThemeClass}}">
+            <view catchtap="noop" class="love-call-dialog">
+                <view class="love-call-dialog-glow"></view>
+                <button aria-label="关闭" bindtap="closeLoveCall" class="love-call-close">×</button>
+                <view class="love-call-success" wx:if="{{loveCallSuccess}}">
+                    <view aria-hidden="true" class="love-call-success-burst">
+                        <view class="love-call-success-ray ray-1"></view>
+                        <view class="love-call-success-ray ray-2"></view>
+                        <view class="love-call-success-ray ray-3"></view>
+                        <view class="love-call-success-ray ray-4"></view>
+                        <view class="love-call-success-ray ray-5"></view>
+                        <view class="love-call-success-ray ray-6"></view>
+                        <view class="love-call-success-ray ray-7"></view>
+                        <view class="love-call-success-ray ray-8"></view>
+                        <text class="love-call-success-spark spark-1">✦</text>
+                        <text class="love-call-success-spark spark-2">✦</text>
+                        <text class="love-call-success-spark spark-3">✦</text>
+                        <text class="love-call-success-spark spark-4">✦</text>
+                        <view class="love-call-success-orbit orbit-outer"></view>
+                        <view class="love-call-success-orbit orbit-inner"></view>
+                        <view class="love-call-success-core">
+                            <text class="love-call-success-check">✓</text>
+                        </view>
+                    </view>
+                    <text class="love-call-success-kicker">CALL DELIVERED</text>
+                    <text class="love-call-success-title">今天的支持已点亮</text>
+                    <text class="love-call-success-copy">你的心意已经被认真记录</text>
+                    <view class="love-call-success-account">
+                        <text class="love-call-success-account-label">dy</text>
+                        <text class="love-call-success-account-value">{{loveCallSuccessAccount}}</text>
+                        <text class="love-call-success-account-status">已支持</text>
+                    </view>
+                    <view class="love-call-campaign-result {{loveCallCampaign.owned?'is-unlocked':''}}" wx:if="{{loveCallCampaign}}">
+                        <view class="love-call-campaign-result-visual">
+                            <view class="love-call-campaign-result-ring"></view>
+                            <image binderror="onInlineArtworkError" bindload="loadInlineArtwork" data-art="iceWaitA" mode="aspectFit" src="{{inlineArt.iceWaitA||'/assets/images/remote-fallback/iceWaitA.png'}}" wx:if="{{loveCallCampaign.kind==='skin'}}"></image>
+                            <view class="love-call-theme-gem" wx:else>
+                                <view class="love-call-theme-gem-core"></view>
+                            </view>
+                        </view>
+                        <view class="love-call-campaign-result-copy">
+                            <text class="love-call-campaign-result-kicker">{{loveCallCampaign.kicker}}</text>
+                            <text class="love-call-campaign-result-title">{{loveCallCampaign.title}}</text>
+                            <text class="love-call-campaign-result-caption">{{loveCallCampaign.caption}}</text>
+                            <view class="love-call-campaign-result-progress">
+                                <view class="love-call-campaign-result-progress-fill" style="width:{{loveCallCampaign.progress_width}}%;"></view>
+                            </view>
+                        </view>
+                        <text class="love-call-campaign-result-count">{{loveCallCampaign.progress_text}}</text>
+                    </view>
+                    <view class="love-call-actions love-call-success-actions">
+                        <button bindtap="closeLoveCall" class="love-call-action love-call-submit">完成</button>
+                        <button class="love-call-action love-call-share" data-share-scene="love-call" open-type="share">
+                            <text class="love-call-share-icon">↗</text>
+                            <text>分享这份支持</text>
+                        </button>
+                    </view>
+                </view>
+                <block wx:else>
+                    <view class="love-call-badge">
+                        <text class="love-call-heart">♥</text>
+                        <view class="love-call-pulse pulse-one"></view>
+                        <view class="love-call-pulse pulse-two"></view>
+                    </view>
+                    <text class="love-call-kicker">LOVE ANCHOR CALL</text>
+                    <text class="love-call-title">为喜欢的主播打call</text>
+                    <text class="love-call-subtitle">留下主播dy号，让你的支持被看见</text>
+                    <view aria-label="选择𝑿.四五六🍉七日限定活动" aria-role="button" bindtap="chooseSiwuliuLoveCall" class="love-call-featured {{loveCallAccountInput==='82553285031'?'is-selected':''}}" hover-class="love-call-featured--pressed">
+                        <view class="love-call-featured-mark">✦</view>
+                        <view class="love-call-featured-copy">
+                            <text class="love-call-featured-name">𝑿.四五六🍉</text>
+                            <text class="love-call-featured-rule">9 月累计 16 次 · 解锁冰蓝主题</text>
+                        </view>
+                        <text class="love-call-featured-action">{{loveCallAccountInput==='82553285031'?'已选择':'打 call'}}</text>
+                    </view>
+                    <view class="love-call-input-wrap">
+                        <text class="love-call-input-prefix">dy</text>
+                        <input adjust-position="{{true}}" bindconfirm="submitLoveCall" bindinput="onLoveCallInput" class="love-call-input" confirm-type="done" cursor-spacing="36" maxlength="64" placeholder="请输入主播dy号" placeholder-class="love-call-input-placeholder" value="{{loveCallAccountInput}}"></input>
+                    </view>
+                    <text class="love-call-rule">同一微信用户每天可提交一次</text>
+                    <view class="love-call-actions">
+                        <button bindtap="submitLoveCall" class="love-call-action love-call-submit {{submittingLoveCall?'is-loading':''}}" disabled="{{submittingLoveCall}}">{{submittingLoveCall?'正在送出支持…':'送出我的支持'}}</button>
+                        <button class="love-call-action love-call-share" data-share-scene="love-call" open-type="share">
+                            <text class="love-call-share-icon">↗</text>
+                            <text>分享小程序，一起打call</text>
+                        </button>
+                    </view>
+                </block>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{showFanBadge}}">
+        <view bindtap="closeFanBadge" class="fan-badge-overlay {{mascotThemeClass}}">
+            <view catchtap="noop" class="fan-badge-dialog theme-{{fanBadgePreview.theme}}">
+                <view class="fan-badge-dialog-aurora"></view>
+                <button aria-label="关闭" bindtap="closeFanBadge" class="fan-badge-close">×</button>
+                <view class="fan-badge-stage">
+                    <view class="fan-badge-stage-ring ring-outer"></view>
+                    <view class="fan-badge-stage-ring ring-inner"></view>
+                    <view class="fan-badge-stage-spark spark-a"></view>
+                    <view class="fan-badge-stage-spark spark-b"></view>
+                    <view class="fan-badge-stage-spark spark-c"></view>
+                    <view class="fan-badge-avatar-shell">
+                        <image class="fan-badge-avatar" mode="aspectFill" src="{{fanBadgePreview.avatarUrl}}" wx:if="{{fanBadgePreview.avatarUrl}}"></image>
+                        <view class="fan-badge-avatar fan-badge-avatar-fallback" wx:else>{{fanBadgePreview.initial}}</view>
+                    </view>
+                    <view class="fan-badge-ribbon">
+                        <text>{{fanBadgePreview.badge_name}}</text>
+                    </view>
+                </view>
+                <text class="fan-badge-kicker">FAN EXCLUSIVE · 10K LOVE</text>
+                <text class="fan-badge-title">
+        {{fanBadge?'你的专属热爱已点亮':'选择你的粉丝专属徽章'}}
+      </text>
+                <text class="fan-badge-subtitle">
+        {{fanBadge?'这枚徽章属于你与 '+fanBadgePreview.nickname:'每位粉丝最多拥有一枚，领取后仍可在这里查看'}}
+      </text>
+                <scroll-view class="fan-badge-choice-list" enhanced="true" scroll-x="true" show-scrollbar="false" wx:if="{{!fanBadge&&eligibleFanBadges.length>1}}">
+                    <view class="fan-badge-choice-track">
+                        <view bindtap="selectFanBadge" class="fan-badge-choice {{fanBadgePreview.anchor_account===item.anchor_account?'is-selected':''}}" data-account="{{item.anchor_account}}" wx:for="{{eligibleFanBadges}}" wx:key="anchor_account">
+                            <image fade-show="{{true}}" lazy-load="{{index>3}}" mode="aspectFill" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+                            <view class="fan-badge-choice-fallback" wx:else>{{item.initial}}</view>
+                            <text>{{item.nickname}}</text>
+                        </view>
+                    </view>
+                </scroll-view>
+                <button bindtap="claimFanBadge" class="fan-badge-claim {{claimingFanBadge?'is-loading':''}}" disabled="{{claimingFanBadge}}" wx:if="{{!fanBadge}}">{{claimingFanBadge?'正在点亮…':'领取这枚专属徽章'}}</button>
+                <button class="fan-badge-share" data-share-scene="fan-badge" open-type="share" wx:else>
+                    <text class="fan-badge-share-icon">↗</text>
+                    <text>分享这份万人热爱</text>
+                </button>
+                <text class="fan-badge-rule" wx:if="{{!fanBadge}}">领取后不能自行更换，请认真选择</text>
+            </view>
+        </view>
+    </root-portal>
+</view>

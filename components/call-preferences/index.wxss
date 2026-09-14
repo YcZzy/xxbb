@@ -1,0 +1,205 @@
+.preferences-overlay {
+  align-items: center;
+  background: #25192588;
+  box-sizing: border-box;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  letter-spacing: 0;
+  padding: 20px;
+  position: fixed;
+  z-index: 1200;
+}
+
+.preferences-panel {
+  --preference-accent: #b72c51;
+  --preference-tint: #fff2f6;
+  animation: preferences-enter 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #fff;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #302a32;
+  max-height: calc(100vh - 40px);
+  max-width: 360px;
+  overflow-y: auto;
+  padding: 22px;
+  width: 100%;
+}
+
+.skin-siwuliu_ice {
+  --preference-accent: #17647f;
+  --preference-tint: #edf9fb;
+}
+
+.skin-xiaoyu_moon_tide {
+  --preference-accent: #1d7068;
+  --preference-tint: #edf8f5;
+}
+
+.skin-ibo_soft_gold {
+  --preference-accent: #806238;
+  --preference-tint: #faf6ef;
+}
+
+.preferences-panel button {
+  background: transparent;
+  border-radius: 6px;
+  color: var(--preference-accent);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+.preferences-panel button::after {
+  border: 0;
+}
+
+.preferences-panel button[disabled] {
+  opacity: 0.5;
+}
+
+.preferences-panel button:focus-visible {
+  outline: 2px solid var(--preference-accent);
+  outline-offset: 2px;
+}
+
+.preferences-heading {
+  font-size: 18px;
+  font-weight: 650;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.preferences-heading,
+.preferences-panel .preferences-close {
+  align-items: center;
+  display: flex;
+}
+
+.preferences-panel .preferences-close {
+  flex: none;
+  height: 44px;
+  justify-content: center;
+  margin-right: -10px;
+  width: 44px;
+}
+
+.preferences-close image {
+  height: 20px;
+  width: 20px;
+}
+
+.preferences-identity {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 18px 0 24px;
+}
+
+.preferences-caption {
+  color: #75636d;
+  font-size: 12px;
+  width: 100%;
+}
+
+.preferences-name {
+  font-size: 22px;
+  font-weight: 650;
+  line-height: 1.4;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.preferences-mode {
+  color: var(--preference-accent);
+  font-size: 12px;
+}
+
+.preferences-row {
+  align-items: center;
+  border-top: 1px solid #f1e9ee;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  min-height: 70px;
+}
+
+.preferences-label {
+  font-size: 14px;
+  line-height: 1.6;
+  min-width: 0;
+}
+
+.preferences-row switch {
+  flex: none;
+}
+
+.preferences-status {
+  color: var(--preference-accent);
+  font-size: 12px;
+  height: 22px;
+  line-height: 22px;
+  margin-top: 8px;
+}
+
+.preferences-state {
+  color: #75636d;
+  font-size: 14px;
+  padding: 30px 0;
+}
+
+.preferences-error {
+  color: #a12838;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  padding: 14px 0 0;
+}
+
+.preferences-error text {
+  display: block;
+}
+
+.preferences-error button {
+  min-height: 44px;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@-webkit-keyframes preferences-enter {
+  from {
+    opacity: 0.75;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes preferences-enter {
+  from {
+    opacity: 0.75;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.preferences-panel.is-lite {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preferences-panel {
+    animation: none;
+  }
+}

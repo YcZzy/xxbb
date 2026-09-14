@@ -1,0 +1,63 @@
+<view aria-hidden="true" class="tip-entry"></view>
+<root-portal wx:if="{{shown&&!dismissed&&foreground&&active&&!dialog}}">
+    <view class="tip-stage {{skin==='ibo_soft_gold'?'theme-ibo-soft-gold':''}} {{scene}} motion-{{motion}} {{tipSending?'is-sending':''}} {{lite?'is-lite':''}}">
+        <view aria-hidden="true" class="tip-guest" wx:if="{{artSrc}}">
+            <view class="tip-character">
+                <view class="tip-sprite">
+                    <image binderror="onArtworkError" class="tip-atlas tip-walk-atlas" mode="scaleToFill" src="{{artSrc}}" wx:if="{{motion==='entering'||motion==='leaving'}}"></image>
+                    <image binderror="onArtworkError" class="tip-atlas" mode="scaleToFill" src="{{artSrc}}" style="left:{{poseX}}%;top:{{poseY}}%;" wx:else></image>
+                </view>
+            </view>
+        </view>
+        <view aria-live="polite" class="tip-bubble">
+            <view aria-hidden="true" class="tip-glint"></view>
+            <button aria-label="请小人退下" bindtap="dismiss" class="tip-close" disabled="{{busy}}" hover-class="tip-control-pressed" hover-stay-time="80">×</button>
+            <view class="tip-bubble-body">
+                <view class="tip-greeting">
+                    <text aria-hidden="true" class="tip-mark">{{scene==='asking'?'禀':'谢'}}</text>
+                    <text class="tip-eyebrow">{{tipSending?'正在确认这笔打赏':scene==='asking'?askLead:'谢大人恩赏，小的祝您'}}</text>
+                </view>
+                <text class="tip-title">{{tipSending?'大人的心意正在呈上，\n请稍候片刻。':scene==='asking'?askLine:thanksLine}}</text>
+                <view class="tip-bubble-actions" wx:if="{{scene==='asking'}}">
+                    <button bindtap="prepareTip" class="tip-action" disabled="{{busy||!available||offerLoading}}" hover-class="tip-pressed" hover-stay-time="80">
+                        <view aria-hidden="true" class="tip-sending-spinner" wx:if="{{tipSending}}"></view>
+                        <text>{{tipSending?'确认中':busy?'正在核对余额':foreignPending?'查看待确认订单':pending&&!pendingUnpaid?'确认打赏结果':'赏 '+payableCoins+' i币'}}</text>
+                    </button>
+                    <button bindtap="openCustom" class="tip-custom" disabled="{{busy||pending||foreignPending||!available||offerLoading}}" hover-class="tip-control-pressed" hover-stay-time="80">自定义</button>
+                </view>
+                <button bindtap="dismiss" class="tip-dismiss" disabled="{{busy||motion==='leaving'}}" hover-class="tip-control-pressed" hover-stay-time="80" wx:else>退下吧</button>
+                <text class="tip-discount" wx:if="{{scene==='asking'&&payableCoins<coins}}">主题九折 · 已省 {{coins-payableCoins}} i币</text>
+                <text class="tip-inline-disclosure" wx:if="{{scene==='asking'}}">仅打赏早报，不向主播转账。未成年人请勿打赏。</text>
+                <view class="tip-availability" wx:if="{{offerError&&scene==='asking'}}">
+                    <text class="tip-offer-state">{{offerError}}</text>
+                    <button bindtap="loadOffer" disabled="{{busy||offerLoading}}" hover-class="tip-control-pressed" hover-stay-time="80">重试</button>
+                </view>
+                <text class="tip-message" wx:if="{{message}}">{{message}}</text>
+            </view>
+        </view>
+    </view>
+</root-portal>
+<recharge-dialog action-text="{{tipRechargeAction}}" active="{{foreground&&active}}" balance-text="{{balance===null?'--':balance}}" bindamountinput="changeTipRecharge" bindcancel="cancelTipRecharge" bindclose="closeDialog" bindconfirm="confirmTipRecharge" bindcustom="chooseTipRecharge" bindexpire="expireTipRecharge" bindrecords="openRecords" bindselect="chooseTipRecharge" busy="{{busy}}" can-cancel="{{tipRechargeCanCancel}}" coins="{{tipRechargeCoins}}" coins-text="{{tipRechargeCoins===null?'--':tipRechargeCoins}}" custom="{{tipRechargeCustom}}" deadline="{{tipRechargeDeadline}}" input-value="{{tipRechargeInput}}" lite="{{lite}}" locked="{{tipRechargeLocked||tipRechargeDone}}" message="{{message}}" mode="{{tipRechargeMode}}" note="充值后留在早报，不会自动打赏。未成年人请勿充值。" options="{{tipRechargeOptions}}" order-id="{{tipRechargeOrderId}}" price-text="{{tipRechargeYuan}}" range-text="{{tipRechargeRange}}" ready="{{tipRechargeReady}}" show-records="{{tipRechargeLocked}}" skin="{{skin}}" visible="{{dialog==='recharge'}}"></recharge-dialog>
+<root-portal wx:if="{{dialog==='custom'&&foreground&&active}}">
+    <view bindtap="closeDialog" catchtouchmove="noop" class="tip-overlay {{skin==='ibo_soft_gold'?'theme-ibo-soft-gold':''}}">
+        <view catchtap="noop" class="tip-panel">
+            <view class="tip-panel-head">
+                <text>大人的心意</text>
+                <button aria-label="关闭打赏弹框" bindtap="closeDialog" disabled="{{busy}}" hover-class="tip-control-pressed" hover-stay-time="80">×</button>
+            </view>
+            <text class="tip-issue">星光早报 · {{date}}</text>
+            <view class="tip-amount-input">
+                <input adjust-position="{{true}}" bindconfirm="useCustom" bindinput="changeAmount" confirm-type="done" cursor-spacing="120" disabled="{{busy}}" maxlength="5" placeholder="9" type="number" value="{{input}}"></input>
+                <text>i币</text>
+            </view>
+            <text class="tip-limit">{{minCoins}}～{{maxCoins}} i币</text>
+            <text class="tip-limit" wx:if="{{goldDiscount&&customPayable>0}}">主题九折 · 实付 {{customPayable}} i币</text>
+            <text class="tip-disclosure">仅为星光早报站内打赏，不向主播转账，不增加 Call 或提醒次数。未成年人请勿打赏。</text>
+            <text class="tip-message" wx:if="{{inputError||message}}">{{inputError||message}}</text>
+            <view class="tip-panel-actions">
+                <button bindtap="closeDialog" class="tip-cancel" disabled="{{busy}}" hover-class="tip-control-pressed" hover-stay-time="80">暂不</button>
+                <button bindtap="useCustom" class="tip-confirm" disabled="{{busy||!input||inputError}}" hover-class="tip-control-pressed" hover-stay-time="80">{{busy?'正在处理':'赏 '+customPayable+' i币'}}</button>
+            </view>
+        </view>
+    </view>
+</root-portal>

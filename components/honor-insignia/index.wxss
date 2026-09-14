@@ -1,0 +1,461 @@
+.insignia {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.anchor-honor-badge {
+  background: linear-gradient(120deg, #fff7f0, #ffdcd1 58%, #fff2e8);
+  border: 1rpx solid rgba(183, 76, 58, 0.3);
+  border-radius: 13rpx;
+  box-shadow:
+    0 7rpx 15rpx rgba(151, 54, 43, 0.12),
+    inset 0 1rpx 0 hsla(0, 0%, 100%, 0.82);
+  box-sizing: border-box;
+  color: #9f302c;
+  height: 44rpx;
+  max-width: 154rpx;
+  overflow: hidden;
+  padding: 0 11rpx 0 7rpx;
+  width: 154rpx;
+}
+
+.anchor-honor-badge,
+.anchor-honor-symbol {
+  align-items: center;
+  display: flex;
+  flex: none;
+  position: relative;
+}
+
+.anchor-honor-symbol {
+  animation: anchor-honor-heart 3.2s ease-in-out infinite;
+  background: radial-gradient(circle at 36% 28%, #f99078, #c92d35 72%);
+  border: 1rpx solid hsla(0, 0%, 100%, 0.58);
+  border-radius: 10rpx;
+  box-shadow:
+    0 4rpx 9rpx rgba(154, 37, 42, 0.22),
+    inset 0 1rpx 0 hsla(0, 0%, 100%, 0.48);
+  color: #fff;
+  font-size: 17rpx;
+  font-weight: 850;
+  height: 30rpx;
+  justify-content: center;
+  line-height: 1;
+  margin-right: 7rpx;
+  width: 30rpx;
+  z-index: 1;
+}
+
+.anchor-honor-name {
+  font-size: 16rpx;
+  font-weight: 800;
+  line-height: 18rpx;
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.anchor-honor-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.anchor-honor-shine {
+  background: hsla(0, 0%, 100%, 0.42);
+  height: 80rpx;
+  left: -50rpx;
+  position: absolute;
+  top: -20rpx;
+  transform: rotate(22deg);
+  width: 38rpx;
+}
+
+.anchor-honor-clip {
+  border-radius: inherit;
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: 1;
+}
+
+.anchor-honor-badge.badge-level-2 {
+  background: linear-gradient(118deg, #fff9e7, #ffdda0 56%, #fff1cd);
+  border-color: rgba(189, 118, 28, 0.4);
+  box-shadow:
+    0 7rpx 16rpx rgba(171, 99, 25, 0.16),
+    inset 0 1rpx 0 hsla(0, 0%, 100%, 0.84);
+  color: #8e5113;
+  max-width: 162rpx;
+  width: 162rpx;
+}
+
+.anchor-honor-badge.badge-level-2 .anchor-honor-symbol {
+  animation: anchor-honor-star 3.6s ease-in-out infinite;
+  background: radial-gradient(circle at 36% 28%, #ffc963, #d7761f 72%);
+  border-color: rgba(255, 244, 194, 0.7);
+  box-shadow:
+    0 4rpx 10rpx rgba(173, 92, 21, 0.24),
+    inset 0 1rpx 0 hsla(0, 0%, 100%, 0.54);
+  color: #fff8d5;
+}
+
+.anchor-honor-badge.badge-level-1 .anchor-honor-shine {
+  animation: anchor-honor-mini-shine 5.4s ease-in-out infinite;
+}
+
+.anchor-honor-badge.badge-level-2 .anchor-honor-shine {
+  animation: anchor-honor-mini-shine 4.8s ease-in-out 0.8s infinite;
+  background: rgba(255, 252, 224, 0.48);
+}
+
+.anchor-honor-badge.badge-level-3 {
+  animation: anchor-top-honor-badge 3.2s ease-in-out infinite;
+  background: linear-gradient(112deg, #71131d, #b4222b 42%, #6e111b);
+  border-color: rgba(221, 171, 66, 0.66);
+  border-radius: 13rpx;
+  box-shadow:
+    0 9rpx 22rpx rgba(125, 22, 27, 0.26),
+    0 0 0 3rpx rgba(255, 216, 115, 0.12),
+    inset 0 1rpx 0 rgba(255, 244, 188, 0.48);
+  color: #fff8d4;
+  height: 46rpx;
+  max-width: 174rpx;
+  overflow: visible;
+  padding: 0 12rpx 0 48rpx;
+  width: 174rpx;
+}
+
+.anchor-honor-badge.badge-level-3 .anchor-honor-name {
+  color: #fff6ce;
+  font-size: 17rpx;
+  line-height: 18rpx;
+  text-shadow: 0 2rpx 5rpx rgba(74, 10, 13, 0.5);
+}
+
+.anchor-honor-badge.badge-level-3 .anchor-honor-shine {
+  animation: anchor-honor-shine 3.6s ease-in-out infinite;
+  background: rgba(255, 244, 189, 0.32);
+  border-radius: 50%;
+  height: 70rpx;
+  left: 32rpx;
+  top: -12rpx;
+  width: 24rpx;
+  z-index: 1;
+}
+
+.anchor-honor-emblem {
+  height: 48rpx;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48rpx;
+  z-index: 3;
+}
+
+.anchor-honor-emblem-image {
+  animation: anchor-honor-emblem-float 3s ease-in-out infinite;
+  height: 48rpx;
+  inset: 0;
+  position: absolute;
+  width: 48rpx;
+  z-index: 2;
+}
+
+.anchor-honor-orbit {
+  animation: anchor-honor-orbit 2.4s ease-out infinite;
+  border: 2rpx solid rgba(255, 217, 111, 0.38);
+  border-radius: 50%;
+  box-shadow: 0 0 12rpx rgba(255, 200, 70, 0.45);
+  inset: 5rpx;
+  position: absolute;
+  z-index: 1;
+}
+
+.anchor-honor-caption {
+  color: rgba(139, 63, 48, 0.62);
+  font-size: 9rpx;
+  font-weight: 800;
+  line-height: 10rpx;
+  margin-top: 1rpx;
+}
+
+.anchor-honor-badge.badge-level-2 .anchor-honor-caption {
+  color: rgba(130, 78, 22, 0.68);
+}
+
+.anchor-honor-badge.badge-level-3 .anchor-honor-caption {
+  color: rgba(255, 222, 135, 0.84);
+}
+
+.anchor-honor-spark {
+  background: #fff9d9;
+  border-radius: 50%;
+  box-shadow: 0 0 8rpx #ffd66c;
+  height: 5rpx;
+  opacity: 0;
+  position: absolute;
+  width: 5rpx;
+  z-index: 3;
+}
+
+.anchor-honor-spark.spark-one {
+  animation: anchor-honor-spark 2.2s ease-in-out infinite;
+  right: 7rpx;
+  top: 6rpx;
+}
+
+.anchor-honor-spark.spark-two {
+  animation: anchor-honor-spark 2.2s ease-in-out 1.1s infinite;
+  bottom: 5rpx;
+  right: 20rpx;
+}
+
+@-webkit-keyframes anchor-honor-shine {
+  0%,
+  55% {
+    transform: translateX(0) rotate(22deg);
+  }
+
+  100%,
+  82% {
+    transform: translateX(132rpx) rotate(22deg);
+  }
+}
+
+@keyframes anchor-honor-shine {
+  0%,
+  55% {
+    transform: translateX(0) rotate(22deg);
+  }
+
+  100%,
+  82% {
+    transform: translateX(132rpx) rotate(22deg);
+  }
+}
+
+@-webkit-keyframes anchor-honor-mini-shine {
+  0%,
+  62% {
+    transform: translateX(0) rotate(22deg);
+  }
+
+  100%,
+  84% {
+    transform: translateX(190rpx) rotate(22deg);
+  }
+}
+
+@keyframes anchor-honor-mini-shine {
+  0%,
+  62% {
+    transform: translateX(0) rotate(22deg);
+  }
+
+  100%,
+  84% {
+    transform: translateX(190rpx) rotate(22deg);
+  }
+}
+
+@-webkit-keyframes anchor-honor-heart {
+  0%,
+  100% {
+    box-shadow:
+      0 4rpx 9rpx rgba(154, 37, 42, 0.22),
+      inset 0 1rpx 0 hsla(0, 0%, 100%, 0.48);
+    transform: scale(1);
+  }
+
+  45% {
+    box-shadow:
+      0 4rpx 12rpx rgba(177, 37, 43, 0.3),
+      0 0 0 4rpx rgba(211, 64, 59, 0.07),
+      inset 0 1rpx 0 hsla(0, 0%, 100%, 0.56);
+    transform: scale(1.06);
+  }
+}
+
+@keyframes anchor-honor-heart {
+  0%,
+  100% {
+    box-shadow:
+      0 4rpx 9rpx rgba(154, 37, 42, 0.22),
+      inset 0 1rpx 0 hsla(0, 0%, 100%, 0.48);
+    transform: scale(1);
+  }
+
+  45% {
+    box-shadow:
+      0 4rpx 12rpx rgba(177, 37, 43, 0.3),
+      0 0 0 4rpx rgba(211, 64, 59, 0.07),
+      inset 0 1rpx 0 hsla(0, 0%, 100%, 0.56);
+    transform: scale(1.06);
+  }
+}
+
+@-webkit-keyframes anchor-honor-star {
+  0%,
+  100% {
+    box-shadow:
+      0 4rpx 10rpx rgba(173, 92, 21, 0.24),
+      inset 0 1rpx 0 hsla(0, 0%, 100%, 0.54);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow:
+      0 4rpx 14rpx rgba(189, 112, 21, 0.32),
+      0 0 0 4rpx rgba(239, 167, 52, 0.08),
+      inset 0 1rpx 0 hsla(0, 0%, 100%, 0.62);
+    transform: scale(1.08);
+  }
+}
+
+@keyframes anchor-honor-star {
+  0%,
+  100% {
+    box-shadow:
+      0 4rpx 10rpx rgba(173, 92, 21, 0.24),
+      inset 0 1rpx 0 hsla(0, 0%, 100%, 0.54);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow:
+      0 4rpx 14rpx rgba(189, 112, 21, 0.32),
+      0 0 0 4rpx rgba(239, 167, 52, 0.08),
+      inset 0 1rpx 0 hsla(0, 0%, 100%, 0.62);
+    transform: scale(1.08);
+  }
+}
+
+@-webkit-keyframes anchor-top-honor-badge {
+  0%,
+  100% {
+    box-shadow:
+      0 9rpx 22rpx rgba(125, 22, 27, 0.26),
+      0 0 0 3rpx rgba(255, 216, 115, 0.12),
+      inset 0 1rpx 0 rgba(255, 244, 188, 0.48);
+  }
+
+  50% {
+    box-shadow:
+      0 10rpx 28rpx rgba(125, 22, 27, 0.34),
+      0 0 0 6rpx rgba(255, 216, 115, 0.06),
+      inset 0 1rpx 0 rgba(255, 244, 188, 0.58);
+  }
+}
+
+@keyframes anchor-top-honor-badge {
+  0%,
+  100% {
+    box-shadow:
+      0 9rpx 22rpx rgba(125, 22, 27, 0.26),
+      0 0 0 3rpx rgba(255, 216, 115, 0.12),
+      inset 0 1rpx 0 rgba(255, 244, 188, 0.48);
+  }
+
+  50% {
+    box-shadow:
+      0 10rpx 28rpx rgba(125, 22, 27, 0.34),
+      0 0 0 6rpx rgba(255, 216, 115, 0.06),
+      inset 0 1rpx 0 rgba(255, 244, 188, 0.58);
+  }
+}
+
+@-webkit-keyframes anchor-honor-emblem-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-1rpx) scale(1.02);
+  }
+}
+
+@keyframes anchor-honor-emblem-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-1rpx) scale(1.02);
+  }
+}
+
+@-webkit-keyframes anchor-honor-orbit {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.82);
+  }
+
+  100%,
+  72% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes anchor-honor-orbit {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.82);
+  }
+
+  100%,
+  72% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
+}
+
+@-webkit-keyframes anchor-honor-spark {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  42% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes anchor-honor-spark {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  42% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+.insignia-still image,
+.insignia-still text,
+.insignia-still view {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .insignia image,
+  .insignia text,
+  .insignia view {
+    animation: none !important;
+  }
+}

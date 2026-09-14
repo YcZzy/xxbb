@@ -1,0 +1,15 @@
+<view aria-label="星河加冕，十万次打Call荣誉" class="galaxy-honor {{moving?'is-moving':''}}">
+    <view aria-hidden="true" class="galaxy-window">
+        <view class="galaxy-stream"></view>
+        <view class="galaxy-constellation"></view>
+    </view>
+    <view aria-hidden="true" class="galaxy-crest">
+        <image binderror="onArtworkError" class="galaxy-medal" mode="aspectFit" src="/assets/images/badges/call-100000.png" wx:if="{{!artworkFailed}}"></image>
+        <view class="galaxy-orbit">
+            <view class="galaxy-comet"></view>
+        </view>
+    </view>
+    <view class="galaxy-copy">
+        <text class="galaxy-name">星河加冕</text>
+    </view>
+</view>

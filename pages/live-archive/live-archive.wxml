@@ -1,0 +1,493 @@
+<call-broadcast></call-broadcast>
+<view class="archive-page archive-design-scope archive-redesign {{mascotThemeClass}} {{performanceClass}}">
+    <view class="custom-nav" style="height:{{navigationHeight}}px;padding-top:{{statusBarHeight}}px;">
+        <view class="nav-side-space"></view>
+        <view class="nav-title-group">
+            <text class="custom-nav-title">星光档案</text>
+        </view>
+        <view class="nav-side-space"></view>
+    </view>
+    <scroll-view enhanced scroll-y bindscroll="onArchiveScroll" class="archive-scroll" show-scrollbar="{{false}}">
+        <view class="archive-content">
+            <view class="archive-tool-row">
+                <view aria-label="主播展示范围" class="archive-scope-switch {{anchorScope==='all'?'is-all':''}}" role="tablist">
+                    <view aria-hidden="true" class="archive-scope-thumb"></view>
+                    <button aria-selected="{{anchorScope==='favorite'}}" bindtap="switchAnchorScope" class="archive-scope-option {{anchorScope==='favorite'?'is-active':''}}" data-scope="favorite" hover-class="archive-scope-option--pressed" role="tab">我的爱播</button>
+                    <button aria-selected="{{anchorScope==='all'}}" bindtap="switchAnchorScope" class="archive-scope-option {{anchorScope==='all'?'is-active':''}}" data-scope="all" hover-class="archive-scope-option--pressed" role="tab">全部主播</button>
+                </view>
+                <button aria-label="查看{{selectedAnchor.nickname||'当前主播'}}在线人数趋势" bindtap="openViewerArchive" class="archive-trend-entry {{trendEntryAttention&&archivePageVisible&&trendEntryVisible&&selectedAnchor.account&&!pkDetailOpen&&!dateSelectorOpen&&!anchorSelectorOpen?'is-inviting':''}}" disabled="{{!selectedAnchor.account}}" hover-class="archive-trend-entry--pressed">
+                    <view aria-hidden="true" class="archive-trend-sheen"></view>
+                    <view aria-hidden="true" class="nav-trend-icon">
+                        <view class="nav-trend-axis axis-x"></view>
+                        <view class="nav-trend-axis axis-y"></view>
+                        <view class="nav-trend-line line-one"></view>
+                        <view class="nav-trend-line line-two"></view>
+                        <view class="nav-trend-dot dot-one"></view>
+                        <view class="nav-trend-dot dot-two"></view>
+                        <view class="nav-trend-dot dot-three"></view>
+                    </view>
+                    <text class="archive-trend-label">在线趋势</text>
+                    <view aria-hidden="true" class="pk-detail-chevron archive-trend-arrow"></view>
+                </button>
+            </view>
+            <view class="archive-identity-row">
+                <button aria-label="选择主播，当前为 {{selectedAnchor.nickname||'未选择'}}" bindtap="openAnchorSelector" class="archive-identity {{anchorSwitchMotion}}" disabled="{{!anchors.length}}" hover-class="archive-control-pressed">
+                    <view class="archive-profile-avatar {{selectedAnchor.status==='live'?'is-live':''}}">
+                        <image mode="aspectFill" src="{{selectedAnchor.avatarUrl}}" wx:if="{{selectedAnchor.avatarUrl}}"></image>
+                        <text wx:else>{{selectedAnchor.initial||'播'}}</text>
+                    </view>
+                    <view class="archive-profile-copy">
+                        <view class="archive-profile-name">
+                            <text>{{selectedAnchor.nickname||'选择主播'}}</text>
+                            <view aria-hidden="true" class="selector-cue-chevron"></view>
+                        </view>
+                        <view class="archive-profile-status {{selectedAnchor.status==='live'?'is-live':''}}">
+                            <view aria-hidden="true" class="archive-live-wave" wx:if="{{selectedAnchor.status==='live'}}">
+                                <view></view>
+                                <view></view>
+                                <view></view>
+                            </view>
+                            <text>{{selectedAnchor.status==='live'?'直播中':'未开播'}}</text>
+                        </view>
+                    </view>
+                </button>
+                <button aria-label="选择日期，当前为 {{selectedDate}}" bindtap="openDateSelector" class="archive-date-control" hover-class="archive-control-pressed">
+                    <view class="archive-date-main">
+                        <view aria-hidden="true" class="date-picker-cue">
+                            <view class="date-picker-cue-top"></view>
+                            <view class="date-picker-cue-grid">
+                                <view></view>
+                                <view></view>
+                                <view></view>
+                                <view></view>
+                            </view>
+                        </view>
+                        <text>{{selectedDate}}</text>
+                        <view aria-hidden="true" class="selector-cue-chevron"></view>
+                    </view>
+                    <text class="archive-date-caption">{{selectedDateLabel}}</text>
+                </button>
+            </view>
+            <view class="archive-state" wx:if="{{loading&&!timeline.length}}">
+                <view class="state-loader">
+                    <view class="state-loader-ring"></view>
+                    <view class="state-loader-core"></view>
+                </view>
+                <text class="state-title">正在整理当天星光</text>
+                <text class="state-subtitle">人气榜与 PK 记录正在汇总</text>
+            </view>
+            <view class="archive-state is-error" wx:elif="{{loadError&&!timeline.length}}">
+                <view class="state-mark">!</view>
+                <text class="state-title">{{loadError}}</text>
+                <button bindtap="retryLoad" class="state-retry" hover-class="state-retry--pressed">重新加载</button>
+            </view>
+            <block wx:else>
+                <view class="archive-day-metrics {{numbersAnimating?'is-number-updating':''}}">
+                    <view class="archive-day-metric">
+                        <text class="archive-metric-number is-rank {{summary.bestRankChanging?'is-changing':''}}">{{summary.bestRank}}</text>
+                        <text class="archive-metric-label">最佳排名</text>
+                    </view>
+                    <view class="archive-day-metric">
+                        <text class="archive-metric-number {{summary.peakSupportersChanging?'is-changing':''}}" style="{{summary.peakSupportersFontStyle}}">{{summary.peakSupporters}}</text>
+                        <text class="archive-metric-label">峰值助力</text>
+                    </view>
+                    <view class="archive-day-metric">
+                        <text class="archive-metric-number {{summary.pkCountChanging?'is-changing':''}}">{{summary.pkCount}}</text>
+                        <text class="archive-metric-label">PK 场次</text>
+                    </view>
+                    <view class="archive-day-metric">
+                        <text class="archive-metric-number {{summary.winsChanging?'is-changing':''}}">{{summary.wins}}</text>
+                        <text class="archive-metric-label">获胜</text>
+                    </view>
+                </view>
+                <view class="archive-timeline-toolbar">
+                    <text class="archive-section-heading">小时线</text>
+                    <button aria-label="当前{{timelineSortOrder==='asc'?'最早优先':'最新优先'}}，点击切换排序" bindtap="toggleTimelineSort" class="timeline-order-toggle {{timelineSortOrder==='asc'?'is-ascending':'is-descending'}}" hover-class="timeline-order-toggle--pressed">
+                        <view aria-hidden="true" class="timeline-order-icon">
+                            <view class="timeline-order-arrow">
+                                <view class="timeline-order-arrow-line"></view>
+                                <view class="timeline-order-arrow-tip"></view>
+                            </view>
+                            <view class="timeline-order-bars">
+                                <view></view>
+                                <view></view>
+                                <view></view>
+                            </view>
+                        </view>
+                        <text>{{timelineSortOrder==='asc'?'最早优先':'最新优先'}}</text>
+                    </button>
+                </view>
+                <view class="empty-state" wx:if="{{!timeline.length}}">
+                    <text class="empty-title">当天暂无星光记录</text>
+                    <text class="empty-subtitle">可以切换主播或日期查看</text>
+                </view>
+                <view class="archive-hours {{numbersAnimating?'is-number-updating':''}}" wx:else>
+                    <view class="archive-hour {{item.isCurrent?'is-current':''}}" wx:for="{{timeline}}" wx:key="periodStart">
+                        <view aria-hidden="true" class="archive-hour-dot"></view>
+                        <view class="archive-hour-heading">
+                            <view class="archive-hour-time">
+                                <text>{{item.hourLabel}}<text class="archive-hour-end"> - {{item.hourEndLabel}}</text>
+                                </text>
+                                <view class="archive-updating" wx:if="{{item.isCurrent}}">
+                                    <view></view>
+                                    <text>更新中</text>
+                                </view>
+                            </view>
+                            <view class="archive-hour-rank" wx:if="{{item.hasPopularity}}">
+                                <text>小时榜</text>
+                                <text class="{{item.rankChanging?'is-changing':''}}">{{item.rankText}}</text>
+                            </view>
+                        </view>
+                        <view class="archive-hour-stats" wx:if="{{item.hasPopularity}}">
+                            <view>
+                                <text class="archive-stat-label">助力人数</text>
+                                <text class="archive-stat-number {{item.supporterChanging?'is-changing':''}}" style="{{item.supporterFontStyle}}">{{item.supporterText}}</text>
+                            </view>
+                            <view>
+                                <text class="archive-stat-label">人气值</text>
+                                <text class="archive-stat-number {{item.scoreChanging?'is-changing':''}}" style="{{item.scoreFontStyle}}">{{item.scoreText}}</text>
+                            </view>
+                            <text class="archive-hour-gap" wx:if="{{!item.rankNeighbors.length}}">{{item.gapText}}</text>
+                        </view>
+                        <view class="archive-rank-neighbors" wx:if="{{item.rankNeighbors.length}}">
+                            <view class="archive-rank-neighbor is-{{neighbor.side}}" wx:for="{{item.rankNeighbors}}" wx:for-item="neighbor" wx:key="side">
+                                <view class="archive-neighbor-identity">
+                                    <text class="archive-neighbor-label">{{neighbor.label}}</text>
+                                    <text class="archive-neighbor-rank" wx:if="{{neighbor.rankText}}">{{neighbor.rankText}}</text>
+                                    <text class="archive-neighbor-name">{{neighbor.nickname}}</text>
+                                </view>
+                                <view class="archive-neighbor-gap {{neighbor.hasGap?'has-gap':''}}">
+                                    <text class="archive-neighbor-gap-label" wx:if="{{neighbor.gapLabel}}">{{neighbor.gapLabel}}</text>
+                                    <text class="archive-neighbor-gap-label" wx:if="{{neighbor.gapNote==='约'}}">约</text>
+                                    <text class="archive-neighbor-gap-value">{{neighbor.gapText}}</text>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="archive-pk-heading" wx:if="{{item.hasOngoingBattle}}">
+                            <text>PK 记录 <text class="archive-pk-count">{{item.pkCount}}</text>
+                            </text>
+                            <text class="archive-pk-meta">{{item.ongoingCount}} 场进行中</text>
+                        </view>
+                        <view aria-label="{{battle.modeSummary}}，PK进行中，点击查看详情" bindtap="openPkDetail" class="archive-live-match" data-record-id="{{battle.motionKey}}" hover-class="archive-control-pressed" role="button" wx:if="{{battle.isOngoing}}" wx:for="{{item.battles}}" wx:for-index="battleIndex" wx:for-item="battle" wx:key="motionKey">
+                            <view class="archive-match-meta">
+                                <text>{{battle.startClock}} · {{battle.modeLabel}}</text>
+                                <view aria-label="PK进行中" class="archive-match-signal">
+                                    <view class="archive-live-wave">
+                                        <view></view>
+                                        <view></view>
+                                        <view></view>
+                                        <view></view>
+                                    </view>
+                                    <view class="pk-detail-chevron"></view>
+                                </view>
+                            </view>
+                            <view class="archive-versus" wx:if="{{battle.battleMode!=='multi'}}">
+                                <view class="archive-player is-red">
+                                    <view class="archive-player-avatars {{battle.battleMode==='team'?'is-team':''}}">
+                                        <view class="archive-player-avatar" wx:for="{{battle.previewLeftMembers}}" wx:for-item="player" wx:key="participant_key">
+                                            <image lazy-load mode="aspectFill" src="{{player.avatarUrl}}" wx:if="{{player.avatarUrl}}"></image>
+                                            <text wx:else>{{player.initial}}</text>
+                                        </view>
+                                    </view>
+                                    <text class="archive-player-name">{{battle.previewLeftLabel}}</text>
+                                    <text class="archive-player-score {{battle.anchorScoreChanging?'is-changing':''}}" style="{{battle.listScoreFontStyle}}">{{battle.anchorScoreText}}</text>
+                                </view>
+                                <view class="archive-vs">
+                                    <text>VS</text>
+                                    <text>{{battle.battleMode==='team'?'团队':'1V1'}}</text>
+                                </view>
+                                <view class="archive-player is-blue">
+                                    <view class="archive-player-avatars {{battle.battleMode==='team'?'is-team':''}}">
+                                        <view class="archive-player-avatar" wx:for="{{battle.previewRightMembers}}" wx:for-item="player" wx:key="participant_key">
+                                            <image lazy-load mode="aspectFill" src="{{player.avatarUrl}}" wx:if="{{player.avatarUrl}}"></image>
+                                            <text wx:else>{{player.initial}}</text>
+                                        </view>
+                                    </view>
+                                    <text class="archive-player-name">{{battle.previewRightLabel}}</text>
+                                    <text class="archive-player-score {{battle.opponentScoreChanging?'is-changing':''}}" style="{{battle.listScoreFontStyle}}">{{battle.opponentScoreText}}</text>
+                                </view>
+                            </view>
+                            <view class="archive-live-multi {{battle.participants.length>4?'is-many':''}}" wx:else>
+                                <view class="archive-multi-player {{player.isAnchor?'is-anchor':''}}" wx:for="{{battle.participants}}" wx:for-item="player" wx:key="participant_key">
+                                    <view class="archive-player-avatar">
+                                        <image lazy-load mode="aspectFill" src="{{player.avatarUrl}}" wx:if="{{player.avatarUrl}}"></image>
+                                        <text wx:else>{{player.initial}}</text>
+                                    </view>
+                                    <text class="archive-player-name">{{player.name}}</text>
+                                    <text class="archive-player-score">{{player.scoreText}}</text>
+                                </view>
+                            </view>
+                            <view aria-hidden="true" class="archive-score-track {{battle.hasComparableScores?'':'is-unknown'}}" wx:if="{{battle.battleMode!=='multi'}}">
+                                <view class="archive-score-blue"></view>
+                                <view class="archive-score-red" style="transform:scaleX({{battle.previewRedScale}});"></view>
+                            </view>
+                            <view class="archive-match-footer">
+                                <text>{{battle.battleMode==='multi'?battle.participantCount+' 位参战主播':battle.scoreComparisonText}}</text>
+                                <view class="archive-match-detail">
+                                    <text>{{battle.detailHint}}</text>
+                                    <view class="pk-detail-chevron"></view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="archive-finished-group" wx:if="{{item.completedCount}}">
+                            <button aria-expanded="{{item.pkExpanded}}" aria-label="已结束{{item.completedCount}}场，{{item.pkExpanded?'点击收起':'点击展开'}}" bindtap="togglePkRecords" class="archive-finished-toggle {{item.pkExpanded?'is-expanded':''}}" data-period-start="{{item.periodStart}}" hover-class="archive-record--pressed" hover-stay-time="80">
+                                <view class="archive-finished-label">
+                                    <view aria-hidden="true" class="archive-finished-check"></view>
+                                    <text>{{item.hasOngoingBattle?'已结束':'PK 记录'}} <text class="archive-finished-count">{{item.completedCount}} 场</text>
+                                    </text>
+                                </view>
+                                <view class="archive-finished-summary">
+                                    <view class="archive-finished-results">
+                                        <text class="is-win" wx:if="{{item.completedWins}}">{{item.completedWins}} 胜</text>
+                                        <text wx:if="{{item.completedLosses}}">{{item.completedLosses}} 负</text>
+                                        <text wx:if="{{item.completedDraws}}">{{item.completedDraws}} 平</text>
+                                    </view>
+                                    <view class="archive-expand-action">
+                                        <text>{{item.pkExpanded?'收起':'展开'}}</text>
+                                        <view class="pk-section-chevron {{item.pkExpanded?'is-expanded':''}}"></view>
+                                    </view>
+                                </view>
+                            </button>
+                            <view class="archive-past-list" wx:if="{{item.pkExpanded}}">
+                                <view aria-label="{{battle.modeSummary}}，{{battle.resultLabel}}，点击查看详情" bindtap="openPkDetail" class="archive-past-match" data-record-id="{{battle.motionKey}}" hover-class="archive-record--pressed" hover-stay-time="80" role="button" wx:if="{{!battle.isOngoing}}" wx:for="{{item.battles}}" wx:for-item="battle" wx:key="motionKey">
+                                    <view class="archive-past-heading">
+                                        <text class="archive-past-time">{{battle.startClock}}</text>
+                                        <text class="archive-past-mode">{{battle.modeLabel}}</text>
+                                        <view aria-label="{{battle.resultLabel}}" class="archive-outcome {{battle.resultClass}}">
+                                            <view class="archive-finished-check" wx:if="{{battle.isFinished}}"></view>
+                                            <text wx:else>{{battle.resultLabel}}</text>
+                                        </view>
+                                        <view aria-hidden="true" class="pk-detail-chevron"></view>
+                                    </view>
+                                    <view class="archive-past-matchup">
+                                        <view class="archive-past-side is-red">
+                                            <text class="archive-past-name">{{battle.previewLeftLabel}}</text>
+                                            <text class="archive-past-score {{battle.anchorScoreChanging?'is-changing':''}}" style="{{battle.listScoreFontStyle}}">{{battle.anchorScoreText}}</text>
+                                        </view>
+                                        <text class="archive-past-vs">VS</text>
+                                        <view class="archive-past-side is-blue">
+                                            <text class="archive-past-name">{{battle.previewRightLabel}}</text>
+                                            <text class="archive-past-score {{battle.opponentScoreChanging?'is-changing':''}}" style="{{battle.listScoreFontStyle}}">{{battle.opponentScoreText}}</text>
+                                        </view>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="archive-no-pk" wx:if="{{!item.pkCount}}">本时段暂无 PK</view>
+                    </view>
+                </view>
+            </block>
+            <view class="archive-update-note">
+                <text wx:if="{{localPreview}}">本地演示</text>
+                <text wx:else>{{lastUpdatedText}}</text>
+            </view>
+            <view class="archive-disclaimer" role="note">
+                <view aria-hidden="true" class="archive-disclaimer-mark">i</view>
+                <text class="archive-disclaimer-copy">数据不保证100%准确，仅供参考，不构成任何承诺和依据。</text>
+            </view>
+            <view class="archive-footer-space"></view>
+        </view>
+    </scroll-view>
+    <root-portal wx:if="{{dateSelectorOpen}}">
+        <view class="archive-design-scope archive-redesign {{mascotThemeClass}} {{performanceClass}}">
+            <view class="date-selector-layer {{mascotThemeClass}} {{performanceClass}} {{dateSelectorClosing?'is-closing':''}}">
+                <view bindtap="closeDateSelector" class="date-selector-backdrop"></view>
+                <view catchtap="preventBubble" class="date-selector-panel">
+                    <view class="date-selector-head">
+                        <view class="date-selector-title-group">
+                            <text class="date-selector-kicker">星光日历</text>
+                            <text class="date-selector-title">选择日期</text>
+                            <text class="date-selector-current">{{calendarDraftDate}}</text>
+                        </view>
+                        <button aria-label="关闭日期选择" bindtap="closeDateSelector" class="date-selector-close" hover-class="date-selector-close--pressed">
+                            <view class="close-line line-one"></view>
+                            <view class="close-line line-two"></view>
+                        </button>
+                    </view>
+                    <view class="calendar-month-row">
+                        <button aria-label="上个月" bindtap="changeCalendarMonth" class="calendar-month-step" data-offset="-1" hover-class="calendar-month-step--pressed">
+                            <view class="date-chevron is-left"></view>
+                        </button>
+                        <text class="calendar-month-title">{{calendarTitle}}</text>
+                        <button aria-label="下个月" bindtap="changeCalendarMonth" class="calendar-month-step {{calendarCanNext?'':'is-disabled'}}" data-offset="1" disabled="{{!calendarCanNext}}" hover-class="calendar-month-step--pressed">
+                            <view class="date-chevron is-right"></view>
+                        </button>
+                    </view>
+                    <view class="calendar-weekdays">
+                        <text wx:for="{{calendarWeekdays}}" wx:key="*this">{{item}}</text>
+                    </view>
+                    <view class="calendar-grid">
+                        <button bindtap="selectCalendarDate" class="calendar-day {{item.outside?'is-outside':''}} {{item.today?'is-today':''}} {{item.selected?'is-selected':''}} {{item.disabled?'is-disabled':''}}" data-date="{{item.key}}" disabled="{{item.disabled}}" hover-class="calendar-day--pressed" wx:for="{{calendarDays}}" wx:key="key">
+                            <text>{{item.day}}</text>
+                            <view class="calendar-today-dot" wx:if="{{item.today}}"></view>
+                        </button>
+                    </view>
+                    <view class="date-selector-actions">
+                        <button bindtap="locateToday" class="date-selector-today" hover-class="date-selector-action--pressed">今天</button>
+                        <view class="date-selector-action-group">
+                            <button bindtap="closeDateSelector" class="date-selector-cancel" hover-class="date-selector-action--pressed">取消</button>
+                            <button bindtap="confirmDateSelection" class="date-selector-confirm" hover-class="date-selector-action--pressed">确定</button>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{pkDetailOpen&&selectedBattle}}">
+        <view class="archive-design-scope archive-redesign {{mascotThemeClass}} {{performanceClass}}">
+            <view class="pk-detail-layer {{pkDetailClosing?'is-closing':''}}">
+                <view bindtap="closePkDetail" class="pk-detail-backdrop"></view>
+                <view catchtap="preventBubble" class="pk-detail-sheet archive-battle-dialog mode-{{selectedBattle.battleMode}} {{selectedBattle.battleMode==='multi'&&selectedBattle.participants.length>6?'is-tall-roster':''}}">
+                    <view class="archive-dialog-head">
+                        <view>
+                            <text class="archive-dialog-title">PK 战报</text>
+                            <text class="archive-dialog-meta">{{selectedBattle.modeSummary}}</text>
+                        </view>
+                        <button aria-label="关闭 PK 详情" bindtap="closePkDetail" class="pk-detail-close" hover-class="pk-detail-close--pressed">
+                            <view class="close-line line-one"></view>
+                            <view class="close-line line-two"></view>
+                        </button>
+                    </view>
+                    <scroll-view enhanced scroll-y class="pk-detail-scroll" show-scrollbar="{{false}}">
+                        <view class="archive-dialog-status">
+                            <text>{{selectedBattle.startClock}} · {{selectedBattle.durationText}}</text>
+                            <view aria-label="{{selectedBattle.resultLabel}}" class="archive-dialog-result {{selectedBattle.resultClass}}">
+                                <view class="archive-live-wave" wx:if="{{selectedBattle.isOngoing}}">
+                                    <view></view>
+                                    <view></view>
+                                    <view></view>
+                                </view>
+                                <view class="archive-finished-check" wx:elif="{{selectedBattle.isFinished}}"></view>
+                                <text>{{selectedBattle.isOngoing?'PK 中':selectedBattle.resultLabel}}</text>
+                            </view>
+                        </view>
+                        <view class="archive-dialog-duel" wx:if="{{selectedBattle.battleMode==='duel'&&selectedBattle.duelMatchup}}">
+                            <view class="archive-dialog-player is-red">
+                                <view class="archive-dialog-avatar">
+                                    <image mode="aspectFill" src="{{selectedBattle.previewLeftMembers[0].avatarUrl}}" wx:if="{{selectedBattle.previewLeftMembers[0].avatarUrl}}"></image>
+                                    <text wx:else>{{selectedBattle.previewLeftMembers[0].initial}}</text>
+                                </view>
+                                <text class="archive-dialog-player-name">{{selectedBattle.previewLeftLabel}}</text>
+                                <text class="archive-dialog-score {{selectedBattle.anchorScoreChanging?'is-changing':''}}" style="{{selectedBattle.previewScoreFontStyle}}">{{selectedBattle.anchorScoreText}}</text>
+                            </view>
+                            <view class="archive-dialog-vs">
+                                <text>VS</text>
+                                <text>1V1</text>
+                            </view>
+                            <view class="archive-dialog-player is-blue">
+                                <view class="archive-dialog-avatar">
+                                    <image mode="aspectFill" src="{{selectedBattle.previewRightMembers[0].avatarUrl}}" wx:if="{{selectedBattle.previewRightMembers[0].avatarUrl}}"></image>
+                                    <text wx:else>{{selectedBattle.previewRightMembers[0].initial}}</text>
+                                </view>
+                                <text class="archive-dialog-player-name">{{selectedBattle.previewRightLabel}}</text>
+                                <text class="archive-dialog-score {{selectedBattle.opponentScoreChanging?'is-changing':''}}" style="{{selectedBattle.previewScoreFontStyle}}">{{selectedBattle.opponentScoreText}}</text>
+                            </view>
+                        </view>
+                        <view class="archive-dialog-teams" wx:elif="{{selectedBattle.battleMode==='team'&&selectedBattle.teamMatchup}}">
+                            <view class="archive-dialog-team-head">
+                                <view class="is-red">
+                                    <text>红方总分</text>
+                                    <text style="{{selectedBattle.previewScoreFontStyle}}">{{selectedBattle.anchorScoreText}}</text>
+                                </view>
+                                <text class="archive-dialog-team-vs">VS</text>
+                                <view class="is-blue">
+                                    <text>蓝方总分</text>
+                                    <text style="{{selectedBattle.previewScoreFontStyle}}">{{selectedBattle.opponentScoreText}}</text>
+                                </view>
+                            </view>
+                            <view class="archive-dialog-rosters">
+                                <view class="archive-dialog-roster is-red">
+                                    <view class="archive-dialog-member" wx:for="{{selectedBattle.previewLeftMembers}}" wx:for-item="player" wx:key="participant_key">
+                                        <view class="archive-dialog-avatar">
+                                            <image mode="aspectFill" src="{{player.avatarUrl}}" wx:if="{{player.avatarUrl}}"></image>
+                                            <text wx:else>{{player.initial}}</text>
+                                        </view>
+                                        <text class="archive-dialog-player-name">{{player.name}}</text>
+                                        <text class="archive-dialog-member-score">{{player.scoreText}}</text>
+                                    </view>
+                                </view>
+                                <view class="archive-dialog-roster is-blue">
+                                    <view class="archive-dialog-member" wx:for="{{selectedBattle.previewRightMembers}}" wx:for-item="player" wx:key="participant_key">
+                                        <view class="archive-dialog-avatar">
+                                            <image mode="aspectFill" src="{{player.avatarUrl}}" wx:if="{{player.avatarUrl}}"></image>
+                                            <text wx:else>{{player.initial}}</text>
+                                        </view>
+                                        <text class="archive-dialog-player-name">{{player.name}}</text>
+                                        <text class="archive-dialog-member-score">{{player.scoreText}}</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="archive-dialog-multi {{selectedBattle.participants.length>4?'is-many':''}}" wx:elif="{{selectedBattle.battleMode==='multi'}}">
+                            <view class="archive-dialog-member {{player.isAnchor?'is-red':'is-blue'}}" wx:for="{{selectedBattle.participants}}" wx:for-item="player" wx:key="participant_key">
+                                <text class="archive-dialog-member-rank">{{player.rankLabel}}</text>
+                                <view class="archive-dialog-avatar">
+                                    <image mode="aspectFill" src="{{player.avatarUrl}}" wx:if="{{player.avatarUrl}}"></image>
+                                    <text wx:else>{{player.initial}}</text>
+                                </view>
+                                <text class="archive-dialog-player-name">{{player.name}}</text>
+                                <text class="archive-dialog-member-score">{{player.scoreText}}</text>
+                            </view>
+                        </view>
+                        <view class="pk-empty-row" wx:else>
+                            <text>暂无完整对阵数据</text>
+                        </view>
+                        <view class="archive-dialog-score-summary" wx:if="{{selectedBattle.battleMode!=='multi'}}">
+                            <view aria-hidden="true" class="archive-score-track {{selectedBattle.hasComparableScores?'':'is-unknown'}}">
+                                <view class="archive-score-blue"></view>
+                                <view class="archive-score-red" style="transform:scaleX({{selectedBattle.previewRedScale}});"></view>
+                            </view>
+                            <view class="archive-dialog-comparison">
+                                <text>{{selectedBattle.previewLeftLabel}}</text>
+                                <text>{{selectedBattle.scoreComparisonText}}</text>
+                                <text>{{selectedBattle.previewRightLabel}}</text>
+                            </view>
+                        </view>
+                        <view class="archive-dialog-ending">
+                            <text>{{selectedBattle.isOngoing?'开赛于 '+selectedBattle.startClock:selectedBattle.timeRange}}</text>
+                            <text>{{selectedBattle.participantCount}} 位参战主播</text>
+                        </view>
+                    </scroll-view>
+                    <view class="archive-dialog-disclaimer">数据不保证100%准确，仅供参考，不构成任何承诺和依据。</view>
+                </view>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{anchorSelectorOpen}}">
+        <view class="archive-design-scope archive-redesign {{mascotThemeClass}} {{performanceClass}}">
+            <view class="anchor-selector-layer {{anchorSelectorClosing?'is-closing':''}}">
+                <view bindtap="closeAnchorSelector" class="anchor-selector-backdrop"></view>
+                <view catchtap="preventBubble" class="anchor-selector-sheet">
+                    <view class="selector-handle"></view>
+                    <view class="selector-head">
+                        <view>
+                            <text class="selector-kicker">星光档案</text>
+                            <text class="selector-title">选择主播</text>
+                        </view>
+                        <button aria-label="关闭主播选择" bindtap="closeAnchorSelector" class="selector-close" hover-class="selector-close--pressed">
+                            <view class="close-line line-one"></view>
+                            <view class="close-line line-two"></view>
+                        </button>
+                    </view>
+                    <scroll-view enhanced scroll-y class="selector-list" show-scrollbar="{{false}}">
+                        <view bindtap="selectAnchor" class="selector-option {{index===selectedAnchorIndex?'is-selected':''}}" data-index="{{index}}" hover-class="selector-option--pressed" wx:for="{{anchors}}" wx:key="account">
+                            <view class="option-avatar-shell">
+                                <image class="option-avatar" mode="aspectFill" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+                                <view class="option-avatar option-avatar-fallback" wx:else>{{item.initial}}</view>
+                                <view class="option-live-dot" wx:if="{{item.status==='live'}}"></view>
+                            </view>
+                            <view class="option-copy">
+                                <text class="option-name">{{item.nickname}}</text>
+                                <text class="option-meta">{{item.status==='live'?'正在直播':item.isSubscribed?'特别关注':'已收录'}}</text>
+                            </view>
+                            <view class="option-check">
+                                <view class="option-checkmark"></view>
+                            </view>
+                        </view>
+                        <view class="selector-safe-space"></view>
+                    </scroll-view>
+                </view>
+            </view>
+        </view>
+    </root-portal>
+</view>

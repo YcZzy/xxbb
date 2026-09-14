@@ -1,0 +1,389 @@
+<call-broadcast></call-broadcast>
+<view class="help-page personal-center help-a {{mascotThemeClass}} {{performanceClass}} {{helpForeground?'':'is-paused'}}">
+    <call-account id="helpAccount" theme="{{mascotThemeSkin}}"></call-account>
+    <view class="personal-tools">
+        <text class="personal-section-title">常用服务</text>
+        <view class="personal-tool-grid">
+            <button aria-label="检查订阅权限" bindtap="onCheckSubscription" class="personal-tool" data-tone="mint" disabled="{{checking}}" hover-class="personal-tool--pressed">
+                <view class="personal-tool-icon">
+                    <image class="original-tool-image" mode="aspectFit" src="/assets/images/help-a/permission.png"></image>
+                </view>
+                <text>{{checking?'检查中':'订阅权限'}}</text>
+            </button>
+            <button bindtap="onTestNotification" class="personal-tool" data-tone="amber" disabled="{{testingNotification}}" hover-class="personal-tool--pressed">
+                <view class="personal-tool-icon {{testingNotification?'is-busy':''}}">
+                    <image class="original-tool-image" mode="aspectFit" src="/assets/images/help-a/test.png"></image>
+                </view>
+                <text>{{testingNotification?'读取中':'测试通知'}}</text>
+            </button>
+            <button aria-label="修复通知状态" bindtap="onRepairNotification" class="personal-tool" data-tone="aqua" disabled="{{repairingNotification}}" hover-class="personal-tool--pressed">
+                <view class="personal-tool-icon">
+                    <image class="original-tool-image" mode="aspectFit" src="/assets/images/help-a/repair.png"></image>
+                </view>
+                <text>修复通知</text>
+            </button>
+            <button aria-label="清除本地缓存" bindtap="onClearCache" class="personal-tool" data-tone="rose" hover-class="personal-tool--pressed">
+                <view class="personal-tool-icon">
+                    <image class="original-tool-image" mode="aspectFit" src="/assets/images/help-a/cache.png"></image>
+                </view>
+                <text>清理缓存</text>
+            </button>
+        </view>
+    </view>
+    <reminder-settings bindaccountsettings="openAccountSettings" bindanchorvisibility="openAnchorVisibility" motion-enabled="{{helpForeground&&!performanceClass}}" skin="{{mascotThemeSkin}}"></reminder-settings>
+    <view class="personal-faq">
+        <button aria-label="查看常见问题" bindtap="openFaq" class="faq-entry" hover-class="faq-row--pressed">
+            <view class="faq-entry-icon">
+                <image mode="aspectFit" src="/assets/images/help-a/faq.png"></image>
+            </view>
+            <text class="faq-entry-title">常见问题</text>
+            <text class="faq-entry-action">查看</text>
+            <image src="/assets/images/call-counter/chevron.png"></image>
+        </button>
+    </view>
+    <view class="safe-bottom-space"></view>
+    <root-portal wx:if="{{faqVisible}}">
+        <view bindtap="closeFaq" catchtouchmove="onPreventTouchMove" class="faq-overlay help-a {{mascotThemeClass}}">
+            <view catchtap="onPreventBubble" class="faq-panel">
+                <view class="faq-panel-head">
+                    <text>常见问题</text>
+                    <button aria-label="关闭常见问题" bindtap="closeFaq" class="faq-close">
+                        <image src="/assets/images/help-a/close.png"></image>
+                    </button>
+                </view>
+                <scroll-view class="faq-list" enhanced="true" scroll-y="true" show-scrollbar="false">
+                    <view aria-expanded="{{activeQuestion===index}}" aria-label="{{item.title}}" bindtap="onToggleQuestion" class="faq-row {{index===questions.length-1?'is-last':''}}" data-index="{{index}}" hover-class="faq-row--pressed" hover-stay-time="80" role="button" wx:for="{{questions}}" wx:key="title">
+                        <view class="faq-copy">
+                            <text class="faq-title">{{item.title}}</text>
+                            <text class="faq-answer" wx:if="{{activeQuestion===index}}">{{item.answer}}</text>
+                        </view>
+                        <image class="faq-chevron {{activeQuestion===index?'is-open':''}}" mode="aspectFit" src="/assets/images/call-counter/chevron.png"></image>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{anchorVisibilityVisible}}">
+        <view bindtap="onAnchorVisibilityOverlayTap" class="anchor-visibility-overlay {{mascotThemeClass}}">
+            <view catchtap="onPreventBubble" class="anchor-visibility-panel">
+                <view class="anchor-visibility-accent"></view>
+                <view class="anchor-visibility-header">
+                    <view class="anchor-visibility-heading">
+                        <text class="anchor-visibility-kicker">PERSONAL WATCHLIST</text>
+                        <text class="anchor-visibility-title">守候列表显示</text>
+                        <text class="anchor-visibility-subtitle">隐藏后仍会保留订阅与提醒次数</text>
+                    </view>
+                    <button aria-label="关闭守候列表显示设置" bindtap="closeAnchorVisibility" class="anchor-visibility-close">×</button>
+                </view>
+                <view class="anchor-visibility-summary">
+                    <view class="anchor-visibility-summary-item is-shown">
+                        <view class="anchor-visibility-summary-dot"></view>
+                        <text>显示 {{anchorVisibilityShownCount}}</text>
+                    </view>
+                    <view class="anchor-visibility-summary-separator"></view>
+                    <view class="anchor-visibility-summary-item is-hidden">
+                        <view class="anchor-visibility-summary-dot"></view>
+                        <text>隐藏 {{anchorVisibilityHiddenCount}}</text>
+                    </view>
+                </view>
+                <view class="anchor-visibility-state" wx:if="{{anchorVisibilityLoading}}">
+                    <view class="anchor-visibility-loader">
+                        <view class="anchor-visibility-loader-dot dot-one"></view>
+                        <view class="anchor-visibility-loader-dot dot-two"></view>
+                        <view class="anchor-visibility-loader-dot dot-three"></view>
+                    </view>
+                    <text>正在读取你的守候列表</text>
+                </view>
+                <view class="anchor-visibility-state is-error" wx:elif="{{anchorVisibilityError}}">
+                    <view class="anchor-visibility-error-mark">!</view>
+                    <text>{{anchorVisibilityError}}</text>
+                    <button bindtap="loadAnchorVisibility" class="anchor-visibility-retry">重新加载</button>
+                </view>
+                <scroll-view class="anchor-visibility-list" enhanced="true" scroll-y="true" show-scrollbar="false" wx:else>
+                    <view class="anchor-visibility-item {{item.hidden?'is-hidden':''}}" wx:for="{{anchorVisibilityItems}}" wx:key="account">
+                        <view class="anchor-visibility-avatar-wrap">
+                            <image class="anchor-visibility-avatar" lazy-load="true" mode="aspectFill" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+                            <view class="anchor-visibility-avatar anchor-visibility-avatar-fallback" wx:else>{{item.initial}}</view>
+                            <view class="anchor-visibility-online-dot" wx:if="{{!item.hidden}}"></view>
+                        </view>
+                        <view class="anchor-visibility-copy">
+                            <view class="anchor-visibility-name-line">
+                                <text class="anchor-visibility-name">{{item.nickname}}</text>
+                                <text class="anchor-visibility-favorite" wx:if="{{item.isFavorite}}">当前爱播</text>
+                            </view>
+                            <text class="anchor-visibility-note">
+              {{item.isFavorite&&!item.hidden?'请先切换爱播后再隐藏':item.hidden?'已从爱播守候中隐藏':'正在爱播守候中显示'}}
+            </text>
+                        </view>
+                        <button aria-label="{{item.isFavorite&&!item.hidden?'当前爱播不可隐藏':item.hidden?'恢复显示该主播':'隐藏该主播'}}" bindtap="onToggleAnchorVisibility" class="anchor-visibility-toggle {{item.hidden?'is-hidden':'is-shown'}} {{item.isFavorite&&!item.hidden?'is-locked':''}} {{anchorVisibilitySavingAccount===item.account?'is-saving':''}}" data-account="{{item.account}}" disabled="{{anchorVisibilitySavingAccount===item.account||item.isFavorite&&!item.hidden}}" hover-class="anchor-visibility-toggle--pressed" hover-stay-time="80">
+                            <view aria-hidden="true" class="anchor-visibility-eye">
+                                <view class="anchor-visibility-eye-dot"></view>
+                                <view class="anchor-visibility-eye-slash" wx:if="{{item.hidden}}"></view>
+                            </view>
+                            <text>{{anchorVisibilitySavingAccount===item.account?'设置中':item.isFavorite&&!item.hidden?'不可隐藏':item.hidden?'恢复':'隐藏'}}</text>
+                        </button>
+                    </view>
+                </scroll-view>
+                <view class="anchor-visibility-footer">
+                    <view class="anchor-visibility-footer-shield">✓</view>
+                    <text>这里只管理列表显示，不会关闭任何通知</text>
+                </view>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{diagnosisVisible}}">
+        <view catchtouchmove="onPreventTouchMove" class="diagnosis-overlay {{mascotThemeClass}}">
+            <view class="diagnosis-card">
+                <view class="diagnosis-glow"></view>
+                <view class="diagnosis-icon help-function-shell">
+                    <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/permission.png"></image>
+                </view>
+                <text class="diagnosis-title">订阅状态诊断</text>
+                <text class="diagnosis-subtitle">开播提醒权限检查完成</text>
+                <view class="diagnosis-results">
+                    <view class="diagnosis-result">
+                        <text class="result-label">微信通知</text>
+                        <view class="result-tag result-{{diagnosisMainTone}}">{{diagnosisMainStatus}}</view>
+                    </view>
+                    <view class="diagnosis-result">
+                        <text class="result-label">开播提醒</text>
+                        <view class="result-tag result-{{diagnosisTone}}">{{diagnosisStatus}}</view>
+                    </view>
+                    <view class="diagnosis-result is-last">
+                        <text class="result-label">通知次数</text>
+                        <view class="result-tag result-{{diagnosisQuotaTone}}">{{diagnosisQuotaStatus}}</view>
+                    </view>
+                </view>
+                <view class="diagnosis-note">
+                    <text class="note-title">状态说明</text>
+                    <text class="note-copy">{{diagnosisDescription}}</text>
+                </view>
+                <button bindtap="onCloseDiagnosis" class="diagnosis-button">知道了</button>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{testPanelVisible}}">
+        <view bindtap="onTestOverlayTap" catchtouchmove="onPreventTouchMove" class="test-panel-overlay {{mascotThemeClass}}">
+            <view catchtap="onPreventBubble" class="test-panel">
+                <view class="test-panel-grabber"></view>
+                <button aria-label="关闭" bindtap="onCloseTestPanel" class="test-panel-close" wx:if="{{testPanelStep!=='sending'}}">×</button>
+                <block wx:if="{{testPanelStep==='loading'}}">
+                    <view class="test-signal-stage is-loading">
+                        <view class="test-signal-ring ring-one"></view>
+                        <view class="test-signal-ring ring-two"></view>
+                        <view class="test-signal-core">
+                            <view class="test-bell is-light"></view>
+                        </view>
+                    </view>
+                    <text class="test-panel-title">正在连接通知中心</text>
+                    <text class="test-panel-subtitle">读取你的开播、请假与作品通知次数</text>
+                    <view class="test-loading-track">
+                        <view class="test-loading-bar"></view>
+                    </view>
+                </block>
+                <block wx:elif="{{testPanelStep==='choose'}}">
+                    <view class="test-panel-heading">
+                        <text class="test-panel-kicker">NOTIFICATION LAB</text>
+                        <text class="test-panel-title align-left">选择测试类型</text>
+                        <text class="test-panel-subtitle align-left">真实发送到当前微信，送达后消耗 1 次对应额度</text>
+                    </view>
+                    <view class="test-choice-list">
+                        <view bindtap="onSelectTestType" class="test-choice {{!liveTestEnabled||liveTestQuota===0?'is-unavailable':''}}" data-type="live">
+                            <view class="test-choice-icon is-live">
+                                <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/live.png"></image>
+                            </view>
+                            <view class="test-choice-copy">
+                                <view class="test-choice-title-line">
+                                    <text class="test-choice-title">开播通知测试</text>
+                                    <text class="test-choice-quota">{{liveTestQuota}} 次</text>
+                                </view>
+                                <text class="test-choice-description">模拟宝哥开播，检查通知是否正常送达</text>
+                            </view>
+                            <text class="test-choice-arrow">›</text>
+                        </view>
+                        <view bindtap="onSelectTestType" class="test-choice {{!leaveTestEnabled||leaveTestQuota===0?'is-unavailable':''}}" data-type="leave">
+                            <view class="test-choice-icon is-leave">
+                                <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/quiet.png"></image>
+                            </view>
+                            <view class="test-choice-copy">
+                                <view class="test-choice-title-line">
+                                    <text class="test-choice-title">请假通知测试</text>
+                                    <text class="test-choice-quota">{{leaveTestQuota}} 次</text>
+                                </view>
+                                <text class="test-choice-description">模拟宝哥请假，检查独立模板是否正常</text>
+                            </view>
+                            <text class="test-choice-arrow">›</text>
+                        </view>
+                        <view bindtap="onSelectTestType" class="test-choice {{!workTestEnabled||workTestQuota===0?'is-unavailable':''}}" data-type="work">
+                            <view class="test-choice-icon is-work">
+                                <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/works.png"></image>
+                            </view>
+                            <view class="test-choice-copy">
+                                <view class="test-choice-title-line">
+                                    <text class="test-choice-title">作品通知测试</text>
+                                    <text class="test-choice-quota work-quota">{{workTestQuota}} 次</text>
+                                </view>
+                                <text class="test-choice-description">模拟宝哥更新作品，检查通知是否正常送达</text>
+                            </view>
+                            <text class="test-choice-arrow">›</text>
+                        </view>
+                    </view>
+                    <view class="test-consume-note">
+                        <view class="consume-note-mark">!</view>
+                        <text>选择类型后还会再次确认，不会直接发送</text>
+                    </view>
+                </block>
+                <block wx:elif="{{testPanelStep==='confirm'}}">
+                    <view class="test-result-icon confirm-icon is-{{selectedTestType}}">
+                        <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/{{selectedTestType==='live'?'live':selectedTestType==='leave'?'quiet':'works'}}.png"></image>
+                    </view>
+                    <text class="test-panel-title">发送{{selectedTestName}}测试？</text>
+                    <text class="test-panel-subtitle">这是一条真实微信通知，请确认本次消耗</text>
+                    <view class="test-confirm-details">
+                        <view class="test-confirm-row">
+                            <text>接收对象</text>
+                            <text class="confirm-value">当前登录微信</text>
+                        </view>
+                        <view class="test-confirm-row">
+                            <text>消耗额度</text>
+                            <text class="confirm-value is-red">1 次{{selectedTestName}}</text>
+                        </view>
+                        <view class="test-confirm-row is-last">
+                            <text>当前剩余</text>
+                            <text class="confirm-value">{{selectedTestQuota}} 次</text>
+                        </view>
+                    </view>
+                    <view class="test-action-row">
+                        <button bindtap="onBackToTestChoices" class="test-secondary-button">返回选择</button>
+                        <button bindtap="onConfirmTestNotification" class="test-primary-button">确认发送</button>
+                    </view>
+                </block>
+                <block wx:elif="{{testPanelStep==='sending'}}">
+                    <view class="test-signal-stage is-sending">
+                        <view class="test-signal-ring ring-one"></view>
+                        <view class="test-signal-ring ring-two"></view>
+                        <view class="sending-orbit"></view>
+                        <view class="test-signal-core">
+                            <view class="test-bell is-light"></view>
+                        </view>
+                    </view>
+                    <text class="test-panel-title">正在投递通知</text>
+                    <text class="test-panel-subtitle">已进入微信发送队列，请勿重复点击</text>
+                    <view class="sending-dots">
+                        <view></view>
+                        <view></view>
+                        <view></view>
+                    </view>
+                </block>
+                <block wx:elif="{{testPanelStep==='success'}}">
+                    <view class="test-result-icon success-icon">
+                        <view class="success-check"></view>
+                    </view>
+                    <text class="test-panel-title">测试通知已提交</text>
+                    <text class="test-panel-subtitle">请留意微信服务通知，送达后将消耗 1 次额度</text>
+                    <button bindtap="onCloseTestPanel" class="test-primary-button is-full">完成</button>
+                </block>
+                <block wx:else>
+                    <view class="test-result-icon error-icon">!</view>
+                    <text class="test-panel-title">本次测试未发送</text>
+                    <text class="test-error-message">{{testErrorMessage}}</text>
+                    <view class="test-action-row">
+                        <button bindtap="onTestErrorSecondaryAction" class="test-secondary-button">{{selectedTestType?'返回选择':'稍后再试'}}</button>
+                        <button bindtap="onRetryTestNotification" class="test-primary-button">重新尝试</button>
+                    </view>
+                </block>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{repairPanelVisible}}">
+        <view bindtap="onRepairOverlayTap" catchtouchmove="onPreventTouchMove" class="repair-panel-overlay {{mascotThemeClass}}">
+            <view catchtap="onPreventBubble" class="repair-panel">
+                <view class="repair-panel-accent"></view>
+                <button aria-label="关闭" bindtap="onCloseRepairPanel" class="repair-panel-close" wx:if="{{repairPanelStep!=='processing'}}">×</button>
+                <block wx:if="{{repairPanelStep==='choose'}}">
+                    <text class="repair-panel-kicker">NOTIFICATION REPAIR</text>
+                    <text class="repair-panel-title">选择需要修复的通知</text>
+                    <text class="repair-panel-subtitle">重新校准微信授权与服务器记录</text>
+                    <view class="repair-choice-list">
+                        <view bindtap="onSelectRepairType" class="repair-choice" data-type="live">
+                            <view class="repair-choice-icon is-live">
+                                <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/live.png"></image>
+                            </view>
+                            <view class="repair-choice-copy">
+                                <text class="repair-choice-title">开播通知</text>
+                                <text class="repair-choice-note">修复开播与传媒主播共用次数</text>
+                            </view>
+                            <text class="repair-choice-arrow">›</text>
+                        </view>
+                        <view bindtap="onSelectRepairType" class="repair-choice" data-type="leave">
+                            <view class="repair-choice-icon is-leave">
+                                <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/quiet.png"></image>
+                            </view>
+                            <view class="repair-choice-copy">
+                                <text class="repair-choice-title">请假通知</text>
+                                <text class="repair-choice-note">修复独立的请假提醒次数</text>
+                            </view>
+                            <text class="repair-choice-arrow">›</text>
+                        </view>
+                        <view bindtap="onSelectRepairType" class="repair-choice" data-type="work">
+                            <view class="repair-choice-icon is-work">
+                                <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/works.png"></image>
+                            </view>
+                            <view class="repair-choice-copy">
+                                <text class="repair-choice-title">作品通知</text>
+                                <text class="repair-choice-note">修复独立的作品提醒次数</text>
+                            </view>
+                            <text class="repair-choice-arrow">›</text>
+                        </view>
+                    </view>
+                </block>
+                <block wx:elif="{{repairPanelStep==='confirm'}}">
+                    <view class="repair-stage-icon">
+                        <view class="repair-stage-ring"></view>
+                        <image aria-hidden="true" class="help-function-image" mode="aspectFit" src="/assets/images/help-a/repair.png"></image>
+                    </view>
+                    <text class="repair-panel-title">修复{{selectedRepairName}}？</text>
+                    <text class="repair-panel-subtitle">请确认当前确实存在“有次数但收不到提醒”的问题</text>
+                    <view class="repair-warning">
+                        <text class="repair-warning-title">修复会覆盖原有次数</text>
+                        <text class="repair-warning-copy">即使当前通知正常，原有次数也不会保留或累加；微信授权成功后将固定重置为 1 次。</text>
+                        <text class="repair-warning-scope">仅影响当前微信的{{selectedRepairName}}，不会影响其他用户。</text>
+                    </view>
+                    <view class="repair-action-row">
+                        <button bindtap="onBackToRepairChoices" class="repair-secondary-button">返回</button>
+                        <button bindtap="submitNotificationRepair" class="repair-primary-button">重新授权</button>
+                    </view>
+                </block>
+                <block wx:elif="{{repairPanelStep==='processing'}}">
+                    <view class="repair-stage-icon is-processing">
+                        <view class="repair-stage-ring"></view>
+                        <text>↻</text>
+                    </view>
+                    <text class="repair-panel-title">正在同步通知状态</text>
+                    <text class="repair-panel-subtitle">请勿退出，马上就好</text>
+                    <view class="repair-loading">
+                        <view></view>
+                    </view>
+                </block>
+                <block wx:elif="{{repairPanelStep==='success'}}">
+                    <view class="repair-result-icon is-success">✓</view>
+                    <text class="repair-panel-title">{{selectedRepairName}}已修复</text>
+                    <text class="repair-panel-subtitle">微信授权与服务器次数已重新同步为 1 次</text>
+                    <button bindtap="onCloseRepairPanel" class="repair-primary-button is-full">完成</button>
+                </block>
+                <block wx:elif="{{repairPanelStep==='rejected'}}">
+                    <view class="repair-result-icon is-warning">!</view>
+                    <text class="repair-panel-title">旧次数已清零</text>
+                    <text class="repair-panel-subtitle">微信未允许本次授权，请在右上角设置中允许通知后再试</text>
+                    <button bindtap="onCloseRepairPanel" class="repair-primary-button is-full">知道了</button>
+                </block>
+                <block wx:else>
+                    <view class="repair-result-icon is-error">!</view>
+                    <text class="repair-panel-title">同步尚未完成</text>
+                    <text class="repair-error-message">{{repairErrorMessage}}</text>
+                    <button bindtap="onRetryNotificationRepair" class="repair-primary-button is-full">重新同步</button>
+                </block>
+            </view>
+        </view>
+    </root-portal>
+</view>

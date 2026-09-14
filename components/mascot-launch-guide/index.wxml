@@ -1,0 +1,19 @@
+<view class="launch-guide-viewport">
+    <view class="launch-guide theme-{{theme}} {{lite?'is-lite':''}} {{inViewport?'':'is-paused'}}" wx:if="{{visible}}">
+        <button aria-label="{{displayText}}，打开形象收藏" catchtap="openCollection" class="launch-guide-action" hover-class="launch-guide-pressed">
+            <view aria-hidden="true" class="launch-guide-arrow">
+                <image aria-hidden="true" class="launch-guide-arrow-segment is-front" mode="aspectFit" src="/assets/icons/mascot-guide-arrow{{theme==='siwuliu-ice'?'-ice':theme==='xiaoyu-moon-tide'?'-tide':''}}.svg"></image>
+                <image aria-hidden="true" class="launch-guide-arrow-segment is-rear" mode="aspectFit" src="/assets/icons/mascot-guide-arrow{{theme==='siwuliu-ice'?'-ice':theme==='xiaoyu-moon-tide'?'-tide':''}}.svg"></image>
+            </view>
+            <view aria-hidden="true" class="launch-guide-copy">
+                <view class="launch-guide-sheen"></view>
+                <view class="launch-guide-letters">
+                    <text class="launch-guide-letter letter-{{index+1}}" wx:for="{{letters}}" wx:key="index">{{item}}</text>
+                </view>
+            </view>
+        </button>
+        <button aria-label="关闭上新提示" catchtap="dismiss" class="launch-guide-close" hover-class="launch-guide-pressed">
+            <image aria-hidden="true" mode="aspectFit" src="/assets/icons/mascot-guide-close.svg"></image>
+        </button>
+    </view>
+</view>

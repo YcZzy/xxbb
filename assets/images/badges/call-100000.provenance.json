@@ -1,0 +1,11 @@
+{
+  "asset": "call-100000.png",
+  "origin": "New crystal-star and nebula artwork generated through the configured Image API, September 11, 2026.",
+  "requested_model": "gpt-image-2.5",
+  "prompt": "outputs/galaxy-honor-v2/prompt.txt",
+  "master": "outputs/galaxy-honor-v2/galaxy-honor-transparent.png",
+  "provider_dimensions": [1254, 1254],
+  "requested_dimensions": [1024, 1024],
+  "method": "Image API generation followed by the skill's soft chroma-key removal and despill. tools/build-galaxy-honor-asset.cjs trims transparent padding, downsamples and pads to 192x192. No enlargement or hand-drawn replacement.",
+  "overlay": "The crystal star is part of the generated artwork. Existing bounded CSS orbit/stream remain; native achievement labels are separate."
+}

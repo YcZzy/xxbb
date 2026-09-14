@@ -1,0 +1,851 @@
+<call-broadcast></call-broadcast>
+<view class="page-shell theme-{{mascotThemeClass}} {{performanceClass}} {{!mascotMotionEnabled||mascotSkinSheetVisible||favoritePickerVisible||customServiceDialogVisible||favoriteAnchorRequestDialogVisible||favoriteRechargeVisible||homePopupVisible||zapPanelMounted||themeTransitionVisible?'soft-gold-paused':''}}">
+    <soft-gold-atmosphere active="{{mascotMotionEnabled&&!mascotSkinSheetVisible&&!favoritePickerVisible&&!customServiceDialogVisible&&!favoriteAnchorRequestDialogVisible&&!favoriteRechargeVisible&&!homePopupVisible&&!zapPanelMounted&&!themeTransitionVisible}}" aria-hidden="true" lite="{{performanceClass!==''}}" wx:if="{{selectedMascotTheme==='ibo_soft_gold'&&(softGoldPreviewAllowed||softGoldOwned)}}"></soft-gold-atmosphere>
+    <view aria-hidden="true" class="theme-transition-wave theme-transition-wave--{{themeTransitionTarget}} {{themeTransitionActive?'is-active':''}}" style="{{themeTransitionOriginStyle}}" wx:if="{{themeTransitionVisible}}">
+        <view class="theme-transition-wave__core"></view>
+        <view class="theme-transition-wave__ring"></view>
+        <view class="theme-transition-wave__spark spark-one"></view>
+        <view class="theme-transition-wave__spark spark-two"></view>
+    </view>
+    <view class="custom-nav" style="height:{{navigationHeight}}px;padding-top:{{statusBarHeight}}px;">
+        <view aria-label="{{mascotThemeHasNew?'切换形象与主题，有新主题':'切换形象与主题'}}" aria-role="button" catchtap="openMascotSkinSheet" class="mascot-collection-trigger" hover-class="mascot-collection-trigger--pressed">
+            <view class="mascot-collection-trigger-halo"></view>
+            <view class="mascot-collection-trigger-core">
+                <view class="mascot-collection-prism prism-back"></view>
+                <view class="mascot-collection-prism prism-front">
+                    <view class="mascot-collection-prism-shine"></view>
+                </view>
+                <view class="mascot-collection-theme-dot dot-warm"></view>
+                <view class="mascot-collection-theme-dot dot-ice"></view>
+            </view>
+            <view class="mascot-collection-spark spark-top" wx:if="{{!mascotThemeHasNew}}"></view>
+            <view class="mascot-collection-spark spark-side"></view>
+            <view aria-hidden="true" class="mascot-collection-unread-dot" wx:if="{{mascotThemeHasNew}}"></view>
+        </view>
+        <text aria-hidden="{{mascotLaunchGuideVisible}}" class="custom-nav-title {{mascotLaunchGuideVisible?'is-guide-covered':''}}">i播播了么</text>
+        <mascot-launch-guide bindopen="openMascotSkinSheet" bindvisibilitychange="onMascotLaunchGuideVisibility" blocked="{{homePopupVisible||favoritePickerVisible||customServiceDialogVisible||favoriteAnchorRequestDialogVisible||favoriteRechargeVisible||zapPanelMounted||themeTransitionVisible}}" enabled="{{mascotLaunchGuideEnabled}}" lite="{{performanceClass!==''}}" opened="{{mascotSkinSheetVisible}}" owned="{{favoriteMascotOwned}}" text="{{mascotLaunchGuideText}}" theme="{{mascotThemeClass}}"></mascot-launch-guide>
+    </view>
+    <view class="content">
+        <view class="hero-row">
+            <view class="hero-copy">
+                <text class="eyebrow">LIVE WATCH</text>
+                <view class="hero-title">爱播今天<text class="accent">播了么？</text>
+                </view>
+                <view class="hero-signal-row">
+                    <view bindtap="onRefresh" class="radar {{loading?'is-loading':''}}" hover-class="radar-hover">
+                        <view class="radar-ring radar-ring-large"></view>
+                        <view class="radar-ring radar-ring-small"></view>
+                        <view class="radar-core"></view>
+                    </view>
+                    <view class="hero-signal-copy">
+                        <text class="hero-signal-label">24 小时守候</text>
+                        <text class="hero-signal-value">开播立即提醒</text>
+                    </view>
+                </view>
+            </view>
+            <view aria-label="{{mascotStatusText}}的{{selectedMascotSkinName}}" aria-role="button" bindtap="onMascotTap" class="mascot-stage skin-{{mascotSkinClass}} state-{{mascotState}} {{mascotWaving?'is-waving':''}} {{mascotTransitioning?'is-state-changing':''}} {{zapActive?'is-zapped':''}} {{zapEasterEggClass}}" hover-class="mascot-stage-hover">
+                <button aria-label="爱播专属形象和主题定制" catchtap="openCustomServiceDialog" class="custom-service-entry {{mascotBubbleVisible?'is-bubble-visible':''}}" hover-class="custom-service-entry--pressed">
+                    <view aria-hidden="true" class="custom-service-entry-mark">✦</view>
+                    <text>定制</text>
+                </button>
+                <view class="mascot-bubble" wx:if="{{mascotBubbleVisible}}">
+                    <text>{{mascotBubbleText}}</text>
+                    <view class="mascot-bubble-tail"></view>
+                </view>
+                <view aria-hidden="true" class="mascot-zap-field" wx:if="{{zapActive||zapPulseItems.length}}">
+                    <view class="mascot-zap-sky-flash"></view>
+                    <view class="mascot-zap-strike">
+                        <view class="mascot-zap-strike-glow"></view>
+                        <view class="mascot-zap-strike-core"></view>
+                        <view class="mascot-zap-strike-hot"></view>
+                        <view class="mascot-zap-branch branch-left"></view>
+                        <view class="mascot-zap-branch branch-right"></view>
+                        <view class="mascot-zap-strike-impact"></view>
+                        <view class="mascot-zap-strike-impact impact-secondary"></view>
+                    </view>
+                    <view class="mascot-zap-ring"></view>
+                    <view class="mascot-zap-bolt bolt-left"></view>
+                    <view class="mascot-zap-bolt bolt-right"></view>
+                    <view class="mascot-zap-particle particle-one"></view>
+                    <view class="mascot-zap-particle particle-two"></view>
+                    <view class="mascot-zap-particle particle-three"></view>
+                    <view class="mascot-zap-egg-burst">
+                        <view class="mascot-zap-egg-ring egg-ring-one"></view>
+                        <view class="mascot-zap-egg-ring egg-ring-two"></view>
+                        <view class="mascot-zap-egg-shard egg-shard-one"></view>
+                        <view class="mascot-zap-egg-shard egg-shard-two"></view>
+                        <view class="mascot-zap-egg-shard egg-shard-three"></view>
+                        <view class="mascot-zap-egg-shard egg-shard-four"></view>
+                    </view>
+                </view>
+                <view aria-hidden="true" class="mascot-zap-combo-layer" wx:if="{{zapActive||zapPulseItems.length}}">
+                    <view class="mascot-zap-combo-pulse {{item.variant}}" wx:for="{{zapPulseItems}}" wx:key="id">
+                        <view class="mascot-zap-combo-flash"></view>
+                        <view class="mascot-zap-combo-strike"></view>
+                        <view class="mascot-zap-combo-ring"></view>
+                    </view>
+                </view>
+                <view aria-hidden="true" class="mascot-smoke" wx:if="{{zapActive||zapPulseItems.length}}">
+                    <view class="mascot-smoke-wisp wisp-one"></view>
+                    <view class="mascot-smoke-wisp wisp-two"></view>
+                    <view class="mascot-smoke-wisp wisp-three"></view>
+                </view>
+                <view aria-label="{{zapPanelVisible?'收起催播面板':'打开催播面板'}}" aria-role="button" catchtap="toggleZapPanel" class="zap-panel-toggle {{zapPanelVisible?'is-open':''}} {{mailboxEntryVisible?'with-mailbox':''}}" hover-class="zap-panel-toggle--pressed" wx:if="{{selectedMascotSkin==='classic'}}">
+                    <view class="zap-panel-toggle-halo"></view>
+                    <view class="zap-panel-toggle-core">
+                        <view class="zap-panel-toggle-bolt"></view>
+                    </view>
+                </view>
+                <view class="mascot-spark mascot-spark-one" wx:if="{{mascotState==='normal'}}"></view>
+                <view class="mascot-spark mascot-spark-two" wx:if="{{mascotState==='normal'}}"></view>
+                <starlight-mascot active="{{mascotMotionEnabled}}" class="starlight-mascot-host" lite="{{performanceClass==='performance-lite'}}" state="{{mascotState}}" wx:if="{{selectedMascotSkin==='ibo_starlight'}}"></starlight-mascot>
+                <view class="mascot-motion" wx:else>
+                    <image binderror="onMascotArtworkError" class="mascot-image" mode="aspectFit" src="{{mascotFrame}}"></image>
+                    <image binderror="onMascotArtworkError" class="mascot-image mascot-zap-xray-image" mode="aspectFit" src="{{zapXrayFrame}}" wx:if="{{selectedMascotSkin==='classic'&&zapActive}}"></image>
+                </view>
+                <view class="mascot-floor"></view>
+            </view>
+        </view>
+        <view aria-hidden="{{!zapPanelVisible}}" class="zap-below-panel {{zapPanelVisible?'is-visible':''}}" wx:if="{{selectedMascotSkin==='classic'&&zapPanelMounted}}">
+            <view catchtap="onZapPanelTap" class="zap-below-panel-surface {{zapActive?'is-charged':''}} {{zapEasterEggClass}}">
+                <view aria-hidden="true" class="zap-panel-scan"></view>
+                <view class="zap-count-grid">
+                    <view class="zap-count-item">
+                        <view class="zap-count-label-row">
+                            <text class="zap-count-label">全网催播</text>
+                            <text class="zap-count-badge {{zapEasterEggClass?'is-easter-egg':''}}">{{zapEasterEggClass?zapPanelTitle:'互动展示'}}</text>
+                        </view>
+                        <text class="zap-count-value">{{globalUrgeCountText}}</text>
+                    </view>
+                    <view class="zap-count-divider"></view>
+                    <view class="zap-count-item zap-count-item-mine">
+                        <text class="zap-count-label">我的次数</text>
+                        <text class="zap-count-value zap-count-value-mine">{{zapTapCountText}}</text>
+                    </view>
+                    <view class="zap-count-haptics-divider"></view>
+                    <view aria-checked="{{zapHapticsEnabled}}" aria-label="催播震动" aria-role="switch" catchtap="toggleZapHaptics" class="zap-haptics-toggle {{zapHapticsEnabled?'is-on':''}}" hover-class="zap-haptics-toggle--pressed">
+                        <view aria-hidden="true" class="zap-haptics-icon">
+                            <view class="zap-haptics-wave wave-left"></view>
+                            <view class="zap-haptics-device"></view>
+                            <view class="zap-haptics-wave wave-right"></view>
+                        </view>
+                        <text class="zap-haptics-label">震动</text>
+                        <view aria-hidden="true" class="zap-haptics-switch">
+                            <view class="zap-haptics-switch-knob"></view>
+                        </view>
+                    </view>
+                </view>
+                <view class="zap-popover-actions">
+                    <view aria-label="催播" aria-role="button" catchtap="onZapTap" class="zap-fire-button" hover-class="zap-fire-button--pressed">
+                        <view class="zap-fire-bolt"></view>
+                        <text>催播</text>
+                        <text class="zap-combo-count" wx:if="{{zapComboCount>1}}">×{{zapComboCount}}</text>
+                    </view>
+                    <button aria-label="分享我的催播次数" class="zap-share-button" data-share-type="zap" hover-class="zap-share-button--pressed" open-type="share">分享</button>
+                </view>
+            </view>
+        </view>
+        <view class="mascot-preview-panel" wx:if="{{isLocalDevelopment}}">
+            <view class="mascot-preview-heading">
+                <view class="mascot-preview-dot"></view>
+                <text>形象预览</text>
+            </view>
+            <view aria-role="tablist" class="mascot-preview-switch">
+                <button bindtap="onMascotPreviewChange" class="mascot-preview-option {{mascotPreviewMode==='auto'?'is-active':''}}" data-mode="auto">自动</button>
+                <button bindtap="onMascotPreviewChange" class="mascot-preview-option {{mascotPreviewMode==='normal'?'is-active':''}}" data-mode="normal">守候</button>
+                <button bindtap="onMascotPreviewChange" class="mascot-preview-option {{mascotPreviewMode==='leave'?'is-active':''}}" data-mode="leave">请假</button>
+                <button bindtap="onMascotPreviewChange" class="mascot-preview-option {{mascotPreviewMode==='live'?'is-active':''}}" data-mode="live">开播</button>
+            </view>
+        </view>
+        <view aria-hidden="true" class="mascot-preload">
+            <image mode="aspectFit" src="{{item}}" wx:for="{{mascotPreloadFrames}}" wx:key="*this"></image>
+        </view>
+        <view class="card account-card">
+            <view class="card-heading-row">
+                <text class="card-kicker">我的爱播</text>
+                <view class="status-pill status-{{anchor.displayStatus}}">
+                    <view class="status-dot"></view>
+                    <text wx:if="{{anchor.displayStatus==='live'}}">开播中</text>
+                    <text wx:elif="{{anchor.displayStatus==='leave'}}">请假中</text>
+                    <text wx:elif="{{anchor.displayStatus==='offline'}}">未开播</text>
+                    <text wx:else>获取中</text>
+                </view>
+            </view>
+            <view class="card-title-row home-favorite-heading">
+                <view class="home-favorite-title">
+                    <text class="card-title">{{anchor.nickname}}</text>
+                    <view class="verified">✓</view>
+                </view>
+                <button aria-expanded="{{favoritePickerVisible}}" aria-label="切换我的爱播" bindtap="openFavoriteAnchorPicker" class="favorite-anchor-switch" hover-class="favorite-anchor-switch--pressed" hover-start-time="0" hover-stay-time="160">
+                    <view class="favorite-anchor-switch-face {{favoritePickerVisible?'is-covered':''}}">
+                        <view aria-hidden="true" class="favorite-anchor-switch-shine"></view>
+                        <image aria-hidden="true" class="favorite-anchor-switch-icon" mode="aspectFit" src="/assets/icons/arrow-right-left.svg"></image>
+                        <text>切换爱播</text>
+                    </view>
+                </button>
+            </view>
+            <view class="anchor-main {{isBirthdayCelebration?'has-birthday-crown':''}}">
+                <view class="avatar-wrap">
+                    <image binderror="onAvatarError" class="avatar-image" mode="aspectFill" src="{{anchor.avatarUrl}}" wx:if="{{anchor.avatarUrl}}"></image>
+                    <view class="avatar-fallback" wx:else>
+                        <view class="avatar-shine"></view>
+                        <text>{{anchor.initial}}</text>
+                    </view>
+                    <view aria-hidden="true" class="birthday-crown" wx:if="{{isBirthdayCelebration}}">
+                        <image class="birthday-crown-image" mode="aspectFit" src="/assets/images/home/xuxu-birthday-crown.png"></image>
+                        <view class="birthday-crown-spark spark-left"></view>
+                        <view class="birthday-crown-spark spark-right"></view>
+                    </view>
+                    <view class="platform-badge">抖</view>
+                </view>
+                <view class="anchor-copy">
+                    <text class="anchor-name">{{anchor.nickname}}</text>
+                    <text class="anchor-id">主页 · {{anchorDisplayAccount}}</text>
+                    <view class="live-status-row" wx:if="{{anchor.displayStatus==='live'}}">
+                        <view aria-label="{{anchor.viewerCountAvailable?anchor.viewerCount+'人在线，查看在线趋势':'在线人数连接中，查看在线趋势'}}" aria-role="button" bindtap="openViewerArchive" class="live-audience" data-account="{{anchor.account}}" hover-class="live-audience--pressed" hover-stay-time="90">
+                            <view aria-hidden="true" class="live-audience-signal">
+                                <view class="live-audience-ring"></view>
+                                <view class="live-audience-core"></view>
+                            </view>
+                            <block wx:if="{{anchor.viewerCountAvailable}}">
+                                <text class="live-audience-number">{{anchor.viewerCountDisplay}}</text>
+                                <text class="live-audience-label">人在线</text>
+                            </block>
+                            <view class="live-audience-loading" wx:else>
+                                <view class="live-audience-loading-dot dot-one"></view>
+                                <view class="live-audience-loading-dot dot-two"></view>
+                                <view class="live-audience-loading-dot dot-three"></view>
+                            </view>
+                            <text aria-hidden="true" class="live-audience-chevron">›</text>
+                        </view>
+                        <lottery-countdown account="{{anchor.account}}" lite="{{performanceClass!==''}}" room-id="{{anchor.roomId}}" theme="{{mascotThemeClass}}"></lottery-countdown>
+                    </view>
+                    <text class="leave-copy" wx:if="{{anchor.displayStatus==='leave'}}">{{anchor.leaveCopy}}</text>
+                    <text class="offline-copy" wx:if="{{anchor.displayStatus!=='live'&&anchor.displayStatus!=='leave'}}">暂时还没开播，放心交给我盯着</text>
+                </view>
+            </view>
+        </view>
+        <view class="card push-card">
+            <block wx:if="{{false}}">
+                <view aria-role="tablist" class="reminder-tabs reminder-tabs-{{reminderMode}}">
+                    <view aria-role="tab" aria-selected="{{reminderMode==='live'}}" bindtap="onReminderModeChange" class="reminder-tab {{reminderMode==='live'?'is-active':''}}" data-mode="live" hover-class="reminder-tab-hover">
+                        <view class="reminder-tab-dot live-dot"></view>
+                        <text>开播提醒</text>
+                        <text class="reminder-tab-count" wx:if="{{reminderMode==='live'}}">{{notifyCount}}</text>
+                    </view>
+                    <view aria-role="tab" aria-selected="{{reminderMode==='leave'}}" bindtap="onReminderModeChange" class="reminder-tab {{reminderMode==='leave'?'is-active':''}}" data-mode="leave" hover-class="reminder-tab-hover">
+                        <view class="reminder-tab-dot leave-dot"></view>
+                        <text>请假提醒</text>
+                        <text class="reminder-tab-count leave-count" wx:if="{{reminderMode==='leave'&&leaveTemplateReady}}">{{leaveNotifyCount}}</text>
+                        <text class="reminder-tab-new" wx:elif="{{reminderMode==='leave'}}">待接入</text>
+                    </view>
+                    <view aria-role="tab" aria-selected="{{reminderMode==='work'}}" bindtap="onReminderModeChange" class="reminder-tab {{reminderMode==='work'?'is-active':''}}" data-mode="work" hover-class="reminder-tab-hover">
+                        <view class="reminder-tab-dot work-dot"></view>
+                        <text>作品提醒</text>
+                        <text class="reminder-tab-count work-count" wx:if="{{reminderMode==='work'&&workTemplateReady}}">{{workNotifyCount}}</text>
+                        <text class="reminder-tab-new work-new" wx:elif="{{reminderMode==='work'}}">待接入</text>
+                    </view>
+                </view>
+                <view class="reminder-panel reminder-panel-live" wx:if="{{reminderMode==='live'}}">
+                    <view class="push-heading">
+                        <view class="bell-icon {{notificationSuccessMode==='live'?'is-success':''}}">
+                            <view class="bell-body"></view>
+                            <view class="bell-clapper"></view>
+                        </view>
+                        <view class="push-copy">
+                            <text class="push-title">实时推送提醒</text>
+                        </view>
+                        <switch bindchange="onTogglePush" checked="{{pushEnabled}}" color="{{selectedMascotTheme==='siwuliu_ice'?'#3f86b2':'#d93a2f'}}"></switch>
+                    </view>
+                    <view class="notify-counter {{notificationSuccessMode==='live'?'is-success':''}}">
+                        <text class="notify-label">剩余开播通知次数（上限200）</text>
+                        <view class="notify-number-row">
+                            <view class="notify-number-viewport">
+                                <view class="notify-number-stack is-rolling" wx:if="{{notificationRollingMode==='live'}}">
+                                    <text class="notify-number notify-number-frame">{{notifyPreviousCount}}</text>
+                                    <text class="notify-number notify-number-frame">{{notifyCount}}</text>
+                                </view>
+                                <text class="notify-number notify-number-frame" wx:else>{{notifyCount}}</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="notice-bar" wx:if="{{notifyCount===0}}">
+                        <view class="notice-symbol">!</view>
+                        <view class="notice-copy">
+                            <text class="notice-title">剩余通知次数不足，请及时补充</text>
+                            <text class="notice-subtitle">（由于微信限制，通知次数只能一次一次点击增加）</text>
+                        </view>
+                        <text class="notice-arrow">›</text>
+                    </view>
+                </view>
+                <view class="reminder-panel reminder-panel-leave" wx:elif="{{reminderMode==='leave'}}">
+                    <view class="push-heading">
+                        <view class="leave-icon {{notificationSuccessMode==='leave'?'is-success':''}}">
+                            <view class="leave-sheet">
+                                <view class="leave-sheet-line leave-sheet-line-long"></view>
+                                <view class="leave-sheet-line"></view>
+                            </view>
+                            <view class="leave-signal"></view>
+                        </view>
+                        <view class="push-copy">
+                            <text class="push-title">实时请假提醒</text>
+                            <text class="push-subtitle">宝哥请假随时通知你</text>
+                        </view>
+                        <switch bindchange="onToggleLeavePush" checked="{{leavePushEnabled}}" color="{{selectedMascotTheme==='siwuliu_ice'?'#6673b5':'#d68122'}}" disabled="{{!leaveTemplateReady}}"></switch>
+                    </view>
+                    <view class="notify-counter {{notificationSuccessMode==='leave'?'is-success':''}}">
+                        <text class="notify-label">剩余请假通知次数（上限200）</text>
+                        <view class="notify-number-row">
+                            <view class="notify-number-viewport">
+                                <view class="notify-number-stack is-rolling" wx:if="{{leaveTemplateReady&&notificationRollingMode==='leave'}}">
+                                    <text class="notify-number notify-number-frame leave-notify-number">{{leaveNotifyPreviousCount}}</text>
+                                    <text class="notify-number notify-number-frame leave-notify-number">{{leaveNotifyCount}}</text>
+                                </view>
+                                <text class="notify-number notify-number-frame leave-notify-number" wx:else>{{leaveTemplateReady?leaveNotifyCount:'--'}}</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="notice-bar leave-setup-bar" wx:if="{{!leaveTemplateReady}}">
+                        <view class="notice-symbol leave-notice-symbol">i</view>
+                        <view class="notice-copy">
+                            <text class="notice-title">请假通知模板待接入</text>
+                            <text class="notice-subtitle">模板配置完成后，即可单独授权和累计次数</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="reminder-panel reminder-panel-work" wx:else>
+                    <view class="push-heading">
+                        <view class="work-icon {{notificationSuccessMode==='work'?'is-success':''}}">
+                            <view class="work-play"></view>
+                            <view class="work-wave wave-one"></view>
+                            <view class="work-wave wave-two"></view>
+                        </view>
+                        <view class="push-copy">
+                            <text class="push-title">实时作品提醒</text>
+                            <text class="push-subtitle">宝哥更新作品后及时告诉你</text>
+                        </view>
+                        <switch bindchange="onToggleWorkPush" checked="{{workPushEnabled}}" color="#238b82" disabled="{{!workTemplateReady}}"></switch>
+                    </view>
+                    <view class="notify-counter {{notificationSuccessMode==='work'?'is-success':''}}">
+                        <text class="notify-label">剩余作品通知次数（上限200）</text>
+                        <view class="notify-number-row">
+                            <view class="notify-number-viewport">
+                                <view class="notify-number-stack is-rolling" wx:if="{{workTemplateReady&&notificationRollingMode==='work'}}">
+                                    <text class="notify-number notify-number-frame work-notify-number">{{workNotifyPreviousCount}}</text>
+                                    <text class="notify-number notify-number-frame work-notify-number">{{workNotifyCount}}</text>
+                                </view>
+                                <text class="notify-number notify-number-frame work-notify-number" wx:else>{{workTemplateReady?workNotifyCount:'--'}}</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="notice-bar work-setup-bar" wx:if="{{!workTemplateReady}}">
+                        <view class="notice-symbol work-notice-symbol">i</view>
+                        <view class="notice-copy">
+                            <text class="notice-title">作品通知模板待接入</text>
+                            <text class="notice-subtitle">模板配置完成后，即可单独授权和累计次数</text>
+                        </view>
+                    </view>
+                </view>
+            </block>
+            <view class="push-heading">
+                <view class="bell-icon {{notificationSuccessMode==='shared'?'is-success':''}}">
+                    <view class="bell-body"></view>
+                    <view class="bell-clapper"></view>
+                </view>
+                <view class="push-copy">
+                    <text class="push-title">实时推送提醒</text>
+                </view>
+                <switch bindchange="onTogglePush" checked="{{pushEnabled}}" color="{{selectedMascotTheme==='ibo_soft_gold'?'#a08b64':selectedMascotTheme==='siwuliu_ice'?'#3f86b2':'#d93a2f'}}"></switch>
+            </view>
+            <view class="notify-counter shared-notify-counter {{notificationSuccessMode==='shared'?'is-success':''}}">
+                <text class="notify-label">剩余提醒推送次数（上限200）</text>
+                <view class="notify-number-row">
+                    <view class="notify-number-viewport">
+                        <view class="notify-number-stack is-rolling" wx:if="{{notificationRollingMode==='shared'}}">
+                            <text class="notify-number notify-number-frame">{{sharedNotifyPreviousCount}}</text>
+                            <text class="notify-number notify-number-frame">{{sharedNotifyCount}}</text>
+                        </view>
+                        <text class="notify-number notify-number-frame" wx:else>{{sharedNotifyCount}}</text>
+                    </view>
+                </view>
+            </view>
+            <view class="notice-bar" wx:if="{{sharedNotifyCount===0}}">
+                <view class="notice-symbol">!</view>
+                <view class="notice-copy">
+                    <text class="notice-title">剩余提醒次数不足，请及时补充</text>
+                    <text class="notice-subtitle">（由于微信限制，提醒次数只能一次一次点击增加）</text>
+                </view>
+                <text class="notice-arrow">›</text>
+            </view>
+            <view class="reminder-center" wx:if="{{false}}">
+                <view class="reminder-center-heading">
+                    <view aria-hidden="true" class="reminder-center-icon">
+                        <view class="reminder-center-pulse"></view>
+                        <view class="reminder-center-bell">
+                            <view class="reminder-center-bell-dome"></view>
+                            <view class="reminder-center-bell-clapper"></view>
+                        </view>
+                    </view>
+                    <view class="reminder-center-copy">
+                        <text class="reminder-center-title">消息提醒</text>
+                        <text class="reminder-center-subtitle">开播、请假、作品，一次授权一起补充</text>
+                    </view>
+                    <text class="reminder-center-badge">微信授权</text>
+                </view>
+                <view class="reminder-setting-list">
+                    <view class="reminder-setting-row is-live">
+                        <view class="reminder-setting-mark">
+                            <view class="reminder-live-signal"></view>
+                        </view>
+                        <view class="reminder-setting-copy">
+                            <text class="reminder-setting-name">开播提醒</text>
+                            <text class="reminder-setting-note">开播后立即告诉你</text>
+                        </view>
+                        <view class="reminder-setting-quota">
+                            <text class="reminder-setting-value">{{notifyCount}}</text>
+                            <text class="reminder-setting-unit">次</text>
+                        </view>
+                        <switch bindchange="onTogglePush" checked="{{pushEnabled}}" class="reminder-setting-switch" color="{{selectedMascotTheme==='siwuliu_ice'?'#3f86b2':'#d93a2f'}}"></switch>
+                    </view>
+                    <view class="reminder-setting-row is-leave">
+                        <view class="reminder-setting-mark">
+                            <view class="reminder-leave-moon"></view>
+                        </view>
+                        <view class="reminder-setting-copy">
+                            <text class="reminder-setting-name">请假提醒</text>
+                            <text class="reminder-setting-note">请假状态及时同步</text>
+                        </view>
+                        <view class="reminder-setting-quota">
+                            <text class="reminder-setting-value">{{leaveTemplateReady?leaveNotifyCount:'--'}}</text>
+                            <text class="reminder-setting-unit">次</text>
+                        </view>
+                        <switch bindchange="onToggleLeavePush" checked="{{leavePushEnabled}}" class="reminder-setting-switch" color="{{selectedMascotTheme==='siwuliu_ice'?'#6673b5':'#d68122'}}" disabled="{{!leaveTemplateReady}}"></switch>
+                    </view>
+                    <view class="reminder-setting-row is-work">
+                        <view class="reminder-setting-mark">
+                            <view class="reminder-work-play"></view>
+                        </view>
+                        <view class="reminder-setting-copy">
+                            <text class="reminder-setting-name">作品提醒</text>
+                            <text class="reminder-setting-note">新作品发布及时通知</text>
+                        </view>
+                        <view class="reminder-setting-quota">
+                            <text class="reminder-setting-value">{{workTemplateReady?workNotifyCount:'--'}}</text>
+                            <text class="reminder-setting-unit">次</text>
+                        </view>
+                        <switch bindchange="onToggleWorkPush" checked="{{workPushEnabled}}" class="reminder-setting-switch" color="{{selectedMascotTheme==='siwuliu_ice'?'#458ca5':'#238b82'}}" disabled="{{!workTemplateReady}}"></switch>
+                    </view>
+                </view>
+            </view>
+            <button bindtap="onAddAllNotifications" class="all-notify-action {{addingAllNotify?'is-disabled':''}}" disabled="{{addingAllNotify}}" hover-class="all-notify-action-hover" wx:if="{{false}}">
+                <view aria-hidden="true" class="all-notify-action-plus">
+                    <view class="all-notify-plus-horizontal"></view>
+                    <view class="all-notify-plus-vertical"></view>
+                </view>
+                <view class="all-notify-action-copy">
+                    <text class="all-notify-action-title">{{addingAllNotify?'正在请求微信授权':'补充全部提醒'}}</text>
+                    <text class="all-notify-action-subtitle">{{addingAllNotify?'请在弹窗中完成选择':'三种提醒分别增加 1 次'}}</text>
+                </view>
+                <text class="all-notify-action-arrow">›</text>
+            </button>
+            <button bindtap="onAddAllNotifications" class="primary-button {{addingAllNotify?'is-disabled':''}} {{notificationSuccessMode==='shared'?'is-success':''}}" disabled="{{addingAllNotify}}" hover-class="primary-button-hover">
+                <text class="plus-icon">⊕</text>
+                <text>{{addingAllNotify?'授权处理中':'新增提醒推送次数'}}</text>
+            </button>
+        </view>
+        <view class="card admin-card" wx:if="{{isAdmin}}">
+            <view class="admin-heading">
+                <view>
+                    <text class="admin-kicker">管理员工具</text>
+                    <text class="admin-title">手动开播通知</text>
+                </view>
+                <view class="admin-lock">仅你可见</view>
+            </view>
+            <view class="admin-summary" wx:if="{{manualPreview}}">
+                <view class="admin-stat">
+                    <text class="admin-stat-value">{{manualPreview.eligible_count}}</text>
+                    <text class="admin-stat-label">预计通知人数</text>
+                </view>
+                <view class="admin-stat">
+                    <text class="admin-stat-value">{{manualPreview.current_rate_per_second}}/s</text>
+                    <text class="admin-stat-label">当前发送速度</text>
+                </view>
+            </view>
+            <button bindtap="onManualNotify" class="manual-button {{sendingManualNotification||!manualPreview||manualPreview.cooldown_remaining_seconds>0?'is-disabled':''}}" disabled="{{sendingManualNotification||!manualPreview||manualPreview.cooldown_remaining_seconds>0}}" hover-class="manual-button-hover">{{sendingManualNotification?'正在创建通知队列':manualPreview&&manualPreview.cooldown_remaining_seconds>0?'通知冷却中':'确认主播开播并通知用户'}}</button>
+        </view>
+        <view class="card admin-card leave-admin-card" wx:if="{{isAdmin}}">
+            <view class="admin-heading">
+                <view>
+                    <text class="admin-kicker">请假通知</text>
+                    <text class="admin-title">{{leavePending?'检测到宝哥请假':'随时发送请假通知'}}</text>
+                </view>
+                <view class="admin-lock">仅你可见</view>
+            </view>
+            <textarea bindinput="onLeaveNoteInput" class="leave-note-input" maxlength="200" placeholder="填写请假备注（将发送给订阅用户）" value="{{leavePendingNote}}"></textarea>
+            <button bindtap="onLeaveSend" class="manual-button {{sendingLeave?'is-disabled':''}}" disabled="{{sendingLeave}}" hover-class="manual-button-hover">{{sendingLeave?'发送中':'发送请假通知'}}</button>
+        </view>
+        <view bindtap="onRefresh" class="error-card" wx:if="{{loadError}}">
+            <text class="error-title">状态获取失败</text>
+            <text class="error-message">{{loadError}} · 点击重试</text>
+        </view>
+        <view class="safe-bottom-space"></view>
+    </view>
+    <root-portal wx:if="{{customServiceDialogVisible}}">
+        <view bindtap="closeCustomServiceDialog" catchtouchmove="onCustomServiceTouchMove" class="custom-service-overlay theme-{{mascotThemeClass}}">
+            <view catchtap="onCustomServiceContentTap" class="custom-service-dialog">
+                <view aria-hidden="true" class="custom-service-dialog-accent"></view>
+                <button aria-label="关闭定制联系方式" bindtap="closeCustomServiceDialog" class="custom-service-close">×</button>
+                <view aria-hidden="true" class="custom-service-emblem">
+                    <view class="custom-service-emblem-ring"></view>
+                    <view class="custom-service-emblem-core">i</view>
+                    <view class="custom-service-emblem-spark spark-one">✦</view>
+                    <view class="custom-service-emblem-spark spark-two">✦</view>
+                </view>
+                <text class="custom-service-kicker">EXCLUSIVE CUSTOM</text>
+                <text class="custom-service-title">爱播专属定制</text>
+                <text class="custom-service-description">爱播虚拟专属形象及虚拟专属主题定制</text>
+                <view class="custom-service-contact-name">
+                    <text class="custom-service-contact-label">联系 dy</text>
+                    <text class="custom-service-contact-value">i播播了么</text>
+                </view>
+                <button aria-label="复制抖音号{{customServiceDouyinId}}" bindtap="copyCustomServiceDouyinId" class="custom-service-copy" hover-class="custom-service-copy--pressed">
+                    <view class="custom-service-copy-text">
+                        <text class="custom-service-copy-label">抖音号</text>
+                        <text class="custom-service-copy-value">{{customServiceDouyinId}}</text>
+                    </view>
+                    <view aria-hidden="true" class="custom-service-copy-icon">
+                        <view class="custom-service-copy-icon-back"></view>
+                        <view class="custom-service-copy-icon-front"></view>
+                    </view>
+                </button>
+                <text class="custom-service-private-message">私信联系</text>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{mascotSkinSheetVisible}}">
+        <view bindtap="closeMascotSkinSheet" catchtouchmove="onMascotSkinSheetTap" class="mascot-skin-overlay theme-{{mascotThemeClass}} {{performanceClass}} {{!mascotMotionEnabled?'collection-is-paused':''}}">
+            <view catchtap="onMascotSkinSheetTap" class="mascot-skin-sheet">
+                <view class="mascot-skin-sheet-heading">
+                    <text class="mascot-skin-sheet-title">{{themeCollectionVisible?'形象与主题收藏':'形象收藏'}}</text>
+                    <button aria-label="关闭收藏面板" bindtap="closeMascotSkinSheet" class="mascot-skin-sheet-close">×</button>
+                </view>
+                <view aria-label="收藏分类" aria-role="tablist" class="mascot-collection-tabs {{mascotCollectionTab==='theme'?'is-theme':''}}" wx:if="{{themeCollectionVisible}}">
+                    <view aria-hidden="true" class="mascot-collection-tab-indicator"></view>
+                    <button aria-controls="mascot-collection-panel-skin" aria-role="tab" aria-selected="{{mascotCollectionTab==='skin'}}" bindtap="switchMascotCollectionTab" class="mascot-collection-tab {{mascotCollectionTab==='skin'?'is-active':''}}" data-tab="skin" hover-class="mascot-collection-tab--pressed" id="mascot-collection-tab-skin">形象</button>
+                    <button aria-controls="mascot-collection-panel-theme" aria-label="{{mascotThemeHasNew?'主题，有新主题':'主题'}}" aria-role="tab" aria-selected="{{mascotCollectionTab==='theme'}}" bindtap="switchMascotCollectionTab" class="mascot-collection-tab {{mascotCollectionTab==='theme'?'is-active':''}}" data-tab="theme" hover-class="mascot-collection-tab--pressed" id="mascot-collection-tab-theme">
+                        <view class="mascot-collection-tab-label">主题<text aria-hidden="true" class="mascot-collection-new-badge" wx:if="{{mascotThemeHasNew}}">新</text>
+                        </view>
+                    </button>
+                </view>
+                <view class="mascot-collection-body">
+                    <scroll-view enhanced scroll-y aria-label="形象收藏" aria-role="tabpanel" bindscroll="onMascotCollectionScroll" class="mascot-collection-scroll" data-tab="skin" id="mascot-collection-panel-skin" scroll-top="{{mascotCollectionScrollTop}}" show-scrollbar="{{false}}" wx:if="{{mascotCollectionTab==='skin'||!themeCollectionVisible}}">
+                        <view class="mascot-collection-panel-content collection-panel-skin">
+                            <view class="mascot-collection-current">
+                                <text>当前形象</text>
+                                <text class="mascot-collection-current-name">{{selectedMascotSkinName}}</text>
+                            </view>
+                            <view class="mascot-skin-campaign {{mascotSkinCampaign.owned?'is-owned':''}}">
+                                <view class="mascot-skin-campaign-glow"></view>
+                                <view class="mascot-skin-campaign-copy">
+                                    <text class="mascot-skin-campaign-label">常驻任务 · 连续为 𝑿.四五六🍉 打 Call 7 天</text>
+                                    <text class="mascot-skin-campaign-caption">{{mascotSkinCampaignCaption}}</text>
+                                </view>
+                                <text class="mascot-skin-campaign-count">{{mascotSkinCampaign.owned?'已解锁':mascotSkinProgressText}}</text>
+                                <view class="mascot-skin-progress">
+                                    <view class="mascot-skin-progress-fill" style="width:{{mascotSkinProgressWidth}}%;"></view>
+                                </view>
+                            </view>
+                            <view class="mascot-skin-grid">
+                                <view aria-label="{{item.name}}，{{item.badgeText}}" aria-role="button" bindtap="selectMascotSkin" class="mascot-skin-card {{item.selected?'is-selected':''}} {{!item.owned&&(!isLocalDevelopment||item.code==='ibo_starlight')?'is-locked':''}} {{item.purchasable?'is-purchasable':''}} {{paymentProcessingCode===item.code?'is-processing':''}} skin-card-{{item.className}}" data-code="{{item.code}}" hover-class="mascot-skin-card--pressed" wx:for="{{mascotSkinItems}}" wx:key="code">
+                                    <view class="mascot-skin-card-visual">
+                                        <view class="mascot-skin-card-orbit"></view>
+                                        <image mode="aspectFit" src="{{item.preview}}"></image>
+                                        <view aria-hidden="true" class="mascot-skin-lock" wx:if="{{!item.owned&&(!isLocalDevelopment||item.code==='ibo_starlight')}}">
+                                            <view class="mascot-skin-lock-shackle"></view>
+                                            <view class="mascot-skin-lock-body"></view>
+                                        </view>
+                                        <text class="mascot-skin-selected-mark" wx:if="{{item.selected}}">✓</text>
+                                    </view>
+                                    <view class="mascot-skin-card-details">
+                                        <text class="mascot-skin-card-name">{{item.name}}</text>
+                                        <text class="mascot-skin-card-subtitle">{{item.subtitle}}</text>
+                                        <text class="mascot-skin-card-badge">{{paymentProcessingCode===item.code?'权益确认中':!item.owned&&item.code!=='ibo_starlight'&&isLocalDevelopment?'本地预览':item.badgeText}}</text>
+                                        <block wx:if="{{item.code==='ibo_starlight'}}">
+                                            <text class="mascot-empower-note">{{item.benefitText}}</text>
+                                            <view class="mascot-commerce-actions">
+                                                <button catchtap="openStandaloneMascotPurchase" class="mascot-commerce-buy" hover-class="mascot-commerce-pressed">{{item.owned?'查看赋能':'购买形象'}}</button>
+                                            </view>
+                                        </block>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="mascot-collection-scroll-end"></view>
+                        </view>
+                    </scroll-view>
+                    <scroll-view enhanced scroll-y aria-label="主题收藏" aria-role="tabpanel" bindscroll="onMascotCollectionScroll" class="mascot-collection-scroll" data-tab="theme" id="mascot-collection-panel-theme" scroll-top="{{mascotCollectionScrollTop}}" show-scrollbar="{{false}}" wx:elif="{{themeCollectionVisible}}">
+                        <view class="mascot-collection-panel-content collection-panel-theme">
+                            <view class="mascot-collection-current">
+                                <text>当前主题</text>
+                                <text class="mascot-collection-current-name">{{selectedMascotThemeName}}</text>
+                            </view>
+                            <view class="mascot-skin-campaign mascot-theme-campaign {{mascotThemeCampaign.owned?'is-owned':''}}">
+                                <view class="mascot-skin-campaign-glow"></view>
+                                <view class="mascot-skin-campaign-copy">
+                                    <text class="mascot-skin-campaign-label">9.1 起 · 冰蓝主题</text>
+                                    <text class="mascot-skin-campaign-caption">{{mascotThemeCampaignCaption}}</text>
+                                </view>
+                                <text class="mascot-skin-campaign-count">{{mascotThemeCampaign.owned?'已解锁':mascotThemeProgressText}}</text>
+                                <view class="mascot-skin-progress">
+                                    <view class="mascot-skin-progress-fill" style="width:{{mascotThemeProgressWidth}}%;"></view>
+                                </view>
+                            </view>
+                            <view class="mascot-theme-grid">
+                                <view aria-label="{{item.name}}，{{item.badgeText}}" aria-role="button" bindtap="selectMascotTheme" class="mascot-theme-card {{item.selected?'is-selected':''}} {{!item.owned&&!item.previewable&&(!isLocalDevelopment||item.requiresOwnership)?'is-locked':''}} {{item.purchasable||item.acquirable?'is-purchasable':''}} {{paymentProcessingCode===item.code?'is-processing':''}} theme-card-{{item.className}}" data-code="{{item.code}}" hover-class="mascot-theme-card--pressed" wx:for="{{mascotThemeItems}}" wx:key="code">
+                                    <view class="mascot-theme-card-visual">
+                                        <view class="mascot-theme-preview-nav"></view>
+                                        <view class="mascot-theme-preview-card"></view>
+                                        <view class="mascot-theme-preview-button"></view>
+                                        <view class="mascot-theme-preview-glow"></view>
+                                        <view aria-hidden="true" class="mascot-skin-lock" wx:if="{{!item.owned&&!item.previewable&&(!isLocalDevelopment||item.requiresOwnership)}}">
+                                            <view class="mascot-skin-lock-shackle"></view>
+                                            <view class="mascot-skin-lock-body"></view>
+                                        </view>
+                                        <text class="mascot-skin-selected-mark" wx:if="{{item.selected}}">✓</text>
+                                    </view>
+                                    <view class="mascot-theme-card-details">
+                                        <text class="mascot-skin-card-name">{{item.name}}</text>
+                                        <text class="mascot-skin-card-subtitle">{{item.subtitle}}</text>
+                                        <text class="mascot-skin-card-badge">{{item.previewable?item.badgeText:paymentProcessingCode===item.code?'权益确认中':!item.owned&&isLocalDevelopment&&!item.requiresOwnership?'本地预览':item.badgeText}}</text>
+                                    </view>
+                                </view>
+                            </view>
+                            <view class="mascot-collection-scroll-end"></view>
+                        </view>
+                    </scroll-view>
+                </view>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{favoritePickerVisible}}">
+        <view bindtap="closeFavoriteAnchorPicker" catchtouchmove="onFavoritePickerTouchMove" class="favorite-anchor-overlay theme-{{mascotThemeClass}}">
+            <view catchtap="onFavoritePickerContentTap" class="favorite-anchor-sheet">
+                <view aria-hidden="true" class="favorite-anchor-sheet-accent"></view>
+                <view class="favorite-anchor-heading">
+                    <view class="favorite-anchor-heading-copy">
+                        <text class="favorite-anchor-kicker">MY FAVORITE</text>
+                        <text class="favorite-anchor-title">选择你的爱播</text>
+                    </view>
+                    <view class="favorite-anchor-heading-actions">
+                        <button bindtap="openFavoriteAnchorRequestDialog" class="favorite-anchor-missing-button {{performanceClass}} {{favoriteAnchorRequestDialogVisible?'is-covered':''}}" disabled="{{favoriteAnchorRequestSaving||favoritePurchaseBusy}}" hover-class="favorite-anchor-missing-button--pressed">
+                            <view aria-hidden="true" class="favorite-anchor-missing-shine"></view>
+                            <image aria-hidden="true" class="favorite-anchor-missing-plus" mode="aspectFit" src="/assets/icons/circle-plus.svg"></image>
+                            <text>没有我的爱播</text>
+                        </button>
+                        <button aria-label="关闭" bindtap="closeFavoriteAnchorPicker" class="favorite-anchor-close" wx:if="{{!favoritePickerRequired}}">×</button>
+                    </view>
+                </view>
+                <scroll-view enhanced scroll-y class="favorite-anchor-scroll" show-scrollbar="{{false}}">
+                    <view class="favorite-anchor-loading" wx:if="{{favoritePickerLoading&&!favoriteAnchorOptions.length}}">
+                        <view class="favorite-anchor-loading-ring"></view>
+                        <text>正在加载主播</text>
+                    </view>
+                    <view class="favorite-anchor-empty" wx:elif="{{!favoriteAnchorOptions.length}}">
+                        <text>主播列表暂时没有加载出来</text>
+                        <button bindtap="openFavoriteAnchorPicker">重新加载</button>
+                    </view>
+                    <view class="favorite-anchor-grid" wx:else>
+                        <view aria-checked="{{favoriteAnchorCandidate===item.account}}" aria-role="radio" bindtap="onSelectFavoriteAnchor" class="favorite-anchor-option {{favoriteAnchorCandidate===item.account?'is-selected':''}} {{item.status==='live'?'is-live':''}}" data-account="{{item.account}}" hover-class="favorite-anchor-option--pressed" wx:for="{{favoriteAnchorOptions}}" wx:key="account">
+                            <view class="favorite-anchor-avatar-wrap">
+                                <image binderror="onFavoriteAnchorAvatarError" class="favorite-anchor-avatar" data-account="{{item.account}}" mode="aspectFill" src="{{item.avatarUrl}}" wx:if="{{item.avatarUrl}}"></image>
+                                <view class="favorite-anchor-avatar favorite-anchor-avatar-fallback" wx:else>{{item.initial}}</view>
+                                <view aria-hidden="true" class="favorite-anchor-live-ring" wx:if="{{item.status==='live'}}"></view>
+                            </view>
+                            <view class="favorite-anchor-option-copy">
+                                <text class="favorite-anchor-option-name">{{item.nickname}}</text>
+                                <view class="favorite-anchor-option-status">
+                                    <view class="favorite-anchor-option-dot"></view>
+                                    <text>{{item.status==='live'?'开播中':'未开播'}}</text>
+                                </view>
+                            </view>
+                            <view aria-hidden="true" class="favorite-anchor-check">✓</view>
+                        </view>
+                    </view>
+                </scroll-view>
+                <button bindtap="confirmFavoriteAnchor" class="favorite-anchor-confirm {{favoriteAnchorCandidate?'':'is-disabled'}}" disabled="{{!favoriteAnchorCandidate||favoritePickerSaving}}" hover-class="favorite-anchor-confirm--pressed">
+                    <view aria-hidden="true" class="favorite-anchor-confirm-shine"></view>
+                    <text>{{favoritePickerSaving?'保存中':'设为我的爱播'}}</text>
+                </button>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{favoriteAnchorRequestDialogVisible}}">
+        <view bindtap="closeFavoriteAnchorRequestDialog" catchtouchmove="onFavoritePickerTouchMove" class="favorite-anchor-request-overlay theme-{{mascotThemeClass}}">
+            <view catchtap="onFavoritePickerContentTap" class="favorite-anchor-request-dialog">
+                <view aria-hidden="true" class="favorite-anchor-request-accent"></view>
+                <view class="favorite-anchor-request-heading">
+                    <view aria-hidden="true" class="favorite-anchor-request-emblem">
+                        <view class="favorite-anchor-request-emblem-core">+</view>
+                        <view class="favorite-anchor-request-emblem-ring"></view>
+                    </view>
+                    <view class="favorite-anchor-request-heading-copy">
+                        <text class="favorite-anchor-request-dialog-title">{{favoritePurchaseStandalone?'吉祥物与赋能':'新增爱播'}}</text>
+                    </view>
+                    <button aria-label="关闭" bindtap="closeFavoriteAnchorRequestDialog" class="favorite-anchor-request-close">×</button>
+                </view>
+                <view class="favorite-purchase-stage" wx:if="{{favoritePurchaseStage==='input'&&!favoritePurchaseStandalone}}">
+                    <view class="favorite-anchor-request-field">
+                        <text class="favorite-anchor-request-field-label">抖音号</text>
+                        <view class="favorite-anchor-request-input-shell">
+                            <text aria-hidden="true" class="favorite-anchor-request-at">@</text>
+                            <input bindconfirm="submitFavoriteAnchorRequest" bindinput="onFavoriteAnchorRequestInput" class="favorite-anchor-request-input" confirm-type="send" disabled="{{favoritePurchaseBusy}}" maxlength="64" placeholder="完整抖音号，含点及下划线" value="{{favoriteAnchorRequestAccount}}"></input>
+                        </view>
+                    </view>
+                    <text class="favorite-anchor-request-history" wx:if="{{favoriteAnchorRequested}}">上次已推荐：{{favoriteAnchorRequestedAccount}}</text>
+                    <view class="favorite-purchase-actions">
+                        <button bindtap="submitFavoriteAnchorRequest" class="favorite-anchor-request-submit" disabled="{{favoriteAnchorRequestSaving||favoritePurchaseBusy}}" hover-class="favorite-anchor-request-submit--pressed" loading="{{favoriteAnchorRequestSaving}}">{{favoriteAnchorRequestSaving?'提交中':'免费推荐'}}</button>
+                        <button bindtap="prepareFavoriteAnchorPurchase" class="favorite-purchase-instant" disabled="{{favoritePurchaseBusy||favoritePurchaseLoading||favoriteAnchorRequestSaving}}" hover-class="favorite-anchor-request-submit--pressed" loading="{{favoritePurchaseBusy||favoritePurchaseLoading}}">
+                            <text class="favorite-purchase-label">立刻加上！</text>
+                        </button>
+                    </view>
+                    <text class="favorite-purchase-hint">立即添加为 i币付费服务</text>
+                </view>
+                <view class="favorite-purchase-stage favorite-purchase-searching" wx:elif="{{favoritePurchaseStage==='lookup'}}">
+                    <view aria-hidden="true" class="favorite-purchase-loader"></view>
+                    <text class="favorite-purchase-stage-title">查找中</text>
+                    <text class="favorite-purchase-account">@{{favoriteAnchorRequestAccount}}</text>
+                    <button bindtap="resetFavoriteAnchorPurchase" class="favorite-purchase-back">返回修改</button>
+                </view>
+                <view class="favorite-purchase-stage favorite-checkout" wx:elif="{{favoritePurchaseStage==='review'||favoritePurchaseOrder}}">
+                    <view class="favorite-purchase-profile" wx:if="{{!favoritePurchaseStandalone}}">
+                        <image binderror="onFavoritePurchaseAvatarError" class="favorite-purchase-avatar" mode="aspectFill" src="{{favoritePurchaseProfile.avatar_url}}" wx:if="{{favoritePurchaseProfile.avatar_url}}"></image>
+                        <view class="favorite-purchase-avatar favorite-purchase-avatar-placeholder" wx:else>{{favoritePurchaseProfile.initial}}</view>
+                        <view class="favorite-purchase-identity">
+                            <text class="favorite-purchase-name">{{favoritePurchaseProfile.nickname}}</text>
+                            <text class="favorite-purchase-account" user-select="true">@{{favoritePurchaseProfile.account}}</text>
+                        </view>
+                        <button aria-label="更换主播" bindtap="resetFavoriteAnchorPurchase" class="favorite-checkout-edit" disabled="{{favoritePurchaseBusy}}" wx:if="{{!favoritePurchaseOrder}}">更换</button>
+                    </view>
+                    <view class="mascot-purchase-intro" wx:if="{{favoritePurchaseStandalone}}">
+                        <image binderror="onInlineArtworkError" bindload="loadInlineArtwork" class="mascot-purchase-art" data-art="starlightWait" mode="aspectFit" src="{{inlineArt.starlightWait||'/assets/images/remote-fallback/starlightWait.png'}}"></image>
+                        <text class="mascot-purchase-name">播播·星光信使</text>
+                        <text class="mascot-purchase-caption">{{favoriteMascotThemeGift?'原创动态形象 · 赠鎏金主题':'原创动态形象 · 永久拥有'}}</text>
+                    </view>
+                    <block wx:if="{{(!favoritePurchaseOrder||favoritePurchaseOrder.status==='prepared')&&!(favoritePurchaseStandalone&&favoriteMascotOwned)}}">
+                        <view class="favorite-checkout-free" wx:if="{{favoritePurchaseProfile.already_monitored}}">
+                            <text class="favorite-purchase-stage-title">你已可守候</text>
+                        </view>
+                        <view class="favorite-checkout-product" wx:else>
+                            <image binderror="onInlineArtworkError" bindload="loadInlineArtwork" class="favorite-checkout-art" data-art="starlightWait" mode="aspectFit" src="{{inlineArt.starlightWait||'/assets/images/remote-fallback/starlightWait.png'}}" wx:if="{{!favoritePurchaseStandalone&&(favoritePurchaseKind==='mascot'||favoritePurchaseKind==='benefit')}}"></image>
+                            <view class="favorite-checkout-product-copy">
+                                <text class="favorite-checkout-product-name">{{favoritePurchaseStandalone?favoriteMascotThemeGift?'形象 + 鎏金主题':'形象 + 1 次添加赋能':favoritePurchaseKind==='mascot'?'i播播了么吉祥物':favoritePurchaseKind==='benefit'?'专属添加权益':'专属守候这位爱播'}}</text>
+                                <text class="favorite-checkout-gift" wx:if="{{!favoritePurchaseStandalone&&favoritePurchaseKind==='mascot'&&favoriteMascotThemeGift}}">赠鎏金主题 · 永久解锁</text>
+                                <text class="favorite-checkout-gift" wx:if="{{favoritePurchaseKind!=='anchor'}}">{{favoritePurchaseKind==='mascot'?'赠免费添加':'免费添加权益'}}<text class="favorite-checkout-limit"> · 每人限 1 次</text>
+                                </text>
+                                <view class="favorite-checkout-price" wx:if="{{favoritePurchasePrice>0}}">
+                                    <view class="favorite-checkout-current-price">
+                                        <text class="favorite-purchase-amount">{{favoritePurchasePrice}}</text>
+                                        <text class="favorite-purchase-unit">i币</text>
+                                    </view>
+                                    <view class="favorite-checkout-compare" wx:if="{{favoritePurchaseKind==='mascot'}}">
+                                        <text>单独添加</text>
+                                        <text class="favorite-checkout-strike">2999 i币</text>
+                                    </view>
+                                    <view class="favorite-checkout-compare" wx:elif="{{favoritePurchaseDiscounted}}">
+                                        <text>主题九折</text>
+                                        <text class="favorite-checkout-strike">2999 i币</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </block>
+                    <view class="favorite-checkout-complete" wx:elif="{{favoritePurchaseStandalone&&favoriteMascotOwned&&!favoritePurchaseOrder||favoritePurchaseOrder.status==='delivered'||favoritePurchaseOrder.status==='already_exists'}}">
+                        <view aria-hidden="true" class="favorite-checkout-checkmark"></view>
+                        <text class="favorite-purchase-stage-title">{{favoritePurchaseStandalone||favoritePurchaseOrder.purchase_kind==='mascot'?'吉祥物已解锁':'已加入守候'}}</text>
+                    </view>
+                    <view class="mascot-purchase-benefit" wx:if="{{favoritePurchaseStandalone}}">
+                        <text>{{favoritePurchaseBenefit&&favoritePurchaseBenefit.used?'赋能已使用，形象永久保留':favoritePurchaseBenefit&&favoritePurchaseBenefit.available?'1 次免费添加赋能可用':favoriteMascotOwned?'当前无可用添加赋能':'购买赠 1 次免费添加爱播'}}</text>
+                        <text wx:if="{{!(favoritePurchaseBenefit&&favoritePurchaseBenefit.used)&&(!favoriteMascotOwned||favoritePurchaseBenefit&&favoritePurchaseBenefit.available)}}">购买时无需抖音号，稍后确认添加才消耗</text>
+                    </view>
+                    <text class="favorite-checkout-credit-note" wx:if="{{favoritePurchasePlan&&favoritePurchaseBalance>0&&!favoritePurchaseRechargePending&&!favoritePurchaseProfile.already_monitored&&(!favoritePurchaseOrder||favoritePurchaseOrder.status==='prepared')}}">已有 {{favoritePurchaseBalanceText}} i币，再充 {{favoritePurchasePlan.coins}} i币</text>
+                    <button bindtap="submitFavoritePurchase" class="favorite-purchase-instant favorite-purchase-confirm" disabled="{{favoritePurchaseBusy||favoritePurchaseLoading}}" hover-class="favorite-anchor-request-submit--pressed" loading="{{favoritePurchaseBusy}}">{{favoritePurchaseBusy?'处理中，请稍候':favoritePurchasePrimary}}</button>
+                    <button bindtap="useStandaloneMascotBenefit" class="mascot-use-benefit" disabled="{{favoritePurchaseBusy||favoritePurchaseLoading}}" wx:if="{{favoritePurchaseStandalone&&favoritePurchaseBenefit&&favoritePurchaseBenefit.available&&(!favoritePurchaseOrder||favoritePurchaseOrder.status==='delivered')}}">使用赋能 · 免费添加爱播</button>
+                    <view class="favorite-checkout-footer">
+                        <button bindtap="resetFavoriteAnchorPurchase" class="favorite-purchase-back" disabled="{{favoritePurchaseBusy}}" wx:if="{{favoritePurchaseOrder&&favoritePurchaseOrder.can_cancel}}">取消购买</button>
+                        <button aria-expanded="{{favoritePurchaseDetails}}" bindtap="toggleFavoritePurchaseDetails" class="favorite-purchase-back favorite-checkout-disclosure">
+                            <text>{{favoritePurchaseDetails?'收起明细':'明细与方案'}}</text>
+                            <view aria-hidden="true" class="favorite-checkout-chevron {{favoritePurchaseDetails?'is-open':''}}"></view>
+                        </button>
+                    </view>
+                    <view class="favorite-checkout-details" wx:if="{{favoritePurchaseDetails}}">
+                        <block wx:if="{{!favoritePurchaseProfile.already_monitored&&(!favoritePurchaseOrder||favoritePurchaseOrder.status==='prepared')}}">
+                            <radio-group bindchange="chooseFavoritePurchase" class="favorite-checkout-choices" wx:if="{{!favoritePurchaseStandalone&&favoritePurchasePromotion&&!favoritePurchaseOrder&&favoritePurchaseKind!=='benefit'}}">
+                                <label>
+                                    <radio checked="{{favoritePurchaseKind==='mascot'}}" color="{{mascotThemeClass==='siwuliu-ice'?'#278bbb':mascotThemeClass==='xiaoyu-moon-tide'?'#208c80':'#bf352e'}}" disabled="{{favoritePurchaseBusy}}" value="mascot"></radio>
+                                    <text>吉祥物 + 赠送权益 · 998 i币</text>
+                                </label>
+                                <label>
+                                    <radio checked="{{favoritePurchaseKind==='anchor'}}" color="{{mascotThemeClass==='siwuliu-ice'?'#278bbb':mascotThemeClass==='xiaoyu-moon-tide'?'#208c80':'#bf352e'}}" disabled="{{favoritePurchaseBusy}}" value="anchor"></radio>
+                                    <text>单独添加 · {{favoriteAnchorPrice}} i币</text>
+                                </label>
+                            </radio-group>
+                            <view class="favorite-checkout-wallet" wx:if="{{favoritePurchasePrice>0}}">
+                                <view class="favorite-checkout-row">
+                                    <text>钱包余额</text>
+                                    <text>{{favoritePurchaseBalanceText}} i币</text>
+                                </view>
+                                <view class="favorite-checkout-row favorite-checkout-shortage" wx:if="{{favoritePurchaseShortage>0}}">
+                                    <text>还差</text>
+                                    <text>{{favoritePurchaseShortage}} i币</text>
+                                </view>
+                                <view class="favorite-checkout-row" wx:if="{{favoritePurchaseRechargePending}}">
+                                    <text>原充值订单</text>
+                                    <text>¥{{favoritePurchaseRechargeAmountText}}</text>
+                                </view>
+                                <block wx:if="{{favoritePurchasePlan&&!favoritePurchaseRechargePending}}">
+                                    <view class="favorite-checkout-row favorite-checkout-pay">
+                                        <text>本次充值</text>
+                                        <text>¥{{favoritePurchasePlan.yuan}}</text>
+                                    </view>
+                                    <text class="favorite-checkout-remainder">充值 {{favoritePurchasePlan.coins}} i币，购买后余 {{favoritePurchasePlan.remaining}} i币</text>
+                                </block>
+                            </view>
+                        </block>
+                        <text wx:if="{{favoritePurchaseKind==='mascot'&&favoritePurchaseEndText}}">{{favoritePurchaseEndText}}</text>
+                        <text wx:if="{{favoritePurchaseKind==='mascot'&&favoriteMascotThemeGift}}">购买后永久解锁鎏金主题，可在主题收藏中切换。</text>
+                        <text wx:if="{{favoritePurchaseKind==='mascot'||favoritePurchaseKind==='benefit'}}">免费添加爱播每人限 1 次，使用主题不消耗这次权益。</text>
+                        <text user-select="true" wx:if="{{favoritePurchaseOrder&&favoritePurchaseOrder.order_id}}">订单 {{favoritePurchaseOrder.order_id}}</text>
+                    </view>
+                </view>
+                <text aria-live="polite" class="favorite-purchase-message" wx:if="{{favoritePurchaseMessage}}">{{favoritePurchaseMessage}}</text>
+            </view>
+        </view>
+    </root-portal>
+    <root-portal wx:if="{{homePopupVisible&&homePopup}}">
+        <view bindtap="closeHomePopup" catchtouchmove="onHomePopupTouchMove" class="home-campaign-overlay">
+            <view catchtap="onHomePopupContentTap" class="home-campaign-modal theme-{{homePopup.themeClass}}">
+                <view aria-hidden="true" class="home-campaign-ambient">
+                    <view class="home-campaign-orbit orbit-one"></view>
+                    <view class="home-campaign-orbit orbit-two"></view>
+                    <view class="home-campaign-spark spark-one">✦</view>
+                    <view class="home-campaign-spark spark-two">✦</view>
+                    <view class="home-campaign-spark spark-three">✦</view>
+                </view>
+                <button aria-label="关闭" bindtap="closeHomePopup" class="home-campaign-close">×</button>
+                <view aria-hidden="true" class="home-campaign-emblem">
+                    <view class="home-campaign-emblem-ring"></view>
+                    <view class="home-campaign-heart">{{homePopup.iconText}}</view>
+                </view>
+                <text class="home-campaign-kicker">{{homePopup.kicker}}</text>
+                <text class="home-campaign-title">{{homePopup.title}}</text>
+                <text class="home-campaign-content">{{homePopup.content}}</text>
+                <button bindtap="handleHomePopupAction" class="home-campaign-primary" hover-class="home-campaign-primary--pressed" wx:if="{{homePopup.buttonEnabled}}">
+                    <view aria-hidden="true" class="home-campaign-primary-shine"></view>
+                    <text>{{homePopup.buttonText}}</text>
+                    <text class="home-campaign-primary-arrow">›</text>
+                </button>
+                <button bindtap="closeHomePopup" class="home-campaign-later" hover-class="home-campaign-later--pressed">稍后再说</button>
+            </view>
+        </view>
+    </root-portal>
+</view>
+<wallet-recharge bindclose="closeFavoriteRecharge" binddelivered="favoriteRechargeDelivered" lite="{{performanceClass==='performance-lite'}}" recovery-id="{{favoritePurchaseOrder.order_id||''}}" required-coins="{{favoritePurchasePrice}}" skin="{{selectedMascotTheme}}" visible="{{favoriteRechargeVisible&&favoriteAnchorRequestDialogVisible}}"></wallet-recharge>

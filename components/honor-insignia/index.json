@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "galaxy-honor-badge": "/components/galaxy-honor-badge/index"
+  }
+}
